@@ -1,0 +1,70 @@
+<?php
+
+namespace common\models;
+
+use Yii;
+use yii\helpers\ArrayHelper;
+
+/**
+ * This is the model class for table "region".
+ *
+ * @property integer $id
+ * @property string $name
+ * @property integer $parent
+ */
+class Region extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'region';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['name'], 'required'],
+            [['parent'], 'integer'],
+            [['name'], 'string', 'max' => 255],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'Name',
+            'parent' => 'Parent',
+        ];
+    }
+
+    public static function getName ($region_id)
+    {
+        if (!$region_id)
+            return false;
+        $region_name = Region::find()->where(['id' => $region_id])->one()->getAttribute('name');
+        return $region_name;
+    }
+
+    public static function getNameTp ($region_id)
+    {
+        if (!$region_id)
+            return false;
+        $region_name_tp = Region::find()->where(['id' => $region_id])->one()->getAttribute('name_tp');
+        return $region_name_tp;
+    }
+
+    public static function getNamesArray ()
+    {
+        $regions = Region::find()->where(['parent' => 0])->all();
+        return ArrayHelper::map($regions,'id','name');
+    }
+}
