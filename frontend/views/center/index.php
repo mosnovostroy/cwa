@@ -9,13 +9,13 @@ use common\models\User;
 /* @var $this yii\web\View */
 if ($searchModel->region_name)
 {
-    $this->title = '1Коворкинг-центры в '.$searchModel->region_name_tp;
+    $this->title = 'Коворкинг-центры в '.$searchModel->region_name_tp;
     $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->region_name_tp.': полный список. Цены, условия, фото, отзывы посетителей']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->region_name]);
 }
 else
 {
-    $this->title = '1Коворкинг-центры: поиск';
+    $this->title = 'Коворкинг-центры: поиск';
     $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкинг-центров в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры в россии']);
 }

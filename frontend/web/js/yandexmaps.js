@@ -34,7 +34,8 @@ function init_yandex_maps () {
         dataroute = dataroute + "&id=" + centerid;
     }
     $.ajax({
-        url: "http://localhost/cwa/frontend/web/index.php",
+        //url: "http://localhost/cwa/frontend/web/index.php",
+		url: "index.php",
         type: "GET",
         data: dataroute
         //data: "r=coords%2Fview&id=" + yandexmap.getAttribute('centerid')
