@@ -7,11 +7,11 @@ use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use common\models\User;
 /* @var $this yii\web\View */
-if ($searchModel->region_name)
+if ($searchModel->region_info && $searchModel->region_info->name)
 {
-    $this->title = 'Коворкинг-центры в '.$searchModel->region_name_tp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->region_name_tp.': полный список. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->region_name]);
+    $this->title = 'Коворкинг-центры в '.$searchModel->region_info->name_tp;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->region_info->name_tp.': полный список. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->region_info->name]);
 }
 else
 {
@@ -52,8 +52,8 @@ else
       <div class="raw">
           <div class="col-xs-12" style="margin-bottom: 15px;">
               <div class="btn-group pull-left">
-                  <?= Html::a('Список', ['center/index'], ['class' => 'btn btn-default', 'disabled' => 'disabled']) ?>
-                  <?= Html::a('Карта', ['center/map'], ['class' => 'btn btn-primary']) ?>
+                  <?= Html::a('Список', ['center/index', 'CenterSearch[region]' => $searchModel->region], ['class' => 'btn btn-default', 'disabled' => 'disabled']) ?>
+                  <?= Html::a('Карта', ['center/map', 'CenterSearch[region]' => $searchModel->region], ['class' => 'btn btn-primary']) ?>
               </div>
               <select class="selectpicker pull-right" data-width="fit">
                   <option>Сортировка:</option>

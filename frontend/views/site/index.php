@@ -1,4 +1,10 @@
+
+
 <?php
+
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use common\models\Region;
 
 /* @var $this yii\web\View */
 
@@ -12,19 +18,23 @@ $this->title = 'Коворкинг-ревю: ';
                 <div style="padding-left: calc(15% - 75px); float: left;" class="">
                     <p class="lead" style="color: #fff;">Быстрый поиск вариантов</p>
                 </div><br>
-                <form class="input-group col-md-12" style="">
+
+                <?= Html::beginForm(
+                    ['site/index-go'],
+                    'post',
+                    ['enctype' => 'multipart/form-data', 'class' => 'input-group col-md-12']) ?>
                     <div class="input-group-btn" id="mainGroup">
-                        <select class="selectpicker" data-width="35%" >
-                            <option>Коворкинг-центры</option>
-                            <option>Совместная аренда офиса</option>
-                        </select>
-                        <select class="selectpicker" data-width="35%">
-                            <option>Москва и область</option>
-                            <option>Санкт-Петербург</option>
-                        </select>
-                        <button type="submit" class="btn btn-warning" style="width:150px!important;">Поиск</button>
+                        <?= Html::dropDownList('type', 1,
+                            [1 => 'Коворкинг-центры', 2 => 'Совместная аренда'],
+                            ['class' => 'selectpicker', 'data-width' => '35%']) ?>
+                        <?= Html::dropDownList('region', 1,
+                                Region::getNamesArray(),
+                                ['class' => 'selectpicker', 'data-width' => '35%']) ?>
+                        <?= Html::submitButton('Поиск',
+                            ['class' => 'btn btn-warning', 'style' => 'width:150px!important;']) ?>
                     </div>
-                </form>
+                <?= Html::endForm() ?>
+
                 <!-- <form class="input-group">
                     <div class="col-md-12">
                         <div class="input-group-btn">

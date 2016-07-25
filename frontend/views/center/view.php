@@ -9,7 +9,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords
 $this->params['breadcrumbs'] =
 [
     ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
-    ['label' => $model->region_name, 'url' => ['center/index', 'CenterSearch[region]' => $model->region]]
+    ['label' => $model->region_info->name, 'url' => ['center/index', 'CenterSearch[region]' => $model->region]]
 ];
 ?>
 
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'] =
 
 <div class="raw">
     <div class="col-md-6">
-        <p><?= $model->region_name?></p>
+        <p><?= $model->region_info->name?></p>
         <p><?= $model->description?></p>
     </div>
     <div class="col-md-6">

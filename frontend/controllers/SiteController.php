@@ -211,4 +211,17 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionIndexGo()
+    {
+        $type = Yii::$app->request->post('type');
+        $region = Yii::$app->request->post('region');
+        switch ($type)
+        {
+            case 1:
+                return $this->redirect(['center/index', 'CenterSearch[region]' => $region]);
+            case 2:
+                return $this->redirect(['arenda/index', 'CenterSearch[region]' => $region]);
+        }
+    }
 }

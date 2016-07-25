@@ -9,7 +9,7 @@ $this->title = $model->name . ': редактирование';
 $this->params['breadcrumbs'] =
 [
     ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
-    ['label' => $model->region_name, 'url' => ['center/index', 'region' => $model->region]]
+    ['label' => $model->region_info->name, 'url' => ['center/index', 'region' => $model->region]]
 ];
 ?>
 <div class="center-update">

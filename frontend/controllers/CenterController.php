@@ -88,6 +88,9 @@ class CenterController extends \yii\web\Controller
         $searchModel = new CenterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        Yii::info('Регион: '.$searchModel->region, 'myd');
+        Yii::info(Yii::$app->request->queryParams, 'myd');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

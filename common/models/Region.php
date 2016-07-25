@@ -31,6 +31,7 @@ class Region extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['parent'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['map_lat', 'map_lng', 'map_zoom'], 'number'],
         ];
     }
 

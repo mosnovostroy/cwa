@@ -6,11 +6,21 @@ use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use common\models\User;
+use Yii;
 
 /* @var $this yii\web\View */
-$this->title = 'Коворкинг-цетры: поиск';
-$this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры: поиск']);
-$this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры']);
+if ($searchModel->region_info && $searchModel->region_info->name)
+{
+    $this->title = 'Коворкинг-центры в '.$searchModel->region_info->name_tp;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->region_info->name_tp.': полный список. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->region_info->name]);
+}
+else
+{
+    $this->title = 'Коворкинг-центры: поиск';
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкинг-центров в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры в россии']);
+}
 // $this->params['breadcrumbs'] =
 // [
 //     ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
@@ -18,8 +28,9 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-�
 // ];
 // ?>
 
+
 <h1>
-    Коворкинг-центры в Москве и МО
+    <?= $this->title ?>
     <?php
         if (Yii::$app->user && Yii::$app->user->identity && User::isUserAdmin(Yii::$app->user->identity->username))
         {
@@ -43,8 +54,8 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-�
       <div class="raw">
           <div class="col-xs-12" style="margin-bottom: 15px;">
               <div class="btn-group pull-left">
-                  <?= Html::a('Список', ['center/index'], ['class' => 'btn btn-primary']) ?>
-                  <?= Html::a('Карта', ['center/map'], ['class' => 'btn btn-default', 'disabled' => 'disabled']) ?>
+                  <?= Html::a('Список', ['center/index', 'CenterSearch[region]' => $searchModel->region], ['class' => 'btn btn-primary']) ?>
+                  <?= Html::a('Карта', ['center/map', 'CenterSearch[region]' => $searchModel->region], ['class' => 'btn btn-default', 'disabled' => 'disabled']) ?>
               </div>
               <select class="selectpicker pull-right" data-width="fit">
                   <option>Сортировка:</option>
@@ -55,7 +66,13 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-�
       </div>
       <div class="raw">
           <div class="col-xs-12">
-              <div id="yandexmap" style="width: 100%; height: 400px"></div>
+              <div id="yandexmap"
+                style="width: 100%; height: 400px"
+                region_id = "<?= $searchModel->region_info->id ?>"
+                ymaps_lat = "<?= $searchModel->region_info->map_lat ?>"
+                ymaps_lng = "<?= $searchModel->region_info->map_lng ?>"
+                ymaps_scale = "<?= $searchModel->region_info->map_zoom ?>"
+              ></div>
             </div>
         </div>
     </div>
