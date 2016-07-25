@@ -10,7 +10,7 @@ use yii\helpers\FileHelper;
 function func1($f1, $f2)
 {
     if ($f1['is_anons'] && !$f2['is_anons']) return 1;
-    if (!$f1['is_anons'] && $f2['is_anons']) return -1;  
+    if (!$f1['is_anons'] && $f2['is_anons']) return -1;
     if ($f1['file'] > $f2['file']) return 1;
     if ($f1['file'] < $f2['file']) return -1;
     return 0;
@@ -166,7 +166,7 @@ class CenterPictures extends Model
         Yii::$app->db->createCommand('UPDATE image SET is_anons = 1 WHERE name = :name AND cid = :cid', [':name' => $filename, ':cid' => $center_id])
             ->execute();
 
-        Yii::$app->db->createCommand('UPDATE image SET is_anons = 0 WHERE name != :name A cid != :cid', [':name' => $filename, ':cid' => $center_id])
+        Yii::$app->db->createCommand('UPDATE image SET is_anons = 0 WHERE name != :name AND cid = :cid', [':name' => $filename, ':cid' => $center_id])
             ->execute();
         return true;
     }
