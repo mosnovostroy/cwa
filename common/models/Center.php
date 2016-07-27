@@ -59,14 +59,16 @@ class Center extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'description' => 'Description',
+            'name' => 'Название',
+            'description' => 'Описание',
             'meta_title' => 'Meta Title',
             'meta_description' => 'Meta Description',
             'meta_keywords' => 'Meta Keywords',
-            'gmap_lat' => 'Gmap Lat',
-            'gmap_lng' => 'Gmap Lng',
+            'gmap_lat' => 'Широта',
+            'gmap_lng' => 'Долгота',
             'region' => 'Регион',
+            'price_day' => 'цена',
+            'rating' => 'рейтинг',
         ];
     }
 
@@ -96,79 +98,4 @@ class Center extends \yii\db\ActiveRecord
          ->queryScalar();
          $this->anonsImage = 'upload/centers/'.$this->id.'/'.$anons_image_name;
     }
-
-    public static function getCoordsJson($filter = [])
-    {
-        if (isset($filter['center']))
-            $center = $filter['center'];
-        else
-            $center = 0;
-
-        if (isset($filter['region']))
-            $region = $filter['region'];
-        else
-            $region = 0;
-
-        $coords_data = array();
-        $coords_data['type'] = 'FeatureCollection';
-        $coords_data['features'] = array();
-
-        $coords_item = array();
-
-        $sql = 'SELECT id, name, gmap_lat, gmap_lng FROM center';
-        if ($center)
-            $result = Yii::$app->db->createCommand($sql.' WHERE id=:id', [':id' => $center])->queryAll();
-        else if ($region)
-            $result = Yii::$app->db->createCommand($sql.' WHERE region=:region ORDER BY name ', [':region' => $region])->queryAll();
-        else
-            $result = Yii::$app->db->createCommand($sql.' ORDER BY name ')->queryAll();
-
-        foreach($result as $row)
-        {
-            $coords_item['type'] = 'Feature';
-            $coords_item['id'] = $row['id'];
-            $coords_item['geometry'] =  [
-                'type' => 'Point',
-                'coordinates' => [$row['gmap_lat'], $row['gmap_lng']]
-            ];
-            $coords_item['properties'] = [
-                'balloonContent' => Html::a($row['name'], ['center/view', 'id' => $row['id']]),
-                'clusterCaption' => 'Еще одна метка',
-                'hintContent' => $row['name']
-            ];
-            $coords_data['features'][] = $coords_item;
-        }
-        return json_encode($coords_data);
-    }
-
-    // public static function getCoordsJson($center = 0)
-    // {
-    //     $coords_data = array();
-    //     $coords_data['type'] = 'FeatureCollection';
-    //     $coords_data['features'] = array();
-    //
-    //     $coords_item = array();
-    //
-    //     $sql = 'SELECT id, name, gmap_lat, gmap_lng FROM center';
-    //     if ($center)
-    //         $result = Yii::$app->db->createCommand($sql.' WHERE id=:id', [':id' => $center])->queryAll();
-    //     else
-    //         $result = Yii::$app->db->createCommand($sql.' ORDER BY name ')->queryAll();
-    //     foreach($result as $row)
-    //     {
-    //         $coords_item['type'] = 'Feature';
-    //         $coords_item['id'] = $row['id'];
-    //         $coords_item['geometry'] =  [
-    //             'type' => 'Point',
-    //             'coordinates' => [$row['gmap_lat'], $row['gmap_lng']]
-    //         ];
-    //         $coords_item['properties'] = [
-    //             'balloonContent' => Html::a($row['name'], ['center/view', 'id' => $row['id']]),
-    //             'clusterCaption' => 'Еще одна метка',
-    //             'hintContent' => $row['name']
-    //         ];
-    //         $coords_data['features'][] = $coords_item;
-    //     }
-    //     return json_encode($coords_data);
-    // }
 }

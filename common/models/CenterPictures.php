@@ -86,9 +86,9 @@ class CenterPictures extends Model
         if (!$center_id)
             return false;
         $upload_path = Yii::getAlias('@webroot/upload/centers/'.$center_id);
-        $upload_url = 'upload/centers/'.$center_id;
+        $upload_url = '/upload/centers/'.$center_id;
         $tmp_path = Yii::getAlias('@webroot/tmp/centers/'.$center_id);
-        $tmp_url = 'tmp/centers/'.$center_id;
+        $tmp_url = '/tmp/centers/'.$center_id;
         if (is_dir($upload_path))
         {
             if(!is_dir($tmp_path) && $generate_thumbnails)

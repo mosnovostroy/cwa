@@ -28,17 +28,20 @@ function init_yandex_maps () {
     ymaps.behavior.storage.add('mybehavior', MyBehavior);
     myMap.behaviors.enable('mybehavior');
 
-    var dataroute = "r=coords%2Fview";
+    //var dataroute = "r=coords%2Fview";
+    //var dataroute = "r=center%2Fcoords";
+    var dataroute = "";
     var centerid = yandexmap.getAttribute('centerid');
     if(centerid) {
-        dataroute = dataroute + "&center=" + centerid;
+        dataroute = dataroute + "&CenterSearch[id]=" + centerid;
     }
     var region_id = yandexmap.getAttribute('region_id');
     if(region_id) {
-        dataroute = dataroute + "&region=" + region_id;
+        dataroute = dataroute + "&CenterSearch[region]=" + region_id;
     }
     $.ajax({
-		    url: "index.php",
+		    //url: "index.php",
+        url: "/center/coords/",
         type: "GET",
         data: dataroute
         //data: "r=coords%2Fview&id=" + yandexmap.getAttribute('centerid')

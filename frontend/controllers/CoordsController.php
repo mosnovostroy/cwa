@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 
-use common\models\Center;
+use common\models\CenterSearch;
 
 class CoordsController extends \yii\web\Controller
 {
@@ -14,7 +14,7 @@ class CoordsController extends \yii\web\Controller
 
       //Yii::info('Region: '.$region, 'myd');
       //Yii::info('Center: '.$center, 'myd');
-      
+
       // $filer = arrray();
       // if ($center)
       //     $filter['center'] = $center;
@@ -23,11 +23,11 @@ class CoordsController extends \yii\web\Controller
       //
       // echo Center::getCoordsJson($filter);
 
-      if ($center)
-          echo Center::getCoordsJson(['center' => $center]);
+      /*if ($center)
+          echo CenterSearch::getCoordsJson(['center' => $center]);
       else if ($region)
-          echo Center::getCoordsJson(['region' => $region]);
+          echo CenterSearch::getCoordsJson(['region' => $region]);
       else
-          echo Center::getCoordsJson();
+          echo CenterSearch::getCoordsJson();*/
     }
 }

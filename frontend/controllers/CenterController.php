@@ -88,9 +88,6 @@ class CenterController extends \yii\web\Controller
         $searchModel = new CenterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        Yii::info('Регион: '.$searchModel->region, 'myd');
-        Yii::info(Yii::$app->request->queryParams, 'myd');
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -107,6 +104,14 @@ class CenterController extends \yii\web\Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionCoords()
+    {
+        $searchModel = new CenterSearch();
+
+        header("Content-Type: application/json; charset=UTF-8");
+        echo $searchModel->searchCoords(Yii::$app->request->queryParams);
     }
 
     public function actionView($id)
