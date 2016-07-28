@@ -45,10 +45,10 @@ class Center extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'alias'], 'required'],
             [['description', 'meta_title', 'meta_description', 'meta_keywords'], 'string'],
-            [['gmap_lat', 'gmap_lng', 'region'], 'number'],
-            [['name'], 'string', 'max' => 255],
+            [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
+            [['name', 'alias'], 'string', 'max' => 255],
         ];
     }
 
@@ -60,6 +60,7 @@ class Center extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Название',
+            'alias' => 'Алиас',
             'description' => 'Описание',
             'meta_title' => 'Meta Title',
             'meta_description' => 'Meta Description',
