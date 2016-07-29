@@ -24,7 +24,7 @@ else
 
 <div class="raw">
     <div class="col-xs-12" style="">
-        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/map'],
+        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/map-redirect'],
                                         'options' => ['class' => 'form-inline']]); ?>
                 <span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regions_array, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
@@ -39,7 +39,7 @@ else
 <div class="raw">
     <div class="col-xs-12" style="">
         <div class="pull-left">
-            <?= Html::a('список', ['center/index', 'CenterSearch[region]' => $searchModel->region]) ?>
+            <?= Html::a('список', ['center/index', 'CenterSearch' => ['region' => $searchModel->region]]) ?>
             | карта
         </div>
     </div>

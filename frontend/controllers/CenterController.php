@@ -106,6 +106,20 @@ class CenterController extends \yii\web\Controller
         ]);
     }
 
+    public function actionIndexRedirect()
+    {
+        $params = Yii::$app->request->queryParams;
+        $params[0] = 'center/index';
+        return $this->redirect($params);
+    }
+
+    public function actionMapRedirect()
+    {
+        $params = Yii::$app->request->queryParams;
+        $params[0] = 'center/map';
+        return $this->redirect($params);
+    }
+
     public function actionCoords()
     {
         $searchModel = new CenterSearch();

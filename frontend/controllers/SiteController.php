@@ -219,9 +219,10 @@ class SiteController extends Controller
         switch ($type)
         {
             case 1:
-                return $this->redirect(['center/index', 'CenterSearch[region]' => $region]);
+                return $this->redirect(['center/index', 'CenterSearch' => ['region' => $region]]);
             case 2:
-                return $this->redirect(['arenda/index', 'CenterSearch[region]' => $region]);
+                return $this->redirect(['arenda/index', 'CenterSearch' => ['region' => $region]]);
         }
     }
+
 }
