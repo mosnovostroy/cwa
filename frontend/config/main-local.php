@@ -22,12 +22,10 @@ $config = [
                     'enableStrictParsing' => false,
                     'suffix' => '/',
                     'rules' => [
-                        [
-                            'class' => 'common\models\CenterUrlRule',
-                        ],
                         'centers' => 'center/index',
                         'centers/map' => 'center/map',
-                        'centers/<id:\d+>' => 'center/view',
+                        //'centers/<id:\d+>' => 'center/view',
+
                         //'centers/<:[a-z-]+>' => 'center/view',
                     ],
                 ],

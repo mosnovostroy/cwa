@@ -24,10 +24,11 @@ else
 
 <div class="raw">
     <div class="col-xs-12" style="">
-        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-redirect'],
+        <?php   $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-redirect'],
                                         'options' => ['class' => 'form-inline']]); ?>
                 <span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regions_array, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
+                <?= $form->field($searchModel, 'price_day')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
                 <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
         <?php ActiveForm::end(); ?>
         <?php
@@ -40,7 +41,7 @@ else
     <div class="col-xs-12" style="">
         <div class="pull-left">
             список
-            | <?= Html::a('карта', ['center/map', 'CenterSearch' => ['region' => $searchModel->region]]) ?>
+            | <?= Html::a('карта', ['center/map', 'CenterSearch' => $searchModel->toArray()]) ?>
         </div>
 
         <div class="pull-right">

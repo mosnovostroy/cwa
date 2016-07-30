@@ -84,7 +84,7 @@ class CenterController extends \yii\web\Controller
 
     public function actionIndex()
     {
-
+        //Yii::info(Yii::$app->request->queryParams, 'myd');
         $searchModel = new CenterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

@@ -39,7 +39,7 @@ else
 <div class="raw">
     <div class="col-xs-12" style="">
         <div class="pull-left">
-            <?= Html::a('список', ['center/index', 'CenterSearch' => ['region' => $searchModel->region]]) ?>
+            <?= Html::a('список', ['center/index', 'CenterSearch' => $searchModel->toArray()]) ?>
             | карта
         </div>
     </div>

@@ -13,6 +13,9 @@ use yii\helpers\Html;
  */
 class CenterSearch extends Center
 {
+    // public $price_day_min;
+    // public $price_day_max;
+
     /**
      * @inheritdoc
      */
@@ -73,6 +76,7 @@ class CenterSearch extends Center
             'gmap_lat' => $this->gmap_lat,
             'gmap_lng' => $this->gmap_lng,
             'region' => $this->region,
+            'price_day' => $this->price_day,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
@@ -80,6 +84,12 @@ class CenterSearch extends Center
             ->andFilterWhere(['like', 'meta_title', $this->meta_title])
             ->andFilterWhere(['like', 'meta_description', $this->meta_description])
             ->andFilterWhere(['like', 'meta_keywords', $this->meta_keywords]);
+
+        //$query->andFilterWhere(['between', 'price_day', $this->price_day_min, $this->price_day_max]);
+
+        // Yii::info($query,'myd');
+        // Yii::info($this->price_day_min,'myd');
+        // Yii::info($this->price_day_max,'myd');
 
         return $dataProvider;
     }
