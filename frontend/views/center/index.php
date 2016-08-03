@@ -24,12 +24,15 @@ else
 
 <div class="raw">
     <div class="col-xs-12" style="">
-        <?php   $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-redirect'],
+        <?php   $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
                                         'options' => ['class' => 'form-inline']]); ?>
                 <span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regions_array, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_day')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-                <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
+                <?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+                <?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+                <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
+
+                <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
         <?php ActiveForm::end(); ?>
         <?php
             if (Yii::$app->user && Yii::$app->user->identity && User::isUserAdmin(Yii::$app->user->identity->username))

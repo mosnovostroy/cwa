@@ -24,9 +24,7 @@ $config = [
                     'rules' => [
                         'centers' => 'center/index',
                         'centers/map' => 'center/map',
-                        //'centers/<id:\d+>' => 'center/view',
-
-                        //'centers/<:[a-z-]+>' => 'center/view',
+                        'centers/coordinates' => 'center/coordinates',
                     ],
                 ],
     ],

@@ -9,6 +9,7 @@ use yii\helpers\Html;
 $this->title = 'Create Center';
 $this->params['breadcrumbs'][] = ['label' => 'Centers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['hasYandexMap'] = true;
 ?>
 <div class="center-create">
 

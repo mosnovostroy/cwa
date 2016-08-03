@@ -11,6 +11,7 @@ $this->params['breadcrumbs'] =
     ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
     ['label' => $model->region_info->name, 'url' => ['center/index', 'region' => $model->region]]
 ];
+$this->params['hasYandexMap'] = true;
 ?>
 <div class="center-update">
     <h1>

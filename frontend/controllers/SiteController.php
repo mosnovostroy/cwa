@@ -212,7 +212,7 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionIndexGo()
+    public function actionIndexSubmit()
     {
         $type = Yii::$app->request->post('type');
         $region = Yii::$app->request->post('region');

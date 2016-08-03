@@ -8,7 +8,7 @@ function init_yandex_maps () {
     var ymaps_lng = yandexmap.getAttribute('ymaps_lng');
     if(!ymaps_lng) ymaps_lng = 37.64;
 
-    //alert(window.location.toString().replace('/map/','/coords/'));
+    alert(window.location);
     var myMap = new ymaps.Map('yandexmap', {
             center: [ymaps_lat, ymaps_lng],
             zoom: ymaps_scale
@@ -28,21 +28,23 @@ function init_yandex_maps () {
     ymaps.behavior.storage.add('mybehavior', MyBehavior);
     myMap.behaviors.enable('mybehavior');
 
-    var datapath = "";
-    var dataparams = "";
+    //var dataroute = "r=coords%2Fview";
+    //var dataroute = "r=center%2Fcoords";
+    var dataroute = "";
     var centerid = yandexmap.getAttribute('centerid');
     if(centerid) {
-        datapath = "/centers/coordinates/"
-        dataparams = "&CenterSearch[id]=" + centerid;
+        dataroute = dataroute + "&CenterSearch[id]=" + centerid;
     }
-    else {
-        datapath = window.location.toString().replace('/map/','/coordinates/');
-        dataparams = "";
+    var region_id = yandexmap.getAttribute('region_id');
+    if(region_id) {
+        dataroute = dataroute + "&CenterSearch[region]=" + region_id;
     }
     $.ajax({
-        url: datapath,
+		    //url: "index.php",
+        url: "/center/coords/",
         type: "GET",
-        data: dataparams
+        data: dataroute
+        //data: "r=coords%2Fview&id=" + yandexmap.getAttribute('centerid')
     }).done(function(data) {
         objectManager.add(data);
     });

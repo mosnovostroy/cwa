@@ -8,7 +8,7 @@ use common\models\Region;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Коворкинг-ревю: ';
+$this->title = 'Коворкинг-ревю: коворкинг-центры и совместная аренда офиса';
 ?>
 
 <div class="row" style="background-color:#bbd; margin: -19px -76px 0px -64px;">
@@ -20,7 +20,7 @@ $this->title = 'Коворкинг-ревю: ';
                 </div><br>
 
                 <?= Html::beginForm(
-                    ['site/index-go'],
+                    ['site/index-submit'],
                     'post',
                     ['enctype' => 'multipart/form-data', 'class' => 'input-group col-md-12']) ?>
                     <div class="input-group-btn" id="mainGroup">

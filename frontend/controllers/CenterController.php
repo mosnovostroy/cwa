@@ -84,7 +84,6 @@ class CenterController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        //Yii::info(Yii::$app->request->queryParams, 'myd');
         $searchModel = new CenterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -96,7 +95,6 @@ class CenterController extends \yii\web\Controller
 
     public function actionMap()
     {
-
         $searchModel = new CenterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -106,27 +104,31 @@ class CenterController extends \yii\web\Controller
         ]);
     }
 
-    public function actionIndexRedirect()
-    {
-        $params = Yii::$app->request->queryParams;
-        $params[0] = 'center/index';
-        return $this->redirect($params);
-    }
-
-    public function actionMapRedirect()
-    {
-        $params = Yii::$app->request->queryParams;
-        $params[0] = 'center/map';
-        return $this->redirect($params);
-    }
-
-    public function actionCoords()
+    public function actionCoordinates()
     {
         $searchModel = new CenterSearch();
 
         header("Content-Type: application/json; charset=UTF-8");
         echo $searchModel->searchCoords(Yii::$app->request->queryParams);
     }
+
+    public function actionIndexSubmit()
+    {
+        $params = Yii::$app->request->queryParams;
+        $params[0] = 'center/index';        
+        return $this->redirect($params);
+    }
+
+    public function actionMapSubmit()
+    {
+        $params = Yii::$app->request->queryParams;
+        $params[0] = 'center/map';
+        return $this->redirect($params);
+    }
+
+
+
+
 
     public function actionView($id)
     {

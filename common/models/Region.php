@@ -65,7 +65,10 @@ class Region extends \yii\db\ActiveRecord
 
     public static function getNamesArray ()
     {
-        $regions = Region::find()->where(['parent' => 0])->all();
-        return ArrayHelper::map($regions,'id','name');
+        $regions[0] = 'Все регионы';
+        $result = Region::find()->where(['parent' => 0])->all();
+        $subregions = ArrayHelper::map($result,'id','name');
+        $regions = $regions + $subregions;
+        return $regions;
     }
 }

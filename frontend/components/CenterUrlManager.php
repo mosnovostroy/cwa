@@ -28,32 +28,23 @@ class CenterUrlManager extends UrlManager
             }
         }
 
-        // Страница index или map:
+        //В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
+        $region_alias = '';
         if (isset($params['CenterSearch']) && isset($params['CenterSearch']['region']))
         {
             //По id региона определяем алиас:
-            $alias = Yii::$app->db
+            $region_alias = Yii::$app->db
                 ->createCommand('SELECT alias FROM region
                                   WHERE id=:id', [':id' => $params['CenterSearch']['region']])
                 ->queryScalar();
-
-            if($alias)
-            {
-                //Переделываем GET-параметр CenterSearch[region] в "поддиректорию"
-                unset($params['CenterSearch']['region']);
-
-                // if(count($params['CenterSearch']) === 0)
-                //     unset($params['CenterSearch']);
-
-                $url = parent::createUrl($params);
-                //$url = $url.'/'.$alias;
-                $url = str_replace('centers', 'centers/'.$alias, $url);
-                return $url;
-            }
         }
 
-        //Если "наш" код не сработал (и мы сюда таки дошли) - ладно, просто вызовем родительский метод:
-        return parent::createUrl($params);
+        unset($params['CenterSearch']['region']);
+        $url = parent::createUrl($params);
+        if($region_alias)
+            $url = str_replace('centers', 'centers/'.$region_alias, $url);
+
+        return $url;
     }
 
     public function parseRequest($request)
@@ -105,14 +96,17 @@ class CenterUrlManager extends UrlManager
                     }
                 }
 
-                // Если же нет (мы сюда дошли), это страница index или map c установленным регионом.
-                // Настраиваем и отдаем либо ['center/index', $params], либо ['center/map', $params]
+                // Если же нет (мы сюда дошли), это страница index или map или coordinates
+                // c установленным регионом.
+                // Настраиваем и отдаем либо ['center/index', $params], либо ['center/map', $params], либо ['center/coordinates', $params]
                 $params['CenterSearch']['region'] = $region_id;
                 if(preg_match('%^map/\S*$%', $matches[2]))
                 //if ($detailed_matches[1] === 'map')
                     return ['center/map', $params];
-                else
-                    return ['center/index', $params];
+                if(preg_match('%^coordinates/\S*$%', $matches[2]))
+                    return ['center/coordinates', $params];
+
+                return ['center/index', $params];
             }
         }
         //Если "наш" код не сработал (и мы сюда таки дошли) - ладно, просто вызовем родительский метод:

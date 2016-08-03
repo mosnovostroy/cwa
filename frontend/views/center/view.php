@@ -11,6 +11,7 @@ $this->params['breadcrumbs'] =
     ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
     ['label' => $model->region_info->name, 'url' => ['center/index', 'CenterSearch' => ['region' => $model->region]]]
 ];
+$this->params['hasYandexMap'] = true;
 ?>
 
 <div class="raw">
@@ -78,7 +79,7 @@ $this->params['breadcrumbs'] =
 
 <div class="raw">
     <div class="col-xs-12">
-        <div id="yandexmap" style="width: 100%; height: 400px" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
+        <div id="yandexmap" class="wideyandexmap" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
     </div>
 </div>
 

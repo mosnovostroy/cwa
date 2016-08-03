@@ -11,12 +11,15 @@ use frontend\assets\AppAsset;
 //use common\assets\CommonAppAsset;
 use frontend\assets\BootstrapSelectAsset;
 use common\widgets\Alert;
+//use yii\widgets\ActiveForm;
+use Yii;
 
 
 //CommonAppAsset::register($this);
 AppAsset::register($this);
 BootstrapSelectAsset::register($this);
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -26,8 +29,9 @@ BootstrapSelectAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"> </script>
-
+    <?php if (isset($this->params['hasYandexMap']))
+        echo '<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"> </script>';
+    ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -41,6 +45,26 @@ BootstrapSelectAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
+
+    ?>
+
+    <?= Html::beginForm(['center/index-submit'], 'get', ['class' => 'navbar-form form-inline navbar-left']) ?>
+        <div class="form-group input-group">
+            <?= Html::input('text', 'CenterSearch[text]',
+              isset(Yii::$app->request->queryParams['CenterSearch']['text']) ? Yii::$app->request->queryParams['CenterSearch']['text'] : null,
+              ['class' => 'form-control', 'style' => 'border-radius: 0;', 'placeholder' => 'Коворкинг-центры'])?>
+
+
+              <?= isset(Yii::$app->request->queryParams['CenterSearch']['region']) ? Html::input('hidden', 'CenterSearch[region]', Yii::$app->request->queryParams['CenterSearch']['region']) : '' ?>
+
+            <span class="input-group-btn">
+                <?= Html::submitButton('Найти', ['class' => 'btn btn-default', 'style' => 'border-radius: 0;']) ?>
+            </span>
+        </div>
+    <?= Html::endForm() ?>
+
+<?php
     $menuItems = [
         ['label' => 'Коворкинг-центры', 'url' => ['/center/index']],
         ['label' => 'Совместная аренда', 'url' => ['/arenda/index']],
@@ -64,13 +88,13 @@ BootstrapSelectAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container-fluid">
         <?= Breadcrumbs::widget([
             'homeLink' => false,
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
-        <?= $content ?>
+        <?=  $content ?>
     </div>
 </div>
 

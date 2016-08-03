@@ -20,14 +20,18 @@ else
     $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкинг-центров в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры в россии']);
 }
+
+$this->params['hasYandexMap'] = true;
 ?>
 
 <div class="raw">
     <div class="col-xs-12" style="">
-        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/map-redirect'],
+        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/map-submit'],
                                         'options' => ['class' => 'form-inline']]); ?>
                 <span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regions_array, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
+                <?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+                <?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
                 <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
         <?php ActiveForm::end(); ?>
         <?php
@@ -46,8 +50,13 @@ else
 </div>
 <div class="raw">
     <div class="col-xs-12">
-        <div id="yandexmap"
-          style="width: 100%; height: 400px"
+        <div id="yandexmap" class="wideyandexmap"
+
+          <?php
+              $params = $searchModel->toArray();
+              foreach ($params as $k => $v)
+                  echo ' '.$k.' = "'.$v.'" ';
+          ?>
           region_id = "<?= $searchModel->region_info->id ?>"
           ymaps_lat = "<?= $searchModel->region_info->map_lat ?>"
           ymaps_lng = "<?= $searchModel->region_info->map_lng ?>"
