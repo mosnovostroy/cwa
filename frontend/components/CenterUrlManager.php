@@ -40,6 +40,12 @@ class CenterUrlManager extends UrlManager
         }
 
         unset($params['CenterSearch']['region']);
+
+        //Не передаем пустые значения:
+        if (isset($params['CenterSearch']))
+            foreach($params['CenterSearch'] as $k => $v)
+                if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '')
+                    unset($params['CenterSearch'][$k]);
         $url = parent::createUrl($params);
         if($region_alias)
             $url = str_replace('centers', 'centers/'.$region_alias, $url);
