@@ -28,7 +28,73 @@ class User extends ActiveRecord implements IdentityInterface
 
     const ROLE_USER = 10;
     const ROLE_ADMIN = 20;
+	
+	
+    /**
+     * @var array EAuth attributes
+     */
+    public $profile;
+	public $authKey;
 
+    /**
+     * @param \nodge\eauth\ServiceBase $service
+     * @return User
+     * @throws ErrorException
+     */
+    public static function findByEAuth($service) {
+        if (!$service->getIsAuthenticated()) {
+            throw new ErrorException('EAuth user should be authenticated before creating identity.');
+        }
+
+		//Идентификатор пользователя типа mailru-10964094557919501470 - мы будем фиксировать его в поле таблицы user.email (моя идея-костыль)
+        $id = $service->getServiceName().'-'.$service->getId();
+		
+		//Если такого юзера из соцсетей еще не было, запишем его в таблицу (мой код).
+		$user = User::find()->where(['email' => $id])->one();		
+		if (!$user)
+		{			
+			$values = [
+				'username' => $service->getAttribute('name'),
+				'role' => self::ROLE_USER,
+				'email' => $id,
+			];
+			
+			$user = new User();
+			$user->attributes = $values;
+			if($user->save())
+			{
+				// $auth = Yii::$app->authManager;
+				// $authorRole = $auth->getRole('author');
+				// $auth->assign($authorRole, $user->getId());			
+			}
+		}				
+		
+		//Пишем специфические для авторизации через сети вещи в сессию (код автора расширения):
+        $attributes = [
+            'id' => $id,
+            'username' => $service->getAttribute('name'),
+            'authKey' => md5($id),
+            'profile' => $service->getAttributes(),
+        ];
+        $attributes['profile']['service'] = $service->getServiceName();
+        Yii::$app->getSession()->set('user-'.$id, $attributes);
+		
+		//Yii::info($user->getAttributes(), 'myd');		
+        return $user;
+    }
+	
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id)
+    {
+        if (Yii::$app->getSession()->has('user-'.$id)) {
+            return new self(Yii::$app->getSession()->get('user-'.$id));
+        }
+        else {
+            return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        }		
+    }
 
     /**
      * @inheritdoc
@@ -57,16 +123,10 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
+			[['username', 'email'], 'safe'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-    }
 
     /**
      * @inheritdoc
@@ -191,13 +251,53 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    public static function isUserAdmin($username)
+    public static function isUser()
     {
-        if (static::findOne(['username' => $username, 'role' => self::ROLE_ADMIN]))
+        if (Yii::$app->user && Yii::$app->user->identity)
         {
             return true;
         } else {
             return false;
         }
     }
+
+    public static function isAdmin()
+    {
+        if (Yii::$app->user && Yii::$app->user->identity && static::findOne(['username' => Yii::$app->user->identity->username, 'role' => self::ROLE_ADMIN]))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isOwner($id)
+    {
+        if (Yii::$app->user && Yii::$app->user->identity && Yii::$app->user->identity->id === $id)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isAdminOrOwner($id)
+    {
+        if (User::isAdmin() || User::isOwner($id))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // public static function isUserAdmin($username)
+    // {
+        // if (static::findOne(['username' => $username, 'role' => self::ROLE_ADMIN]))
+        // {
+            // return true;
+        // } else {
+            // return false;
+        // }
+    // }
 }

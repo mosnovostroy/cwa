@@ -13,6 +13,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\Index;
 
 /**
  * Site controller
@@ -47,6 +48,11 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+			'eauth' => [
+				// required to disable csrf validation on OpenID requests
+				'class' => \nodge\eauth\openid\ControllerBehavior::className(),
+				'only' => ['login'],
+			],
         ];
     }
 
@@ -73,7 +79,23 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+		$model = new Index();
+        return $this->render('index', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionIndexSubmit()
+    {
+        $type = Yii::$app->request->post('type');
+        $region = Yii::$app->request->post('region');
+        switch ($type)
+        {
+            case 1:
+                return $this->redirect(['center/index', 'CenterSearch' => ['region' => $region]]);
+            case 2:
+                return $this->redirect(['arenda/index', 'ArendaSearch' => ['region' => $region]]);
+        }
     }
 
     /**
@@ -81,8 +103,55 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogin()
-    {
+    // public function actionLogin()
+    // {
+        // if (!Yii::$app->user->isGuest) {
+            // return $this->goHome();
+        // }
+
+        // $model = new LoginForm();
+        // if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            // return $this->goBack();
+        // } else {
+            // return $this->render('login', [
+                // 'model' => $model,
+            // ]);
+        // }
+    // }
+	
+    public function actionLogin() {
+        $serviceName = Yii::$app->getRequest()->getQueryParam('service');
+        if (isset($serviceName)) {
+            /** @var $eauth \nodge\eauth\ServiceBase */
+            $eauth = Yii::$app->get('eauth')->getIdentity($serviceName);
+            $eauth->setRedirectUrl(Yii::$app->getUser()->getReturnUrl());
+            $eauth->setCancelUrl(Yii::$app->getUrlManager()->createAbsoluteUrl('site/login'));
+ 
+            try {
+                if ($eauth->authenticate()) {
+//                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
+ 
+                    $identity = User::findByEAuth($eauth);
+					Yii::$app->getUser()->login($identity); 
+ 
+                    // special redirect with closing popup window
+                    $eauth->redirect();
+                }
+                else {
+                    // close popup window and redirect to cancelUrl
+                    $eauth->cancel();
+                }
+            }
+            catch (\nodge\eauth\ErrorException $e) {
+                // save error to show it later
+                Yii::$app->getSession()->setFlash('error', 'EAuthException: '.$e->getMessage());
+ 
+                // close popup window and redirect to cancelUrl
+//              $eauth->cancel();
+                $eauth->redirect($eauth->getCancelUrl());
+            }
+        }
+ 
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -95,7 +164,7 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }	
 
     /**
      * Logs out the current user.
@@ -210,19 +279,6 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
-    }
-
-    public function actionIndexSubmit()
-    {
-        $type = Yii::$app->request->post('type');
-        $region = Yii::$app->request->post('region');
-        switch ($type)
-        {
-            case 1:
-                return $this->redirect(['center/index', 'CenterSearch' => ['region' => $region]]);
-            case 2:
-                return $this->redirect(['arenda/index', 'CenterSearch' => ['region' => $region]]);
-        }
     }
 
 }

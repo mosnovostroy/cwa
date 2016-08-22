@@ -2,18 +2,24 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = $model->name . ': картинки';
+$this->title = 'Картинки';
+$this->params['breadcrumbs'] =
+[
+    ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
+    ['label' => $model->regionName, 'url' => ['center/index', 'region' => $model->region]],
+	['label' => $model->name, 'url' => ['center/view', 'id' => $model->id]],
+];
 ?>
 
 <h1>
     <?= Html::encode($this->title) ?>
-    <?= Html::a('Страница', ['view', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     <?= Html::a('Редактирование', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+	<?= Html::a('Тарифы', ['features', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
 </h1>
 
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
-    <?= $form->field($model, 'uploadFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+    <?= $form->field($model->imageUploadModel, 'uploadFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
     <!-- <button>Submit</button> -->
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']) ?>
@@ -31,7 +37,7 @@ $this->title = $model->name . ': картинки';
                 <th>Дата</th>
                 <th>Действия</th>
             </tr>
-            <?php foreach ($model->imageFiles as $file) {?>
+            <?php foreach ($model->images as $file) {?>
             <tr>
                 <td><img src="<?= $file['thumbnail'] ?>" ></td>
                 <td>

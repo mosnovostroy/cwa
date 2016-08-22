@@ -1,10 +1,7 @@
-
-
 <?php
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\models\Region;
 
 /* @var $this yii\web\View */
 
@@ -17,8 +14,7 @@ $this->title = 'Коворкинг-ревю: коворкинг-центры и 
             <div class="row">
                 <div style="padding-left: calc(15% - 75px); float: left;" class="">
                     <p class="lead" style="color: #fff;">Быстрый поиск вариантов</p>
-                </div><br>
-
+                </div><br>	
                 <?= Html::beginForm(
                     ['site/index-submit'],
                     'post',
@@ -28,49 +24,13 @@ $this->title = 'Коворкинг-ревю: коворкинг-центры и 
                             [1 => 'Коворкинг-центры', 2 => 'Совместная аренда'],
                             ['class' => 'selectpicker', 'data-width' => '35%']) ?>
                         <?= Html::dropDownList('region', 1,
-                                Region::getNamesArray(),
+                                $model->regionsArray,
                                 ['class' => 'selectpicker', 'data-width' => '35%']) ?>
                         <?= Html::submitButton('Поиск',
                             ['class' => 'btn btn-warning', 'style' => 'width:150px!important;']) ?>
                     </div>
                 <?= Html::endForm() ?>
-
-                <!-- <form class="input-group">
-                    <div class="col-md-12">
-                        <div class="input-group-btn">
-                            <select class="selectpicker" data-width="100%" >
-                                <option>Коворкинг-центры</option>
-                                <option>Совместная аренда офиса</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-group-btn">
-                            <select class="selectpicker" data-width="100%">
-                                <option>Москва и область</option>
-                                <option>Санкт-Петербург</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-primary">Поиск</button>
-                        </div>
-                    </div>
-                </form> -->
             </div>
         </div>
-    </div>
-</div>
-
-<div class="site-index" ">
-
-
-
-
-    <div class="jumbotron">
-    </div>
-
-    <div class="body-content">
     </div>
 </div>

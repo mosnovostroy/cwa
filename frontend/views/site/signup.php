@@ -7,29 +7,47 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Регистрация';
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to signup:</p>
 
     <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+        <div class="col-lg-2">
+		</div>
+        <div class="col-lg-8">
+			<h1><?= Html::encode($this->title) ?></h1>
+			<div class="row">
+				<div class="col-lg-7">
+					<?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+						<?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+						<span id="helpBlock" class="help-block">
+							Например, "Иван Фёдоров" или "ivan31415". Ваш логин понадобится для входа на сайт и будет отображаться как Ваше имя. 
+						</span>				
 
-                <?= $form->field($model, 'email') ?>
+						<?= $form->field($model, 'email') ?>
+						<span id="helpBlock" class="help-block">
+							На указанный адрес будет выслана ссылка для активации. 
+						</span>				
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+						<?= $form->field($model, 'password')->passwordInput() ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-                </div>
+						<div class="form-group">
+							<?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success', 'name' => 'signup-button']) ?>
+						</div>
 
-            <?php ActiveForm::end(); ?>
+					<?php ActiveForm::end(); ?>
+				</div>
+				<div class="col-lg-1">
+				</div>
+				<div class="col-lg-4">
+					<div style="font-weight: normal; margin-bottom: 5px;">Уже зарегистрированы?</div>
+					<?= Html::a('Вход на сайт', ['site/login'], ['class' => 'btn btn-primary']) ?>
+				</div>				
+			</div>
         </div>
+        <div class="col-lg-2">
+		</div>
     </div>
 </div>

@@ -4,13 +4,11 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Center;
+use common\models\CenterFeatures;
 use yii\web\Controller;
-use common\models\CenterPictures;
 use common\models\CenterSearch;
 use common\models\User;
-use yii\web\UploadedFile;
 use yii\data\Pagination;
-use common\models\Region;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
@@ -28,7 +26,7 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                             return User::isUserAdmin(Yii::$app->user->identity->username);
+							 return User::isAdmin();
                          }
                     ],
                     [
@@ -36,7 +34,16 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                             return User::isUserAdmin(Yii::$app->user->identity->username);
+							//Yii::info($action->controller->actionParams->id, 'myd');							
+							 return User::isAdmin();
+                         }
+                    ],
+                    [
+                         'actions' => ['features'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+							 return User::isAdmin();
                          }
                     ],
                     [
@@ -44,7 +51,7 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                             return User::isUserAdmin(Yii::$app->user->identity->username);
+							 return User::isAdmin();
                          }
                     ],
                     [
@@ -52,7 +59,7 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                             return User::isUserAdmin(Yii::$app->user->identity->username);
+							 return User::isAdmin();
                          }
                     ],
                     [
@@ -60,7 +67,7 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                             return User::isUserAdmin(Yii::$app->user->identity->username);
+							 return User::isAdmin();
                          }
                     ],
                     [
@@ -68,7 +75,7 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-                             return User::isUserAdmin(Yii::$app->user->identity->username);
+							 return User::isAdmin();
                          }
                     ],
                 ],
@@ -80,6 +87,15 @@ class CenterController extends \yii\web\Controller
                 ],
             ],
         ];
+    }
+
+   protected function findModel($id)
+    {
+        if (($model = Center::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 
     public function actionIndex()
@@ -98,6 +114,8 @@ class CenterController extends \yii\web\Controller
         $searchModel = new CenterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+		$this->layout = 'map';
+		
         return $this->render('map', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -126,33 +144,17 @@ class CenterController extends \yii\web\Controller
         return $this->redirect($params);
     }
 
-
-
-
-
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $model->initPictures();
+		$featuresModel = new CenterFeatures;
+		$featuresModel->load(unserialize($model->features));
         return $this->render('view', [
             'model' => $model,
-          ]);
+			'fm' => $featuresModel,          
+		  ]);
     }
 
-    public function actionPictures($id)
-    {
-        $model = new CenterPictures();
-        if ($model && $model->initData($id) && Yii::$app->request->isPost) {
-            $model->uploadFiles = UploadedFile::getInstances($model, 'uploadFiles');
-            if ($model->upload()) {
-                //return $this->redirect(['view', 'id' => $id]);
-                $model->initData($id);
-                return $this->render('pictures', ['model' => $model]);
-            }
-        }
-
-        return $this->render('pictures', ['model' => $model]);
-    }
 
     /**
      * Creates a new Center model.
@@ -162,8 +164,6 @@ class CenterController extends \yii\web\Controller
     public function actionCreate()
     {
         $model = new Center();
-        $model->initMembers();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -181,8 +181,6 @@ class CenterController extends \yii\web\Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->initAnonsPicture();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -191,6 +189,72 @@ class CenterController extends \yii\web\Controller
             ]);
         }
     }
+
+    public function actionFeatures($id)
+    {
+		$centerModel = $this->findModel($id);
+		
+		$featuresModel = new CenterFeatures;
+        if ($featuresModel->load(Yii::$app->request->post()) ) 
+		{
+			$centerModel->features = serialize($featuresModel->toArray());
+			$centerModel->save();
+		}
+		else
+		{
+			$featuresModel->load(unserialize($centerModel->features));
+		}
+		
+		return $this->render('features', [
+			'centerModel' => $centerModel,
+			'featuresModel' => $featuresModel,
+		]);
+    }
+	
+	public function actionCreateTariff($center_id)
+	{
+		$centerModel = $this->findModel($center_id);		
+		$featuresModel = new CenterFeatures;
+        if ($featuresModel->load(Yii::$app->request->post())) 
+		{
+			if ($centerModel->addTariff($featuresModel)) 
+				return $this->redirect(['features', 'id' => $centerModel->id]);
+        } 
+		else 
+		{
+			$featuresModel->isTariff = 1;
+			return $this->render('create-tariff', [
+				'centerModel' => $centerModel,
+				'featuresModel' => $featuresModel,
+			]);
+        }
+	}
+
+	public function actionUpdateTariff($id, $center_id)
+	{
+		$centerModel = $this->findModel($center_id);		
+		$featuresModel = new CenterFeatures;
+		$featuresModel->load($centerModel->getTariffArray($id));
+		
+        if ($featuresModel->load(Yii::$app->request->post()) && $centerModel->updateTariff($id, $featuresModel)) {
+            return $this->redirect(['features', 'id' => $centerModel->id]);
+        } 
+		else 
+		{
+			$featuresModel->isTariff = 1;
+            return $this->render('update-tariff', [
+				'centerModel' => $centerModel,
+				'featuresModel' => $featuresModel,
+            ]);
+        }
+	}
+
+	public function actionDeleteTariff($id, $center_id)
+	{
+		$centerModel = $this->findModel($center_id);
+		$centerModel->deleteTariff($id);
+		return $this->redirect(['features', 'id' => $centerModel->id]);
+	}
 
     /**
      * Deletes an existing Center model.
@@ -205,25 +269,23 @@ class CenterController extends \yii\web\Controller
         return $this->redirect(['index']);
     }
 
+    public function actionPictures($id)
+    {
+		$model = $this->findModel($id);
+        if (Yii::$app->request->isPost) 
+            $model->upload();
+        return $this->render('pictures', ['model' => $model]);		
+    }
+
     public function actionDeleteFile($id, $filename)
     {
-        CenterPictures::deleteFile($id, $filename);
+		$this->findModel($id)->deleteImage($filename);
         return $this->redirect(['pictures', 'id' => $id]);
     }
 
     public function actionFileSetAsAnons($id, $filename)
     {
-        CenterPictures::fileSetAsAnons($id, $filename);
-        return $this->redirect(['pictures', 'id' => $id]);
-    }
-
-   protected function findModel($id)
-    {
-        if (($model = Center::findOne($id)) !== null) {
-            $model->initMembers();
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+		$this->findModel($id)->setAnonsImage($filename);
+		return $this->redirect(['pictures', 'id' => $id]);
     }
 }

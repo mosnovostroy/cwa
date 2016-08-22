@@ -67,7 +67,7 @@ class CenterSearch extends Center
             $adpParams = ['query' => $query];
         else
             $adpParams = ['query' => $query,
-                  'pagination' => ['pageSize' => 1],
+                  'pagination' => ['pageSize' => 3],
                   'sort' => [
                       'defaultOrder' => [
                           'price_day' => SORT_ASC,
@@ -78,7 +78,7 @@ class CenterSearch extends Center
 
         $dataProvider = new ActiveDataProvider($adpParams);
 
-        Yii::info($params,'myd');
+        //Yii::info($params,'myd');
         // //Загружаем данные из GET, пришедшие из текстового поля поиска (параметр CenterSearch[text])
         // if (isset($params['CenterSearch']['text']))
         //     $this->text = $params['CenterSearch']['text'];
@@ -88,8 +88,6 @@ class CenterSearch extends Center
 
         if (!$this->validate())
             return $dataProvider;
-
-        $this->initMembers();
 
         // grid filtering conditions
         $query->andFilterWhere([

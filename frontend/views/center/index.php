@@ -8,11 +8,11 @@ use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use common\models\User;
 /* @var $this yii\web\View */
-if ($searchModel->region_info && $searchModel->region_info->name)
+if ($searchModel->regionNameTp)
 {
-    $this->title = 'Коворкинг-центры в '.$searchModel->region_info->name_tp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->region_info->name_tp.': полный список. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->region_info->name]);
+    $this->title = 'Коворкинг-центры в '.$searchModel->regionNameTp;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->regionName]);
 }
 else
 {
@@ -22,25 +22,47 @@ else
 }
 ?>
 
-<div class="raw">
-    <div class="col-xs-12" style="">
+<div id="mainform-small" class="row visible-xs">
+    <div class="col-xs-12 center-index-form">
+        <span class="center-index-title">Коворкинг-центры</span>
+		<span class="pull-right">
+			<a class="btn btn-default" onclick="
+				document.getElementById('mainform-small').className = 'hidden';
+				document.getElementById('mainform-large').className = 'row';
+				">Фильтр</a>
+		</span>
+    </div>
+</div>
+
+<div id="mainform-large" class="row hidden-xs">
+    <div class="col-xs-12 center-index-form">
+		<span class="pull-right visible-xs">
+			<a class="btn btn-default" onclick="
+				document.getElementById('mainform-small').className = 'row visible-xs';
+				document.getElementById('mainform-large').className = 'row hidden-xs';
+				">Скрыть</a>
+		</span>
         <?php   $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
                                         'options' => ['class' => 'form-inline']]); ?>
-                <span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
-                <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regions_array, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
+                <span class="center-index-title">Коворкинг-центры</span>
+                <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
                 <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
         <?php ActiveForm::end(); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12" style="">
         <?php
-            if (Yii::$app->user && Yii::$app->user->identity && User::isUserAdmin(Yii::$app->user->identity->username))
+            if (User::isAdmin())
                 echo Html::a('Создать новый', ['create'], ['class' => 'btn btn-default']);
         ?>
     </div>
 </div>
-<div class="raw">
+<div class="row">
     <div class="col-xs-12" style="">
         <div class="pull-left">
             список
@@ -57,18 +79,20 @@ else
     </div>
 </div>
 
-<div class="raw">
-    <div class="col-xs-12">
-        <ul>
-            <?php foreach ($dataProvider->getModels() as $center): ?>
-                <li>
-                    <?= Html::a(Html::encode("{$center->name}"), ['view', 'id' => $center->id]) ?><br>
-                    <p><?= $center->description ?></p>
-                    <?php if($center->price_day) echo '<p>Стоимость: '.$center->price_day.' руб. в день</p>';?>
-                    <?php if($center->rating) echo '<p>Рейтинг: '.$center->rating.'</p>';?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        <?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>
+		<div class="center-index">
+		<?php foreach ($dataProvider->getModels() as $center): ?>
+			<?php $url = Url::to(['view', 'id' => $center->id]); ?>
+<div class="row">
+    <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
+				<div class="clearfix" >
+					<?php if ($center->anonsImage) echo '<image class="center-index-image" src="'.$center->anonsImage.'">'; ?>
+					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>					
+					<p><?= $center->description ?></p>
+					<?php if($center->price_day) echo '<p>Стоимость: '.$center->price_day.' руб. в день</p>';?>
+					<?php if($center->rating) echo '<p>Рейтинг: '.$center->rating.'</p>';?>
+				</div>
     </div>
 </div>
+		<?php endforeach; ?>
+		</div>
+        <?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>

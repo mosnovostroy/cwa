@@ -12,6 +12,13 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'components' => [
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=localhost;dbname=cwa',
+            'username' => 'root',
+            'password' => 'avt240390',
+            'charset' => 'utf8',
+        ],	
         'log' => [
             'targets' => [
                 [

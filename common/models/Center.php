@@ -3,11 +3,11 @@
 namespace common\models;
 
 use Yii;
-use common\models\Region;
-use common\models\CenterPictures;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\FileHelper;
+use common\behaviors\ImageBehavior;
+use common\behaviors\RegionInfoBehavior;
 
 
 /**
@@ -25,13 +25,11 @@ use yii\helpers\FileHelper;
  */
 class Center extends \yii\db\ActiveRecord
 {
-    //public $region_name;
-    //public $region_name_tp;
-    public $region_info;
-    public $regions_array;
-    public $imageFiles;
-    public $anonsImage;
-    /**
+	public $_features = null;
+	public $_tariffs = null;
+	public $_tariff_headers = null;
+	
+	 /**
      * @inheritdoc
      */
     public static function tableName()
@@ -46,12 +44,30 @@ class Center extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'alias'], 'required'],
-            [['description', 'meta_title', 'meta_description', 'meta_keywords'], 'string'],
+            [['description', 'meta_title', 'meta_description', 'meta_keywords', 'features', 'tariffs'], 'string'],
             [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
+            [['region', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
             [['name', 'alias'], 'string', 'max' => 255],
         ];
     }
 
+    /**
+     * Returns a list of behaviors that this component should behave as.
+     *
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            'image' => [
+                'class' => ImageBehavior::className(),
+            ],
+            'regionInfo' => [
+                'class' => RegionInfoBehavior::className(),
+            ],
+        ];
+    }
+	
     /**
      * @inheritdoc
      */
@@ -72,31 +88,84 @@ class Center extends \yii\db\ActiveRecord
             'rating' => 'рейтинг',
         ];
     }
+	
+	public function addTariff($tariffModel)
+	{
+		$tariffs = array();
+		if ($this->tariffs)
+			$tariffs = unserialize($this->tariffs);
+		$tariffs[] = $tariffModel->toArray();
+		$this->tariffs = serialize($tariffs);
+		$this->_tariffs = null;
+		$this->_tariff_headers = null;
+		return $this->save();
+	}
 
-    public function initMembers()
-    {
-        //Название региона в разных падежах
-        //$this->region_name = Region::getName($this->region);
-        //$this->region_name_tp = Region::getNameTp($this->region);
+	public function updateTariff($id, $tariffModel)
+	{
+		if (!$this->_tariffs)
+			$this->_tariffs = $this->getTariffArrays();		
+		$this->_tariffs[$id] = $tariffModel->toArray();
+		$this->tariffs = serialize($this->_tariffs);
+		$this->_tariffs = null;
+		$this->_tariff_headers = null;
+		return $this->save();
+	}
 
-        //Название региона в разных падежах, параметры карты региона
-        $this->region_info = Region::findOne($this->region);
+	public function deleteTariff($id)
+	{
+		if (!$this->_tariffs)
+			$this->_tariffs = $this->getTariffArrays();		
+		unset($this->_tariffs[$id]);
+		$this->tariffs = serialize($this->_tariffs);
+		$this->_tariffs = null;
+		$this->_tariff_headers = null;
+		return $this->save();
+	}
 
-        //Список всех регионов для выпадающего списка
-        $this->regions_array = Region::getNamesArray();
-    }
+	public function getTariffArray($id)
+	{
+		if (!$this->tariffArrays)
+			$this->_tariffs = $this->getTariffArrays();
+		
+		if (isset($this->_tariffs[$id]))
+		{
+			$this->_tariffs[$id]['id'] = $id;
+			$this->_tariffs[$id]['isTariff'] = 1;
+			return $this->_tariffs[$id];
+		}
+		else
+			return [];
+	}
+	
+	public function getTariffHeaders()
+	{
+		if ($this->_tariff_headers)
+			return $this->_tariff_headers;
 
-    public function initPictures()
-    {
-        $this->imageFiles = CenterPictures::readPictures($this->id, false);
-    }
+		$this->_tariff_headers = array();
+		if ($this->tariffs)
+		{
+			$tariffs = unserialize($this->tariffs);
+			foreach($tariffs as $k => $v)
+				$this->_tariff_headers[$k] = isset($v['name']) && $v['name'] ? $v['name'] : 'Без имени '.$k;
+		}
+		return $this->_tariff_headers;
+	}
 
-    public function initAnonsPicture()
-    {
-        if (!$this->id)
-            return false;
-        $anons_image_name = Yii::$app->db->createCommand('SELECT name FROM image WHERE is_anons = 1 AND cid = :cid', [':cid' => $this->id])
-         ->queryScalar();
-         $this->anonsImage = 'upload/centers/'.$this->id.'/'.$anons_image_name;
-    }
+	public function getTariffArrays()
+	{
+		if ($this->_tariffs)
+			return $this->_tariffs;
+
+		$this->_tariffs = array();
+		if ($this->tariffs)
+		{
+			$tariffs = unserialize($this->tariffs);
+			foreach($tariffs as $k => $v)
+				$this->_tariffs[$k] = $v;
+		}
+		return $this->_tariffs;
+	}
+	
 }
