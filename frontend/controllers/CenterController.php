@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Center;
 use common\models\CenterFeatures;
+use common\models\Tariff;
 use yii\web\Controller;
 use common\models\CenterSearch;
 use common\models\User;
@@ -218,51 +219,53 @@ class CenterController extends \yii\web\Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        else
+            return $this->render('update', [ 'model' => $model ]);
     }
 
     public function actionFeatures($id)
     {
     		$center = $this->findModel($id);
-
-        if ($center->loadFeaturesFromArray(Yii::$app->request->post()) && $center->saveFeatures())
-        {
-            return $this->render('view', [
-        			'model' => $center,
-        		]);
-        }
-    		else
-        {
-            return $this->render('features', [
-        			'model' => $center,
-        		]);
-        }
+        if ($center->updateFeaturesFromArray(Yii::$app->request->post()))
+            return $this->redirect(['view', 'id' => $center->id ]);
+        else
+            return $this->render('features', ['model' => $center ]);
     }
 
-	public function actionCreateTariff($center_id)
-	{
-		$centerModel = $this->findModel($center_id);
-		$featuresModel = new CenterFeatures;
-        if ($featuresModel->load(Yii::$app->request->post()))
-		{
-			if ($centerModel->addTariff($featuresModel))
-				return $this->redirect(['view', 'id' => $centerModel->id]);
+    public function actionCreateTariff($center_id)
+  	{
+  		  $center = $this->findModel($center_id);
+  		  $tariff = new Tariff;
+        if ($tariff->load(Yii::$app->request->post()) && $center->addTariff($tariff))
+            return $this->redirect(['view', 'id' => $center->id]);
+  		  else
+  		  {
+  			    $tariff->isTariff = 1;
+  			    return $this->render('create-tariff', [ 'center' => $center, 'tariff' => $tariff ]);
         }
-		else
-		{
-			$featuresModel->isTariff = 1;
-			return $this->render('create-tariff', [
-				'centerModel' => $centerModel,
-				'featuresModel' => $featuresModel,
-			]);
-        }
-	}
+  	}
+
+
+	// public function actionCreateTariff($center_id)
+	// {
+	// 	$centerModel = $this->findModel($center_id);
+	// 	$featuresModel = new CenterFeatures;
+  //       if ($featuresModel->load(Yii::$app->request->post()))
+	// 	{
+	// 		if ($centerModel->addTariff($featuresModel))
+	// 			return $this->redirect(['view', 'id' => $centerModel->id]);
+  //       }
+	// 	else
+	// 	{
+	// 		$featuresModel->isTariff = 1;
+	// 		return $this->render('create-tariff', [
+	// 			'centerModel' => $centerModel,
+	// 			'featuresModel' => $featuresModel,
+	// 		]);
+  //       }
+	// }
 
 	public function actionUpdateTariff($id, $center_id)
 	{

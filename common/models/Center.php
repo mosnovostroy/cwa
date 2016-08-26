@@ -89,39 +89,56 @@ class Center extends \yii\db\ActiveRecord
         ];
     }
 
-		public function loadFeaturesFromArray($data)
+
+		public function updateFeaturesFromArray($data)
 		{
 				if (!$this->_featuresModel)
 						$this->_featuresModel = new Tariff;
-				return $this->_featuresModel->load($data);
-		}
 
-		public function saveFeatures()
-		{
-				if (!$this->_featuresModel)
-						return false;
-				else
+				if ($this->_featuresModel->load($data))
 				{
-						$tariffs = array();
-						if ($this->tariffs)
-								$tariffs = unserialize($this->tariffs);
-						$tariffs[0] = $this->_featuresModel->toArray();
-						$this->tariffs = serialize($tariffs);
-						$this->resetCache();
+						$this->features = serialize($data);
+						//$this->resetCache();
 						return $this->save();
 				}
+				// if (!$this->_featuresModel)
+				// 		$this->_featuresModel = new Tariff;
+				//
+				// if ($this->_featuresModel->load($data))
+				// {
+				// 		$tariffs = array();
+				// 		if ($this->tariffs)
+				// 				$tariffs = unserialize($this->tariffs);
+				// 		$tariffs[0] = $this->_featuresModel->toArray();
+				// 		$this->tariffs = serialize($tariffs);
+				// 		//$this->resetCache();
+				// 		return $this->save();
+				// }
 		}
 
-	public function addTariff($tariffModel)
-	{
-		$tariffs = array();
-		if ($this->tariffs)
-			$tariffs = unserialize($this->tariffs);
-		$tariffs[] = $tariffModel->toArray();
-		$this->tariffs = serialize($tariffs);
+		public function addTariff($tariff)
+		{
+				$tariffArrays = array();
+				if ($this->tariffs)
+						$tariffArrays = unserialize($this->tariffs);
+				$tariffArrays[] = $tariff->toArray();
+				$this->tariffs = serialize($tariffArrays);
+
 		$this->_tariffs = null;
 		$this->_tariff_headers = null;
-		return $this->save();
+
+				return $this->save();
+		}
+
+	public function deleteTariff($id)
+	{
+			if (!$this->_tariffs)
+					$this->_tariffs = $this->getTariffArrays();
+			unset($this->_tariffs[$id]);
+			$this->tariffs = serialize($this->_tariffs);
+			$this->_tariffs = null;
+			$this->_tariff_headers = null;
+			return $this->save();
 	}
 
 	public function updateTariff($id, $tariffModel)
@@ -129,17 +146,6 @@ class Center extends \yii\db\ActiveRecord
 		if (!$this->_tariffs)
 			$this->_tariffs = $this->getTariffArrays();
 		$this->_tariffs[$id] = $tariffModel->toArray();
-		$this->tariffs = serialize($this->_tariffs);
-		$this->_tariffs = null;
-		$this->_tariff_headers = null;
-		return $this->save();
-	}
-
-	public function deleteTariff($id)
-	{
-		if (!$this->_tariffs)
-			$this->_tariffs = $this->getTariffArrays();
-		unset($this->_tariffs[$id]);
 		$this->tariffs = serialize($this->_tariffs);
 		$this->_tariffs = null;
 		$this->_tariff_headers = null;
@@ -195,14 +201,22 @@ class Center extends \yii\db\ActiveRecord
 		{
 				if (!$this->_featuresModel)
 				{
-						$tariffArrays = unserialize($this->tariffs);
-						if ($tariffArrays && isset($tariffArrays[0])) // Нулевой - это как раз "общие параметры центра"
-						{
-								$this->_featuresModel = new Tariff;
-								$this->_featuresModel->loadFromArray($tariffArrays[0]);
-						}
+						$this->_featuresModel = new Tariff;
+						$this->_featuresModel->loadFromArray(unserialize($this->features));
 				}
 				return $this->_featuresModel;
+
+
+				// if (!$this->_featuresModel)
+				// {
+				// 		$tariffArrays = unserialize($this->tariffs);
+				// 		if ($tariffArrays && isset($tariffArrays[0])) // Нулевой - это как раз "общие параметры центра"
+				// 		{
+				// 				$this->_featuresModel = new Tariff;
+				// 				$this->_featuresModel->loadFromArray($tariffArrays[0]);
+				// 		}
+				// }
+				// return $this->_featuresModel;
 		}
 
 		// Массив моделей (классы Tariff) менованных тарифов доступен через свойство tariffModels,
@@ -216,16 +230,39 @@ class Center extends \yii\db\ActiveRecord
 						$arr = array();
 						$tariffArrays = unserialize($this->tariffs);
 						if ($tariffArrays)
-								foreach($tariffArrays as $k => $tariff)
+								foreach($tariffArrays as $k => $tariffArray)
 								{
-										if ($k === 0) continue; // Нулевой - это "общие параметры центра"
 										$tariffModel = new Tariff;
-										$tariffModel->loadFromArray($tariff);
+										$tariffModel->loadFromArray($tariffArray);
 										$tariffModel->id = $k;
 										$arr[] = $tariffModel;
 								}
 						$this->_tariffModels = $arr;
 				}
 				return $this->_tariffModels;
+				// if (!$this->_tariffModels)
+				// {
+				// 		$arr = array();
+				// 		$tariffArrays = unserialize($this->tariffs);
+				// 		if ($tariffArrays)
+				// 				foreach($tariffArrays as $k => $tariff)
+				// 				{
+				// 						if ($k === 0) continue; // Нулевой - это "общие параметры центра"
+				// 						$tariffModel = new Tariff;
+				// 						$tariffModel->loadFromArray($tariff);
+				// 						$tariffModel->id = $k;
+				// 						$arr[] = $tariffModel;
+				// 				}
+				// 		$this->_tariffModels = $arr;
+				// }
+				// return $this->_tariffModels;
 		}
+
+		public function afterFind()
+    {
+				$this->getFeaturesModel();
+				$this->getTariffModels();
+				parent::afterFind();
+    }
+
 }
