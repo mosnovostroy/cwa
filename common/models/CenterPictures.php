@@ -43,7 +43,7 @@ class CenterPictures extends Model
     public function rules()
     {
         return [
-            [['uploadFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
+            [['uploadFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, gif', 'maxFiles' => 10],
         ];
     }
 

@@ -28,7 +28,7 @@ class Center extends \yii\db\ActiveRecord
 	public $_features = null;
 	public $_tariffs = null;
 	public $_tariff_headers = null;
-	
+
 	 /**
      * @inheritdoc
      */
@@ -67,7 +67,7 @@ class Center extends \yii\db\ActiveRecord
             ],
         ];
     }
-	
+
     /**
      * @inheritdoc
      */
@@ -88,7 +88,30 @@ class Center extends \yii\db\ActiveRecord
             'rating' => 'рейтинг',
         ];
     }
-	
+
+		public function loadFeaturesFromArray($data)
+		{
+				if (!$this->_featuresModel)
+						$this->_featuresModel = new Tariff;
+				return $this->_featuresModel->load($data);
+		}
+
+		public function saveFeatures()
+		{
+				if (!$this->_featuresModel)
+						return false;
+				else
+				{
+						$tariffs = array();
+						if ($this->tariffs)
+								$tariffs = unserialize($this->tariffs);
+						$tariffs[0] = $this->_featuresModel->toArray();
+						$this->tariffs = serialize($tariffs);
+						$this->resetCache();
+						return $this->save();
+				}
+		}
+
 	public function addTariff($tariffModel)
 	{
 		$tariffs = array();
@@ -104,7 +127,7 @@ class Center extends \yii\db\ActiveRecord
 	public function updateTariff($id, $tariffModel)
 	{
 		if (!$this->_tariffs)
-			$this->_tariffs = $this->getTariffArrays();		
+			$this->_tariffs = $this->getTariffArrays();
 		$this->_tariffs[$id] = $tariffModel->toArray();
 		$this->tariffs = serialize($this->_tariffs);
 		$this->_tariffs = null;
@@ -115,7 +138,7 @@ class Center extends \yii\db\ActiveRecord
 	public function deleteTariff($id)
 	{
 		if (!$this->_tariffs)
-			$this->_tariffs = $this->getTariffArrays();		
+			$this->_tariffs = $this->getTariffArrays();
 		unset($this->_tariffs[$id]);
 		$this->tariffs = serialize($this->_tariffs);
 		$this->_tariffs = null;
@@ -127,7 +150,7 @@ class Center extends \yii\db\ActiveRecord
 	{
 		if (!$this->tariffArrays)
 			$this->_tariffs = $this->getTariffArrays();
-		
+
 		if (isset($this->_tariffs[$id]))
 		{
 			$this->_tariffs[$id]['id'] = $id;
@@ -136,21 +159,6 @@ class Center extends \yii\db\ActiveRecord
 		}
 		else
 			return [];
-	}
-	
-	public function getTariffHeaders()
-	{
-		if ($this->_tariff_headers)
-			return $this->_tariff_headers;
-
-		$this->_tariff_headers = array();
-		if ($this->tariffs)
-		{
-			$tariffs = unserialize($this->tariffs);
-			foreach($tariffs as $k => $v)
-				$this->_tariff_headers[$k] = isset($v['name']) && $v['name'] ? $v['name'] : 'Без имени '.$k;
-		}
-		return $this->_tariff_headers;
 	}
 
 	public function getTariffArrays()
@@ -167,5 +175,57 @@ class Center extends \yii\db\ActiveRecord
 		}
 		return $this->_tariffs;
 	}
-	
+
+		// Кэшируются модели, которые вычисляются по полю center.tariffs и используются через геттеры
+		// При любых изменениях модели (в частности при load) кэш нужно сбрасывать вызовом этого метода
+		public function resetCache()
+		{
+				$this->_featuresModel = null;
+				$this->_tariffModels = null;
+
+				$this->_tariffs = null;
+				$this->_tariff_headers = null;
+		}
+
+		// Модель (класс Tariff) "общих параметров центра" доступна через свойство featuresModel,
+		// определяемое через геттер
+		// Кэшируем в private свойстве
+		private $_featuresModel;
+		public function getFeaturesModel()
+		{
+				if (!$this->_featuresModel)
+				{
+						$tariffArrays = unserialize($this->tariffs);
+						if ($tariffArrays && isset($tariffArrays[0])) // Нулевой - это как раз "общие параметры центра"
+						{
+								$this->_featuresModel = new Tariff;
+								$this->_featuresModel->loadFromArray($tariffArrays[0]);
+						}
+				}
+				return $this->_featuresModel;
+		}
+
+		// Массив моделей (классы Tariff) менованных тарифов доступен через свойство tariffModels,
+		// определяемое через геттер
+		// Кэшируем этот массив в private свойстве
+		private $_tariffModels;
+		public function getTariffModels()
+		{
+				if (!$this->_tariffModels)
+				{
+						$arr = array();
+						$tariffArrays = unserialize($this->tariffs);
+						if ($tariffArrays)
+								foreach($tariffArrays as $k => $tariff)
+								{
+										if ($k === 0) continue; // Нулевой - это "общие параметры центра"
+										$tariffModel = new Tariff;
+										$tariffModel->loadFromArray($tariff);
+										$tariffModel->id = $k;
+										$arr[] = $tariffModel;
+								}
+						$this->_tariffModels = $arr;
+				}
+				return $this->_tariffModels;
+		}
 }

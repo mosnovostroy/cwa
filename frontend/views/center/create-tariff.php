@@ -13,7 +13,6 @@ $this->params['breadcrumbs'] =
 
 <h1>
     <?= Html::encode($this->title) ?>
-	<?= Html::a('Список тарифов', ['features', 'id' => $centerModel->id], ['class' => 'btn btn-default']) ?>
 </h1>
 
 <div class="raw">
@@ -21,4 +20,3 @@ $this->params['breadcrumbs'] =
         <?= $this->render('_features-form', ['model' => $featuresModel]) ?>
     </div>
 </div>
-

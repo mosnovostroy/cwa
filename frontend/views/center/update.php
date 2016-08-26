@@ -17,8 +17,7 @@ $this->params['hasYandexMap'] = true;
 <div class="center-update">
     <h1>
         <?= Html::encode($this->title) ?>
-        <?= Html::a('Картинки', ['pictures', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
-		<?= Html::a('Тарифы', ['features', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Вернуться на главную', ['view', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     </h1>
 </div>
 

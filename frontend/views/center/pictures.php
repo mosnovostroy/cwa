@@ -13,8 +13,7 @@ $this->params['breadcrumbs'] =
 
 <h1>
     <?= Html::encode($this->title) ?>
-    <?= Html::a('Редактирование', ['update', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
-	<?= Html::a('Тарифы', ['features', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+    <?= Html::a('Вернуться на главную', ['view', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
 </h1>
 
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
@@ -37,12 +36,13 @@ $this->params['breadcrumbs'] =
                 <th>Дата</th>
                 <th>Действия</th>
             </tr>
-            <?php foreach ($model->images as $file) {?>
+            <?php foreach ($model->allImages as $file) {?>
             <tr>
                 <td><img src="<?= $file['thumbnail'] ?>" ></td>
                 <td>
                     <?= end(explode('/',$file['file'])) ?>
                     <?= $file['is_anons'] ? '<span class="label label-primary label-lg">Анонс</span>' : Html::a('Анонс', ['file-set-as-anons', 'filename' => $name = end(explode('/',$file['file'])), 'id' => $model->id], ['class' => 'btn btn-default btn-xs']); ?>
+                    <?= $file['is_logo'] ? '<span class="label label-primary label-lg">Логотип</span>' : Html::a('Логотип', ['file-set-as-logo', 'filename' => $name = end(explode('/',$file['file'])), 'id' => $model->id], ['class' => 'btn btn-default btn-xs']); ?>
                 </td>
                 <td></td>
                 <td></td>

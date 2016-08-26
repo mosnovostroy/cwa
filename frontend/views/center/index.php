@@ -85,9 +85,11 @@ else
 <div class="row">
     <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
 				<div class="clearfix" >
+          <?php if ($center->logoImage) echo '<div class="center-index-logo"><image src="'.$center->logoImage.'">'; ?></div>
 					<?php if ($center->anonsImage) echo '<image class="center-index-image" src="'.$center->anonsImage.'">'; ?>
-					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>					
+					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
 					<p><?= $center->description ?></p>
+
 					<?php if($center->price_day) echo '<p>Стоимость: '.$center->price_day.' руб. в день</p>';?>
 					<?php if($center->rating) echo '<p>Рейтинг: '.$center->rating.'</p>';?>
 				</div>

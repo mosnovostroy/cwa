@@ -31,7 +31,7 @@ body {
 .container-map {
     height: calc(100% - 50px);
 	position: relative;
-	top: 50px; 
+	top: 50px;
 	left: 0;
     padding: 0;
 }
@@ -160,7 +160,7 @@ div.required label.control-label:after {
 .center-index-title {font-size: 1.6em; padding-right: 10px; }
 .center-index-form {margin-bottom: 30px; }
 
-.center-index-col { margin-bottom: 30px; cursor: pointer;}
+.center-index-col { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
 .center-index-col:hover { background-color: #f8f8f8;}
 
 @media (max-width: 389px)
@@ -178,3 +178,8 @@ div.required label.control-label:after {
 {
 	.center-index-image {margin: 15px 0 15px 15px; width: 25%; float: right;}
 }
+
+.center-index-logo {margin: 15px 15px 15px 0; width: 10%; float: left; border: 1px solid #aaa;}
+.center-index-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
+
+.tariff-label {color: #ccc; font-size: 0.5em;}

@@ -19,7 +19,7 @@ class CenterController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'pictures', 'delete-file', 'file-set-as-anons'],
+                'only' => ['create', 'update', 'delete', 'pictures', 'delete-file', 'file-set-as-anons', 'file-set-as-logo', 'features', 'create-tariff', 'update-tariff', 'delete-tariff'],
                 'rules' => [
                     [
                          'actions' => ['create'],
@@ -34,7 +34,7 @@ class CenterController extends \yii\web\Controller
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
-							//Yii::info($action->controller->actionParams->id, 'myd');							
+							//Yii::info($action->controller->actionParams->id, 'myd');
 							 return User::isAdmin();
                          }
                     ],
@@ -78,6 +78,46 @@ class CenterController extends \yii\web\Controller
 							 return User::isAdmin();
                          }
                     ],
+                    [
+                         'actions' => ['file-set-as-logo'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+							 return User::isAdmin();
+                         }
+                    ],
+                    [
+                         'actions' => ['features'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+							                return User::isAdmin();
+                         }
+                    ],
+                    [
+                         'actions' => ['create-tariff'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+							                return User::isAdmin();
+                         }
+                    ],
+                    [
+                         'actions' => ['update-tariff'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+							                return User::isAdmin();
+                         }
+                    ],
+                    [
+                         'actions' => ['delete-tariff'],
+                         'allow' => true,
+                         'roles' => ['@'],
+                         'matchCallback' => function ($rule, $action) {
+							                return User::isAdmin();
+                         }
+                    ],
                 ],
             ],
             'verbs' => [
@@ -115,7 +155,7 @@ class CenterController extends \yii\web\Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$this->layout = 'map';
-		
+
         return $this->render('map', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -133,7 +173,7 @@ class CenterController extends \yii\web\Controller
     public function actionIndexSubmit()
     {
         $params = Yii::$app->request->queryParams;
-        $params[0] = 'center/index';        
+        $params[0] = 'center/index';
         return $this->redirect($params);
     }
 
@@ -146,13 +186,10 @@ class CenterController extends \yii\web\Controller
 
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-		$featuresModel = new CenterFeatures;
-		$featuresModel->load(unserialize($model->features));
-        return $this->render('view', [
-            'model' => $model,
-			'fm' => $featuresModel,          
-		  ]);
+      $model = $this->findModel($id);
+      return $this->render('view', [
+          'model' => $model,
+        ]);
     }
 
 
@@ -192,35 +229,32 @@ class CenterController extends \yii\web\Controller
 
     public function actionFeatures($id)
     {
-		$centerModel = $this->findModel($id);
-		
-		$featuresModel = new CenterFeatures;
-        if ($featuresModel->load(Yii::$app->request->post()) ) 
-		{
-			$centerModel->features = serialize($featuresModel->toArray());
-			$centerModel->save();
-		}
-		else
-		{
-			$featuresModel->load(unserialize($centerModel->features));
-		}
-		
-		return $this->render('features', [
-			'centerModel' => $centerModel,
-			'featuresModel' => $featuresModel,
-		]);
+    		$center = $this->findModel($id);
+
+        if ($center->loadFeaturesFromArray(Yii::$app->request->post()) && $center->saveFeatures())
+        {
+            return $this->render('view', [
+        			'model' => $center,
+        		]);
+        }
+    		else
+        {
+            return $this->render('features', [
+        			'model' => $center,
+        		]);
+        }
     }
-	
+
 	public function actionCreateTariff($center_id)
 	{
-		$centerModel = $this->findModel($center_id);		
+		$centerModel = $this->findModel($center_id);
 		$featuresModel = new CenterFeatures;
-        if ($featuresModel->load(Yii::$app->request->post())) 
+        if ($featuresModel->load(Yii::$app->request->post()))
 		{
-			if ($centerModel->addTariff($featuresModel)) 
-				return $this->redirect(['features', 'id' => $centerModel->id]);
-        } 
-		else 
+			if ($centerModel->addTariff($featuresModel))
+				return $this->redirect(['view', 'id' => $centerModel->id]);
+        }
+		else
 		{
 			$featuresModel->isTariff = 1;
 			return $this->render('create-tariff', [
@@ -232,14 +266,14 @@ class CenterController extends \yii\web\Controller
 
 	public function actionUpdateTariff($id, $center_id)
 	{
-		$centerModel = $this->findModel($center_id);		
+		$centerModel = $this->findModel($center_id);
 		$featuresModel = new CenterFeatures;
 		$featuresModel->load($centerModel->getTariffArray($id));
-		
+
         if ($featuresModel->load(Yii::$app->request->post()) && $centerModel->updateTariff($id, $featuresModel)) {
-            return $this->redirect(['features', 'id' => $centerModel->id]);
-        } 
-		else 
+            return $this->redirect(['view', 'id' => $centerModel->id]);
+        }
+		else
 		{
 			$featuresModel->isTariff = 1;
             return $this->render('update-tariff', [
@@ -253,7 +287,7 @@ class CenterController extends \yii\web\Controller
 	{
 		$centerModel = $this->findModel($center_id);
 		$centerModel->deleteTariff($id);
-		return $this->redirect(['features', 'id' => $centerModel->id]);
+		return $this->redirect(['view', 'id' => $centerModel->id]);
 	}
 
     /**
@@ -272,9 +306,9 @@ class CenterController extends \yii\web\Controller
     public function actionPictures($id)
     {
 		$model = $this->findModel($id);
-        if (Yii::$app->request->isPost) 
+        if (Yii::$app->request->isPost)
             $model->upload();
-        return $this->render('pictures', ['model' => $model]);		
+        return $this->render('pictures', ['model' => $model]);
     }
 
     public function actionDeleteFile($id, $filename)
@@ -286,6 +320,11 @@ class CenterController extends \yii\web\Controller
     public function actionFileSetAsAnons($id, $filename)
     {
 		$this->findModel($id)->setAnonsImage($filename);
+		return $this->redirect(['pictures', 'id' => $id]);
+    }
+    public function actionFileSetAsLogo($id, $filename)
+    {
+		$this->findModel($id)->setLogoImage($filename);
 		return $this->redirect(['pictures', 'id' => $id]);
     }
 }
