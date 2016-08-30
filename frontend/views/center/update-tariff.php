@@ -6,8 +6,8 @@ $this->title = 'Редактирование тарифа';
 $this->params['breadcrumbs'] =
 [
     ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
-    ['label' => $centerModel->regionName, 'url' => ['center/index', 'region' => $centerModel->region]],
-	['label' => $centerModel->name, 'url' => ['center/view', 'id' => $centerModel->id]],
+    ['label' => $center->regionName, 'url' => ['center/index', 'region' => $center->region]],
+	['label' => $center->name, 'url' => ['center/view', 'id' => $center->id]],
 ];
 ?>
 
@@ -17,6 +17,6 @@ $this->params['breadcrumbs'] =
 
 <div class="raw">
     <div class="col-md-12">
-        <?= $this->render('_features-form', ['model' => $featuresModel]) ?>
+        <?= $this->render('_features-form', ['model' => $tariff]) ?>
     </div>
 </div>

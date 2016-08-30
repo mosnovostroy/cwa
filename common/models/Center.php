@@ -25,10 +25,6 @@ use common\behaviors\RegionInfoBehavior;
  */
 class Center extends \yii\db\ActiveRecord
 {
-	public $_features = null;
-	public $_tariffs = null;
-	public $_tariff_headers = null;
-
 	 /**
      * @inheritdoc
      */
@@ -48,6 +44,9 @@ class Center extends \yii\db\ActiveRecord
             [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
             [['region', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
             [['name', 'alias'], 'string', 'max' => 255],
+						[['address', 'phone'], 'string'],
+						['email', 'email'],
+						['site', 'url', 'defaultScheme' => 'http'],
         ];
     }
 
@@ -86,6 +85,10 @@ class Center extends \yii\db\ActiveRecord
             'region' => 'Регион',
             'price_day' => 'цена',
             'rating' => 'рейтинг',
+						'address' => 'Адрес',
+						'phone' => 'Телефон',
+						'email' => 'Email',
+						'site' => 'Сайт',
         ];
     }
 
@@ -95,102 +98,95 @@ class Center extends \yii\db\ActiveRecord
 				if (!$this->_featuresModel)
 						$this->_featuresModel = new Tariff;
 
+				$this->_featuresModel->isTariff = 0;
+
 				if ($this->_featuresModel->load($data))
 				{
 						$this->features = serialize($data);
-						//$this->resetCache();
+						$this->resetCache();
 						return $this->save();
 				}
-				// if (!$this->_featuresModel)
-				// 		$this->_featuresModel = new Tariff;
-				//
-				// if ($this->_featuresModel->load($data))
-				// {
-				// 		$tariffs = array();
-				// 		if ($this->tariffs)
-				// 				$tariffs = unserialize($this->tariffs);
-				// 		$tariffs[0] = $this->_featuresModel->toArray();
-				// 		$this->tariffs = serialize($tariffs);
-				// 		//$this->resetCache();
-				// 		return $this->save();
-				// }
 		}
 
-		public function addTariff($tariff)
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		// Параметр - тариф-модель (класс Tariff)
+		public function addTariff($tariffModel)
 		{
+				// Заполняем временный локальный массив тарифов-массивов данными из поля бд:
 				$tariffArrays = array();
 				if ($this->tariffs)
 						$tariffArrays = unserialize($this->tariffs);
-				$tariffArrays[] = $tariff->toArray();
+
+				// Добавляем еще один тариф-массив
+				$tariffArrays[] = $tariffModel->toArray();
+
+				// Очищаем кэш класса и сохраняем изменения обратно в поле бд
+				$this->resetCache();
 				$this->tariffs = serialize($tariffArrays);
-
-		$this->_tariffs = null;
-		$this->_tariff_headers = null;
-
 				return $this->save();
 		}
 
-	public function deleteTariff($id)
-	{
-			if (!$this->_tariffs)
-					$this->_tariffs = $this->getTariffArrays();
-			unset($this->_tariffs[$id]);
-			$this->tariffs = serialize($this->_tariffs);
-			$this->_tariffs = null;
-			$this->_tariff_headers = null;
-			return $this->save();
-	}
-
-	public function updateTariff($id, $tariffModel)
-	{
-		if (!$this->_tariffs)
-			$this->_tariffs = $this->getTariffArrays();
-		$this->_tariffs[$id] = $tariffModel->toArray();
-		$this->tariffs = serialize($this->_tariffs);
-		$this->_tariffs = null;
-		$this->_tariff_headers = null;
-		return $this->save();
-	}
-
-	public function getTariffArray($id)
-	{
-		if (!$this->tariffArrays)
-			$this->_tariffs = $this->getTariffArrays();
-
-		if (isset($this->_tariffs[$id]))
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		// Параметр - id тарифа-массива (ключ в массиве массивов)
+		public function deleteTariff($id)
 		{
-			$this->_tariffs[$id]['id'] = $id;
-			$this->_tariffs[$id]['isTariff'] = 1;
-			return $this->_tariffs[$id];
+				// Заполняем временный локальный массив тарифов-массивов данными из поля бд:
+				$tariffArrays = array();
+				if ($this->tariffs)
+						$tariffArrays = unserialize($this->tariffs);
+
+				// Удаляем из него один тариф-массив
+				unset($tariffArrays[$id]);
+
+				// Очищаем кэш класса и сохраняем изменения обратно в поле бд
+				$this->resetCache();
+				$this->tariffs = serialize($tariffArrays);
+				return $this->save();
 		}
-		else
-			return [];
-	}
 
-	public function getTariffArrays()
-	{
-		if ($this->_tariffs)
-			return $this->_tariffs;
-
-		$this->_tariffs = array();
-		if ($this->tariffs)
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		// Параметр - id тарифа-массива (ключ в массиве массивов)
+		public function updateTariff($id, $tariffModel)
 		{
-			$tariffs = unserialize($this->tariffs);
-			foreach($tariffs as $k => $v)
-				$this->_tariffs[$k] = $v;
-		}
-		return $this->_tariffs;
-	}
+				// Заполняем временный локальный массив тарифов-массивов данными из поля бд:
+				$tariffArrays = array();
+				if ($this->tariffs)
+						$tariffArrays = unserialize($this->tariffs);
 
-		// Кэшируются модели, которые вычисляются по полю center.tariffs и используются через геттеры
-		// При любых изменениях модели (в частности при load) кэш нужно сбрасывать вызовом этого метода
+				// Заменяем один тариф-массив
+				$tariffArrays[$id] = $tariffModel->toArray();
+
+				// Очищаем кэш класса и сохраняем изменения обратно в поле бд
+				$this->resetCache();
+				$this->tariffs = serialize($tariffArrays);
+				return $this->save();
+		}
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		// Параметр - id тарифа-массива. Возвращает тариф-модель
+		public function getTariffModel($id)
+		{
+				// Заполняем временный локальный массив тарифов-массивов данными из поля бд:
+				$tariffArrays = array();
+				if ($this->tariffs)
+						$tariffArrays = unserialize($this->tariffs);
+
+				// Готовим тариф-модель
+				$tariff = new Tariff;
+
+				// Выбираем нужный тариф-массив и заполняем тариф-модель
+				$tariff->load($tariffArrays[$id]);
+
+				return $tariff;
+		}
+
+		// Кэшируются модели, которые вычисляются по полям center.features и center.tariffs
+		// и используются через геттеры.
+		// При любых изменениях модели кэш нужно сбрасывать вызовом этого метода
 		public function resetCache()
 		{
 				$this->_featuresModel = null;
 				$this->_tariffModels = null;
-
-				$this->_tariffs = null;
-				$this->_tariff_headers = null;
 		}
 
 		// Модель (класс Tariff) "общих параметров центра" доступна через свойство featuresModel,
@@ -202,21 +198,10 @@ class Center extends \yii\db\ActiveRecord
 				if (!$this->_featuresModel)
 				{
 						$this->_featuresModel = new Tariff;
+						$this->_featuresModel->isTariff = 0;
 						$this->_featuresModel->loadFromArray(unserialize($this->features));
 				}
 				return $this->_featuresModel;
-
-
-				// if (!$this->_featuresModel)
-				// {
-				// 		$tariffArrays = unserialize($this->tariffs);
-				// 		if ($tariffArrays && isset($tariffArrays[0])) // Нулевой - это как раз "общие параметры центра"
-				// 		{
-				// 				$this->_featuresModel = new Tariff;
-				// 				$this->_featuresModel->loadFromArray($tariffArrays[0]);
-				// 		}
-				// }
-				// return $this->_featuresModel;
 		}
 
 		// Массив моделей (классы Tariff) менованных тарифов доступен через свойство tariffModels,
@@ -235,27 +220,11 @@ class Center extends \yii\db\ActiveRecord
 										$tariffModel = new Tariff;
 										$tariffModel->loadFromArray($tariffArray);
 										$tariffModel->id = $k;
-										$arr[] = $tariffModel;
+										$arr[$k] = $tariffModel;
 								}
 						$this->_tariffModels = $arr;
 				}
 				return $this->_tariffModels;
-				// if (!$this->_tariffModels)
-				// {
-				// 		$arr = array();
-				// 		$tariffArrays = unserialize($this->tariffs);
-				// 		if ($tariffArrays)
-				// 				foreach($tariffArrays as $k => $tariff)
-				// 				{
-				// 						if ($k === 0) continue; // Нулевой - это "общие параметры центра"
-				// 						$tariffModel = new Tariff;
-				// 						$tariffModel->loadFromArray($tariff);
-				// 						$tariffModel->id = $k;
-				// 						$arr[] = $tariffModel;
-				// 				}
-				// 		$this->_tariffModels = $arr;
-				// }
-				// return $this->_tariffModels;
 		}
 
 		public function afterFind()

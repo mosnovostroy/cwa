@@ -183,3 +183,8 @@ div.required label.control-label:after {
 .center-index-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
 
 .tariff-label {color: #ccc; font-size: 0.5em;}
+
+.contacts {width: 100%; margin-top: 25px; border-collapse: collapse;}
+.contacts td:first-child  {width: 40%;}
+
+.contacts td {padding: 20px 30px; border: 1px solid #ddd;}

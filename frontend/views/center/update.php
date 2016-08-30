@@ -21,13 +21,4 @@ $this->params['hasYandexMap'] = true;
     </h1>
 </div>
 
-<div class="raw">
-    <div class="col-md-6">
-        <?= $this->render('_form', ['model' => $model,]) ?>
-    </div>
-    <div class="col-md-6">
-        <image src="<?= $model->anonsImage ?>" width=100%>
-          <br><br>
-        <div id="yandexmap" style="width: 100%; height: 400px" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
-    </div>
-</div>
+<?= $this->render('_form', ['model' => $model,]) ?>

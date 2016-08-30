@@ -9,16 +9,18 @@ use yii\helpers\FileHelper;
 
 class Tariff extends \yii\base\Model
 {
-    // id тарифа = ключ в массиве массивов (поле center.tariffs). Нумерация своя для каждого центра.
-    // Нулевой соответствует "общим" параметрам центра ("тариф без названия"). Может отсутствовать.
-    // Последующие - имеенованным тарифам. Могут отсутствовать.
+    // id тарифа = ключ в массиве массивов (поле center.tariffs). Нумерация своя для каждого центра
+    // Устанавливается автоматически. Используется в представлениях для формирования УРЛов админских кнопок
     public $id;
 
-    // Флаг, указывающий, что это имнованный тариф. Будет удалено в версиях.
-    public $isTariff = 0;
+    // Флаг, указывающий, что это имнованный тариф (а не "общие параметры центра")
+    public $isTariff = 1;
 
-  	//Название тарифа (если есть)
+  	//Название тарифа (для именованных тарифов)
   	 public $name;
+
+     //Описание тарифа (для именованных тарифов)
+   	 public $descr;
 
   	//Цены
   	public $price_minute;
@@ -31,7 +33,22 @@ class Tariff extends \yii\base\Model
   	public $is_fixed;
 
   	// Параметры типа "есть ли"
-  	public $options;
+  	//public $options;
+
+    // Параметры типа "есть ли" - хранение
+    public $optionsStorage;
+
+    // Параметры типа "есть ли" - питание
+    public $optionsMeal;
+
+    // Параметры типа "есть ли" - спорт и развлечения
+    public $optionsRecr;
+
+    // Параметры типа "есть ли" - технологии
+    public $optionsTech;
+
+    // Параметры типа "есть ли" - остальное
+    public $optionsMisc;
 
   	//Принтер
   	public $printer_mode; // Режим доступа к принтеру
@@ -41,6 +58,14 @@ class Tariff extends \yii\base\Model
   	// Переговорная
   	public $meeting_room_mode; // Режим доступа к переговорной
   	public $meeting_room_hours; // Количество бесплатных часов за период
+
+    // Курьерская доставка
+  	public $courier_mode; // Режим предоставления курьера
+  	public $courier_count; // Количество бесплатных доставок за период
+
+    // Гостевые визиты
+  	public $guest_mode; // Режим пропуска гостей
+  	public $guest_count; // Количество бесплатных визитов за период
 
   	//Режим работы и часы работы
   	public $days_1_mode; // Работает ли (и как именно) в понедельник
@@ -66,18 +91,6 @@ class Tariff extends \yii\base\Model
   	public $days_7_open;
   	public $days_7_close;
 
-    public function loadFromCenterModel($centerModel)
-    {
-        $this->resetCache();
-        return $this->load(unserialize($centerModel->features));
-    }
-
-    public function saveToCenterModel($centerModel)
-    {
-        $centerModel->features = serialize($this->toArray());
-        return $centerModel->save();
-    }
-
     public function loadFromArray($data)
     {
         $this->resetCache();
@@ -99,12 +112,14 @@ class Tariff extends \yii\base\Model
     {
         return [
 			[['id'], 'integer'],
-			[['name'], 'string'],
+			[['name', 'descr'], 'string'],
       [['price_minute', 'price_hour', 'price_day', 'price_week', 'price_month'], 'integer'],
 			[['is_fixed'], 'integer'],
-			[['options'], 'each', 'rule' => ['integer']],
+			[[/*'options',*/ 'optionsStorage', 'optionsMeal', 'optionsRecr', 'optionsTech', 'optionsMisc'], 'each', 'rule' => ['integer']],
 			[['printer_pages', 'printer_mode'], 'integer'],
 			[['meeting_room_hours', 'meeting_room_mode'], 'integer'],
+      [['courier_count', 'courier_mode'], 'integer'],
+      [['guest_count', 'guest_mode'], 'integer'],
 			[['days_1_open', 'days_1_close', 'days_2_open', 'days_2_close', 'days_3_open', 'days_3_close', 'days_4_open', 'days_4_close', 'days_5_open', 'days_5_close', 'days_6_open', 'days_6_close', 'days_7_open', 'days_7_close', ], 'integer'],
 			[['days_1_mode', 'days_2_mode', 'days_3_mode', 'days_4_mode', 'days_5_mode', 'days_6_mode', 'days_7_mode'], 'integer'],
         ];
@@ -122,8 +137,14 @@ class Tariff extends \yii\base\Model
     {
         return [
 			'name' => 'Название тарифа',
+      'descr' => 'Описание тарифа',
 			'is_fixed' => 'Рабочее место закрепляется',
-			'options' => 'Предоставляется',
+			//'options' => 'Предоставляется',
+      'optionsStorage' => 'Хранение',
+      'optionsMeal' => 'Питание',
+      'optionsRecr' => 'Спорт и развлечения',
+      'optionsTech' => 'Технологии',
+      'optionsMisc' => 'А также',
 			'price_minute' => 'Цена за минуту',
 			'price_hour' => 'Цена за час',
 			'price_day' => 'Цена за день',
@@ -131,6 +152,8 @@ class Tariff extends \yii\base\Model
 			'price_month' => 'Цена за месяц',
 			'printer_mode' => 'Принтер',
 			'meeting_room_mode' => 'Переговорная',
+      'courier_mode' => 'Курьерская доставка',
+      'guest_mode' => 'Гостевые визиты',
 			'days_1_mode' => 'Понедельник',
 			'days_2_mode' => 'Вторник',
 			'days_3_mode' => 'Среда',
@@ -162,7 +185,8 @@ class Tariff extends \yii\base\Model
 						switch ($this->is_fixed)
 						{
 						case 1:
-								$arr[] = 'Фиксированное рабочее место'; break;
+								//$arr[] = '<strong>Фиксированное рабочее место</strong>'; break;
+                $arr[] = 'Фиксированное рабочее место'; break;
 						case 2:
 								$arr[] = 'Рабочее место не фиксируется'; break;
 						}
@@ -186,6 +210,14 @@ class Tariff extends \yii\base\Model
   	{
   		return [ 0 => 'Не указано', 1 => 'Не более N часов в день', 2 => 'Не более N часов в неделю', 3 => 'Не более N часов в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется' ];
   	}
+    public function getCourierModeMap()
+  	{
+      return [ 0 => 'Не указано', 1 => 'Не более N раз в день', 2 => 'Не более N раз в неделю', 3 => 'Не более N раз в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется' ];
+  	}
+    public function getGuestModeMap()
+  	{
+      return [ 0 => 'Не указано', 1 => 'Не более N раз в день', 2 => 'Не более N раз в неделю', 3 => 'Не более N раз в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется' ];
+  	}
 		private $_paramsList;
 		public function getParamsList()
 		{
@@ -201,6 +233,14 @@ class Tariff extends \yii\base\Model
 					{
 							$arr[] = 'Переговорная: '.(str_replace('N', ($this->meeting_room_hours ? $this->meeting_room_hours : 'N'), $this->getMeetingRoomModeMap()[$this->meeting_room_mode]));
 					}
+          if ($this->courier_mode)
+					{
+							$arr[] = 'Курьерская доставка: '.(str_replace('N', ($this->courier_count ? $this->courier_count : 'N'), $this->getCourierModeMap()[$this->courier_mode]));
+					}
+          if ($this->guest_mode)
+					{
+							$arr[] = 'Гостевые визиты: '.(str_replace('N', ($this->guest_count ? $this->guest_count : 'N'), $this->getGuestModeMap()[$this->guest_mode]));
+					}
 					$this->_paramsList = $arr;
 			}
 			return $this->_paramsList;
@@ -208,10 +248,31 @@ class Tariff extends \yii\base\Model
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     //Рендеринг элементов блока: опции-"галочки"
-    public function getOptionsMap()
+    // public function getOptionsMap()
+  	// {
+  	// 	return [ 1 => 'Сейф', 2 => 'Ящик', 3 => 'Шкаф', 4 => 'Шкафчик', 5 => 'Личный ящик', 6 => 'Ниша для бумаг', 7 => 'Интернет', 8 => 'Wi-fi', 9 => 'Кухня', 10 => 'Кофе-брейк', 11 => 'Парковка', 12 => 'Напитки', 13 => 'Личный шкафчик для вещей', 14 => 'Личная страница на сайте' ];
+  	// }
+    public function getOptionsStorageMap()
   	{
-  		return [ 1 => 'Сейф', 2 => 'Ящик', 3 => 'Шкаф', 4 => 'Шкафчик', 5 => 'Личный ящик', 6 => 'Ниша для бумаг', 7 => 'Интернет', 8 => 'Wi-fi', 9 => 'Кухня', 10 => 'Кофе-брейк', 11 => 'Парковка' ];
+  		return [ 1 => 'Сейф', 2 => 'Ящик', 3 => 'Шкаф', 4 => 'Шкафчик', 5 => 'Личный ящик', 6 => 'Ниша для бумаг', 7 => 'Личный шкафчик для вещей' ];
   	}
+    public function getOptionsMealMap()
+  	{
+  		return [ 1 => 'Кухня', 2 => 'Кофе-брейк', 3 => 'Напитки' ];
+  	}
+    public function getOptionsRecrMap()
+  	{
+  		return [ 1 => 'Спортзал', 2 => 'Фитнесс-центр', 3 => 'Тренажеры', 4 => 'Настольный теннис' ];
+  	}
+    public function getOptionsTechMap()
+  	{
+  		return [ 1 => 'Интернет', 2 => 'Wi-fi', 3 => 'Канцелярские принадлежности' ];
+  	}
+    public function getOptionsMiscMap()
+  	{
+  		return [ 1 => 'Парковка', 2 => 'Личная страница на сайте' ];
+  	}
+
 		private $_optionsList;
 		public function getOptionsList()
 		{
@@ -219,9 +280,30 @@ class Tariff extends \yii\base\Model
 			{
 					$arr = array();
 
-					if ($this->options)
-							foreach($this->options as $v)
-									$arr[] = $this->optionsMap[$v];
+					// if ($this->options)
+					// 		foreach($this->options as $v)
+					// 				$arr[] = $this->optionsMap[$v];
+
+          if ($this->optionsStorage)
+							foreach($this->optionsStorage as $v)
+									$arr[] = $this->optionsStorageMap[$v];
+
+          if ($this->optionsMeal)
+							foreach($this->optionsMeal as $v)
+									$arr[] = $this->optionsMealMap[$v];
+
+          if ($this->optionsRecr)
+							foreach($this->optionsRecr as $v)
+									$arr[] = $this->optionsRecrMap[$v];
+
+          if ($this->optionsTech)
+							foreach($this->optionsTech as $v)
+									$arr[] = $this->optionsTechMap[$v];
+
+          if ($this->optionsMisc)
+							foreach($this->optionsMisc as $v)
+									$arr[] = $this->optionsMiscMap[$v];
+
 					$this->_optionsList = $arr;
 			}
 			return $this->_optionsList;

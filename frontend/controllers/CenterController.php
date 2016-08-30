@@ -225,7 +225,7 @@ class CenterController extends \yii\web\Controller
             return $this->render('update', [ 'model' => $model ]);
     }
 
-    public function actionFeatures($id)
+    public function actionUpdateFeatures($id)
     {
     		$center = $this->findModel($id);
         if ($center->updateFeaturesFromArray(Yii::$app->request->post()))
@@ -242,56 +242,29 @@ class CenterController extends \yii\web\Controller
             return $this->redirect(['view', 'id' => $center->id]);
   		  else
   		  {
-  			    $tariff->isTariff = 1;
   			    return $this->render('create-tariff', [ 'center' => $center, 'tariff' => $tariff ]);
         }
   	}
 
+    public function actionDeleteTariff($id, $center_id)
+  	{
+  		$center = $this->findModel($center_id);
+  		$center->deleteTariff($id);
+  		return $this->redirect(['view', 'id' => $center->id]);
+  	}
 
-	// public function actionCreateTariff($center_id)
-	// {
-	// 	$centerModel = $this->findModel($center_id);
-	// 	$featuresModel = new CenterFeatures;
-  //       if ($featuresModel->load(Yii::$app->request->post()))
-	// 	{
-	// 		if ($centerModel->addTariff($featuresModel))
-	// 			return $this->redirect(['view', 'id' => $centerModel->id]);
-  //       }
-	// 	else
-	// 	{
-	// 		$featuresModel->isTariff = 1;
-	// 		return $this->render('create-tariff', [
-	// 			'centerModel' => $centerModel,
-	// 			'featuresModel' => $featuresModel,
-	// 		]);
-  //       }
-	// }
-
-	public function actionUpdateTariff($id, $center_id)
-	{
-		$centerModel = $this->findModel($center_id);
-		$featuresModel = new CenterFeatures;
-		$featuresModel->load($centerModel->getTariffArray($id));
-
-        if ($featuresModel->load(Yii::$app->request->post()) && $centerModel->updateTariff($id, $featuresModel)) {
-            return $this->redirect(['view', 'id' => $centerModel->id]);
+    public function actionUpdateTariff($id, $center_id)
+    {
+    		$center = $this->findModel($center_id);
+        $tariff = new Tariff;
+        if ($tariff->load(Yii::$app->request->post()) && $center->updateTariff($id, $tariff))
+            return $this->redirect(['view', 'id' => $center->id ]);
+        else
+        {
+            $tariff = $center->getTariffModel($id);
+            return $this->render('update-tariff', ['center' => $center, 'tariff' => $tariff ]);
         }
-		else
-		{
-			$featuresModel->isTariff = 1;
-            return $this->render('update-tariff', [
-				'centerModel' => $centerModel,
-				'featuresModel' => $featuresModel,
-            ]);
-        }
-	}
-
-	public function actionDeleteTariff($id, $center_id)
-	{
-		$centerModel = $this->findModel($center_id);
-		$centerModel->deleteTariff($id);
-		return $this->redirect(['view', 'id' => $centerModel->id]);
-	}
+    }
 
     /**
      * Deletes an existing Center model.
@@ -302,13 +275,12 @@ class CenterController extends \yii\web\Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
     public function actionPictures($id)
     {
-		$model = $this->findModel($id);
+		    $model = $this->findModel($id);
         if (Yii::$app->request->isPost)
             $model->upload();
         return $this->render('pictures', ['model' => $model]);
@@ -316,18 +288,18 @@ class CenterController extends \yii\web\Controller
 
     public function actionDeleteFile($id, $filename)
     {
-		$this->findModel($id)->deleteImage($filename);
+		    $this->findModel($id)->deleteImage($filename);
         return $this->redirect(['pictures', 'id' => $id]);
     }
 
     public function actionFileSetAsAnons($id, $filename)
     {
-		$this->findModel($id)->setAnonsImage($filename);
-		return $this->redirect(['pictures', 'id' => $id]);
+		    $this->findModel($id)->setAnonsImage($filename);
+		    return $this->redirect(['pictures', 'id' => $id]);
     }
     public function actionFileSetAsLogo($id, $filename)
     {
-		$this->findModel($id)->setLogoImage($filename);
-		return $this->redirect(['pictures', 'id' => $id]);
+		    $this->findModel($id)->setLogoImage($filename);
+		    return $this->redirect(['pictures', 'id' => $id]);
     }
 }
