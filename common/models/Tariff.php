@@ -201,24 +201,28 @@ class Tariff extends \yii\base\Model
 		}
 
     /////////////////////////////////////////////////////////////////////////////////////////////
-    //Рендеринг элементов блока: принтер и переговорная
+    //Рендеринг элементов блока: принтер, переговорная, курьерская доставка, гостевые визиты
     public function getPrinterModeMap()
   	{
   		return [ 0 => 'Не указано', 1 => 'Не более N страниц в день', 2 => 'Нет', 3 => 'Не ограничено', 4 => 'Предоставляется' ];
   	}
+
     public function getMeetingRoomModeMap()
   	{
   		return [ 0 => 'Не указано', 1 => 'Не более N часов в день', 2 => 'Не более N часов в неделю', 3 => 'Не более N часов в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется' ];
-  	}
+    }
+
     public function getCourierModeMap()
   	{
       return [ 0 => 'Не указано', 1 => 'Не более N раз в день', 2 => 'Не более N раз в неделю', 3 => 'Не более N раз в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется' ];
   	}
+
     public function getGuestModeMap()
   	{
-      return [ 0 => 'Не указано', 1 => 'Не более N раз в день', 2 => 'Не более N раз в неделю', 3 => 'Не более N раз в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется' ];
+      return [ 0 => 'Не указано', 1 => 'Не более N раз в день', 2 => 'Не более N раз в неделю', 3 => 'Не более N раз в месяц', 4 => 'Нет', 5 => 'Не ограничено', 6 => 'Предоставляется', 7 => 'Не более N часов в день', 8 => 'Не более N часов в неделю', 9 => 'Не более N часов в месяц' ];
   	}
-		private $_paramsList;
+
+    private $_paramsList;
 		public function getParamsList()
 		{
 			if (!$this->_paramsList)
@@ -270,7 +274,7 @@ class Tariff extends \yii\base\Model
   	}
     public function getOptionsMiscMap()
   	{
-  		return [ 1 => 'Парковка', 2 => 'Личная страница на сайте' ];
+  		return [ 1 => 'Парковка', 2 => 'Личная страница на сайте', 3 => 'Секретарское обслуживание' ];
   	}
 
 		private $_optionsList;
@@ -477,4 +481,21 @@ class Tariff extends \yii\base\Model
   		return false;
   		}
   	}
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    // В модели Center есть поля, которые не задаются через админку, а вычисляются (например, is24x7).
+    // Вот методы, которые используются при этих вычислениях:
+    public function hasPrinter() {return $this->printer_mode == 2 ? false : true; }
+    public function hasMeetingRoom() {return $this->meeting_room_mode == 2 ? false : true; }
+    public function hasCourier() {return $this->courier_mode == 2 ? false : true; }
+    public function hasGuest() {return $this->guest_mode == 2 ? false : true; }
+    public function hasFixed() {return $this->is_fixed == 1 ? true : false; }
+    public function hasStorage() {return is_array($this->optionsStorage) ? true : false; }
+    public function is24x7()
+    {
+        if ( $this->days_1_mode == 2 && $this->days_2_mode == 2 && $this->days_3_mode == 2 && $this->days_4_mode == 2 && $this->days_5_mode == 2 && $this->days_6_mode == 2 && $this->days_7_mode == 2 )
+            return true;
+        else
+            return false;
+    }
 }

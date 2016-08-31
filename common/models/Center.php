@@ -234,4 +234,134 @@ class Center extends \yii\db\ActiveRecord
 				parent::afterFind();
     }
 
+		/////////////////////////////////////////////////////////////////////////////////////////////
+    //Рендеринг списка для карточки в результатах поиска
+		private $_paramsList;
+		public function getParamsList()
+		{
+			if (!$this->_paramsList)
+			{
+					$arr = array();
+
+					if ($this->price_hour) $arr[] = 'от '.$this->price_hour.' руб. в час';
+					if ($this->price_day) $arr[] = 'от '.$this->price_day.' руб. в день';
+					if ($this->price_week) $arr[] = 'от '.$this->price_week.' руб. в неделю';
+					if ($this->price_month) $arr[] = 'от '.$this->price_month.' руб. в месяц';
+
+					$this->_paramsList = $arr;
+			}
+			return $this->_paramsList;
+		}
+
+		// Вычисляем цены-поля на базе цен в полях features и tariffs
+		public function updatePrices()
+		{
+				$features = $this->getFeaturesModel();
+				$tariffs = $this->getTariffModels();
+
+				$this->price_hour = 0;
+				if ($features->price_hour) $this->price_hour = $features->price_hour;
+				foreach ($tariffs as $tariff)
+						if ($tariff->price_hour && (!$this->price_hour || $tariff->price_hour < $this->price_hour))
+								$this->price_hour = $tariff->price_hour;
+
+				$this->price_day = 0;
+				if ($features->price_day) $this->price_day = $features->price_day;
+				foreach ($tariffs as $tariff)
+						if ($tariff->price_day && (!$this->price_day || $tariff->price_day < $this->price_day))
+								$this->price_day = $tariff->price_day;
+
+				$this->price_week = 0;
+				if ($features->price_week) $this->price_week = $features->price_week;
+				foreach ($tariffs as $tariff)
+						if ($tariff->price_week && (!$this->price_week || $tariff->price_week < $this->price_week))
+								$this->price_week = $tariff->price_week;
+
+				$this->price_month = 0;
+				if ($features->price_month) $this->price_month = $features->price_month;
+				foreach ($tariffs as $tariff)
+						if ($tariff->price_month && (!$this->price_month || $tariff->price_month < $this->price_month))
+								$this->price_month = $tariff->price_month;
+		}
+
+		// Работает ли центр круглосуточно
+		public function is24x7()
+		{
+				$features = $this->getFeaturesModel();
+				$tariffs = $this->getTariffModels();
+				if ($features->is24x7()) return true;
+				foreach ($tariffs as $tariff)	if ($tariff->is24x7()) return true;
+				return false;
+		}
+
+		// Можно ли зафиксировать свое рабочее место
+		public function hasFixed()
+		{
+				$features = $this->getFeaturesModel();
+				$tariffs = $this->getTariffModels();
+				if ($features->hasFixed()) return true;
+				foreach ($tariffs as $tariff)	if ($tariff->hasFixed()) return true;
+				return false;
+		}
+
+		// Предоставляется ли место для хранения личных вещей
+		public function hasStorage()
+		{
+				$features = $this->getFeaturesModel();
+				$tariffs = $this->getTariffModels();
+				if ($features->hasStorage()) return true;
+				foreach ($tariffs as $tariff)	if ($tariff->hasStorage()) return true;
+				return false;
+		}
+
+		// Предоставляется ли доступ к принтеру
+		public function hasPrinter()
+		{
+				$features = $this->getFeaturesModel();
+				$tariffs = $this->getTariffModels();
+				if ($features->hasPrinter()) return true;
+				foreach ($tariffs as $tariff)	if ($tariff->hasPrinter()) return true;
+				return false;
+		}
+
+		// Есть ли переговорная комната
+		public function hasMeetingRoom()
+		{
+				$features = $this->getFeaturesModel();
+				$tariffs = $this->getTariffModels();
+				if ($features->hasMeetingRoom()) return true;
+				foreach ($tariffs as $tariff)	if ($tariff->hasMeetingRoom()) return true;
+				return false;
+		}
+
+		public function beforeSave($insert)
+		{
+		    if (parent::beforeSave($insert))
+				{
+						// Вычисляем цены-поля на базе цен в полях features и tariffs
+						$this->updatePrices();
+
+						// Работает ли центр круглосуточно
+						$this->is24x7 = $this->is24x7();
+
+						// Можно ли зафиксировать свое рабочее место
+						$this->has_fixed = $this->hasFixed();
+
+						// Предоставляется ли место для хранения личных вещей
+						$this->has_storage = $this->hasStorage();
+
+						// Предоставляется ли доступ к принтеру
+						$this->has_printer = $this->hasPrinter();
+
+						// Есть ли переговорная комната
+						$this->has_meeting_room = $this->hasMeetingRoom();
+
+						// Есть ли интернет :)
+
+		        return true;
+		    }
+				else
+		        return false;
+		}
+
 }

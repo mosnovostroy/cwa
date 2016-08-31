@@ -46,8 +46,8 @@ else
                                         'options' => ['class' => 'form-inline']]); ?>
                 <span class="center-index-title">Коворкинг-центры</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+                <?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за месяц, от'])->label(false) ?>
+                <?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за месяц, до'])->label(false) ?>
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
                 <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
@@ -88,10 +88,34 @@ else
                 <?php if ($center->logoImage) echo '<div class="center-index-logo"><image src="'.$center->logoImage.'"></div>'; ?>
       					<?php if ($center->anonsImage) echo '<image class="center-index-image" src="'.$center->anonsImage.'">'; ?>
       					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
-      					<p><?= $center->description ?></p>
+                <?php
+                    if ($center->paramsList || $center->is24x7())
+                    {
+                        echo '<div class="center-index-params">';
+                        if ($center->paramsList)
+                        {
+                            echo '<ul>';
+                            foreach($center->paramsList as $param)
+                                echo '<li>'.$param.'</li>';
+                            echo '<ul>';
+                        }
+                        if ($center->is24x7())
+                        {
+                            echo '<ul style="margin-top: 10px;">';
+                            echo '<li style="font-weight: bold;">Круглосуточно</li>';
+                            echo '<ul>';
+                        }
+                        echo '</div>';
+                    }
+                ?>
+                <?php
+                    $arr = array();
+                    if ($center->regionName) $arr[] = $center->regionName;
+                    if ($center->address) $arr[] = $center->address;
+                    echo '<p>'.implode(' | ', $arr).'</p>';
+                ?>
 
-      					<?php if($center->price_day) echo '<p>Стоимость: '.$center->price_day.' руб. в день</p>';?>
-      					<?php if($center->rating) echo '<p>Рейтинг: '.$center->rating.'</p>';?>
+      					<p><?= $center->description ?></p>
       				</div>
           </div>
       </div>

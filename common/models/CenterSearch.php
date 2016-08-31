@@ -14,8 +14,8 @@ use ReflectionClass;
  */
 class CenterSearch extends Center
 {
-    public $price_day_min;
-    public $price_day_max;
+    public $price_month_min;
+    public $price_month_max;
     public $text;
 
     /**
@@ -26,7 +26,7 @@ class CenterSearch extends Center
         return [
             [['id'], 'integer'],
             [['name', 'description', 'meta_title', 'meta_description', 'meta_keywords','text'], 'safe'],
-            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_day', 'price_day_min', 'price_day_max'], 'number'],
+            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max'], 'number'],
         ];
     }
 
@@ -43,9 +43,9 @@ class CenterSearch extends Center
     {
         $fields = parent::fields();
         //if ($this->price_day_min)
-            $fields['price_day_min'] = 'price_day_min';
+            $fields['price_month_min'] = 'price_month_min';
         //if ($this->price_day_max)
-            $fields['price_day_max'] = 'price_day_max';
+            $fields['price_month_max'] = 'price_month_max';
         //if ($this->text)
             $fields['text'] = 'text';
 
@@ -105,8 +105,8 @@ class CenterSearch extends Center
 
             ->andFilterWhere(['like', 'name', $this->text]);
 
-        $query->andFilterWhere(['>=', 'price_day', $this->price_day_min])
-              ->andFilterWhere(['<=', 'price_day', $this->price_day_max]);
+        $query->andFilterWhere(['>=', 'price_month', $this->price_month_min])
+              ->andFilterWhere(['<=', 'price_month', $this->price_month_max]);
 
         return $dataProvider;
     }
