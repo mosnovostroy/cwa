@@ -45,7 +45,7 @@ class SignupForm extends Model
             'password' => 'Пароль',
         ];
     }
-	
+
     /**
      * Signs user up.
      *
@@ -56,7 +56,7 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
@@ -64,12 +64,12 @@ class SignupForm extends Model
         $user->generateAuthKey();
         if($user->save())
 		{
-			$auth = Yii::$app->authManager;
-			$authorRole = $auth->getRole('author');
-			$auth->assign($authorRole, $user->getId());			
+			// $auth = Yii::$app->authManager;
+			// $authorRole = $auth->getRole('author');
+			// $auth->assign($authorRole, $user->getId());
 			return $user;
 		}
-		
+
 		return null;
     }
 }

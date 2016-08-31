@@ -9,7 +9,7 @@ class CenterUrlManager extends UrlManager
 {
     public function createUrl($params)
     {
-        
+
         $route = trim($params[0], '/');
         // Страница-окно авторизации через соцсеть:
 		if ($route === 'site/login')
@@ -19,8 +19,8 @@ class CenterUrlManager extends UrlManager
                 return '/login/' . $params['service'] . '/';
             }
 			return '/login/';
-        }		
-		
+        }
+
         // Страница центра:
 		if ($route === 'center/view')
         {
@@ -38,7 +38,7 @@ class CenterUrlManager extends UrlManager
                 return '/centers/' . $alias['region'] . '/' . $alias['center'] . '/';
             }
         }
-		
+
         // Страница аренды:
 		if ($route === 'arenda/view')
         {
@@ -56,7 +56,7 @@ class CenterUrlManager extends UrlManager
                 return '/arenda/' . $alias['region_alias'] . '/' . $alias['arenda_alias'] . '/';
             }
         }
-		
+
 		if (isset($params['CenterSearch']))
 		{
 			//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
@@ -69,13 +69,22 @@ class CenterUrlManager extends UrlManager
 									  WHERE id=:id', [':id' => $params['CenterSearch']['region']])
 					->queryScalar();
 			}
-			
+
 			unset($params['CenterSearch']['region']);
 
 			//Не передаем пустые значения:
 			foreach($params['CenterSearch'] as $k => $v)
-				if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '')
-					unset($params['CenterSearch'][$k]);
+      {
+				  if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '')
+					    unset($params['CenterSearch'][$k]);
+      }
+      if (isset($params['CenterSearch']['is24x7']) && $params['CenterSearch']['is24x7'] == '0')
+          unset($params['CenterSearch']['is24x7']);
+
+      // Yii::info('Запрос в CreateUrl: ', 'myd');
+      // Yii::info($params, 'myd');
+
+
 			$url = parent::createUrl($params);
 			if($region_alias)
 				$url = str_replace('centers', 'centers/'.$region_alias, $url);
@@ -92,7 +101,7 @@ class CenterUrlManager extends UrlManager
 									  WHERE id=:id', [':id' => $params['ArendaSearch']['region']])
 					->queryScalar();
 			}
-			
+
 			unset($params['ArendaSearch']['region']);
 
 			//Не передаем пустые значения:
@@ -107,9 +116,9 @@ class CenterUrlManager extends UrlManager
 		{
 			$url = parent::createUrl($params);
 		}
-		
+
 		return $url;
-		
+
         /*//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
         $region_alias = '';
         if (isset($params['CenterSearch']) && isset($params['CenterSearch']['region']))
@@ -132,8 +141,8 @@ class CenterUrlManager extends UrlManager
         if($region_alias)
             $url = str_replace('centers', 'centers/'.$region_alias, $url);
 
-			
-			
+
+
         //В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
         $region_alias = '';
         if (isset($params['ArendaSearch']) && isset($params['ArendaSearch']['region']))
@@ -156,32 +165,34 @@ class CenterUrlManager extends UrlManager
         if($region_alias)
             $url = str_replace('arenda', 'arenda/'.$region_alias, $url);
 
-			
+
         return $url;*/
     }
 
     public function parseRequest($request)
     {
+
         // Yii::info($request->pathInfo, 'myd');
         // Yii::info($request->queryString, 'myd');
+        // Yii::info('Параметры запроса', 'myd');
         // Yii::info($request->queryParams, 'myd');
 
         $pathInfo = $request->pathInfo;
         $params = $request->queryParams;
-		
+
 		//Страница авторизации:
 		if (preg_match('%^login/$%', $pathInfo, $matches))
 		{
 			return ['site/login', $params];
 		}
-		
+
 		// Страница-окно авторизации через соцсеть:
 		if (preg_match('%^login/([a-z0-9-_]+)/$%', $pathInfo, $matches))
 		{
 			$params['service'] = $matches[1];
 			return ['site/login', $params];
 		}
-		
+
 		//Центр или список или карта:
         if (preg_match('%^centers/([a-z0-9-_]+)/(\S*)$%', $pathInfo, $matches))
         {
@@ -228,6 +239,10 @@ class CenterUrlManager extends UrlManager
                 // c установленным регионом.
                 // Настраиваем и отдаем либо ['center/index', $params], либо ['center/map', $params], либо ['center/coordinates', $params]
                 $params['CenterSearch']['region'] = $region_id;
+
+                // Yii::info('Запрос: ', 'myd');
+                // Yii::info($params, 'myd');
+
                 if(preg_match('%^map/\S*$%', $matches[2]))
                 //if ($detailed_matches[1] === 'map')
                     return ['center/map', $params];

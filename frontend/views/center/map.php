@@ -31,13 +31,14 @@ $this->params['hasYandexMap'] = true;
 				<a class="btn btn-default" onclick="
 					document.getElementById('mainform-large').classList.add('hidden');
 					">Скрыть</a>
-			</span>		
+			</span>
 			<?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/map-submit'],
 											'options' => ['class' => 'form-inline']]); ?>
 					<span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
 					<?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-					<?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-					<?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+					<?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+					<?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
+          <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
 					<?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
 			<?php ActiveForm::end(); ?>
 			<?php
@@ -68,4 +69,3 @@ $this->params['hasYandexMap'] = true;
   ymaps_lng = "<?= $searchModel->regionMapLng ?>"
   ymaps_scale = "<?= $searchModel->regionMapZoom ?>"
 ></div>
-

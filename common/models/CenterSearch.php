@@ -24,7 +24,7 @@ class CenterSearch extends Center
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'is24x7'], 'integer'],
             [['name', 'description', 'meta_title', 'meta_description', 'meta_keywords','text'], 'safe'],
             [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max'], 'number'],
         ];
@@ -67,10 +67,10 @@ class CenterSearch extends Center
             $adpParams = ['query' => $query];
         else
             $adpParams = ['query' => $query,
-                  'pagination' => ['pageSize' => 3],
+                  'pagination' => ['pageSize' => 10],
                   'sort' => [
                       'defaultOrder' => [
-                          'price_day' => SORT_ASC,
+                          'name' => SORT_ASC,
                       ]
                   ],
             ];
@@ -83,8 +83,17 @@ class CenterSearch extends Center
         // if (isset($params['CenterSearch']['text']))
         //     $this->text = $params['CenterSearch']['text'];
 
+        // Yii::info('параметры, пришедшие в search: ', 'myd');
+        // Yii::info($params, 'myd');
+        // Yii::info('this->is24x7: '.$this->is24x7, 'myd');
+        // Yii::info('this->price_month_max: '.$this->price_month_max, 'myd');
+
         //Загружаем данные из GET, пришедшие из формы поиска (остальные параметры вида CenterSearch[region])
         $this->load($params);
+
+        // Yii::info('this->is24x7: '.$this->is24x7, 'myd');
+        // Yii::info('this->price_month_max: '.$this->price_month_max, 'myd');
+
 
         if (!$this->validate())
             return $dataProvider;
@@ -92,9 +101,10 @@ class CenterSearch extends Center
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'gmap_lat' => $this->gmap_lat,
-            'gmap_lng' => $this->gmap_lng,
+            // 'gmap_lat' => $this->gmap_lat,
+            // 'gmap_lng' => $this->gmap_lng,
             'region' => $this->region,
+            'is24x7' => $this->is24x7,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

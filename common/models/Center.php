@@ -74,7 +74,7 @@ class Center extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название',
+            'name' => 'название',
             'alias' => 'Алиас',
             'description' => 'Описание',
             'meta_title' => 'Meta Title',
@@ -83,12 +83,12 @@ class Center extends \yii\db\ActiveRecord
             'gmap_lat' => 'Широта',
             'gmap_lng' => 'Долгота',
             'region' => 'Регион',
-            'price_day' => 'цена',
-            'rating' => 'рейтинг',
+            'price_month' => 'цена',
 						'address' => 'Адрес',
 						'phone' => 'Телефон',
 						'email' => 'Email',
 						'site' => 'Сайт',
+						'is24x7' => 'Круглосуточно',
         ];
     }
 

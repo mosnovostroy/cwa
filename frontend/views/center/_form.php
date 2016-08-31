@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Без кавычек и без слова "коворкинг", если только оно не является частью бренда. Ромашка | Romashka | Коворкинг 14') ?>
 
-            <?= $form->field($model, 'alias')->textInput(['maxlength' => true])->hint('Отдельные слова соединяем дефисом: siniy-kaktus') ?>
+            <?= $form->field($model, 'alias')->textInput(['maxlength' => true])->hint('Отдельные слова соединяем дефисом: siniy-kaktus. используем только маленькие латинские буквы и цифры') ?>
 
             <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
 

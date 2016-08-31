@@ -48,6 +48,7 @@ else
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за месяц, от'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за месяц, до'])->label(false) ?>
+                <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
                 <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
@@ -73,7 +74,7 @@ else
           <?php
               $sort = $dataProvider->getSort();
               if ($sort)
-                  echo $sort->link('rating') . ' | ' . $sort->link('price_day');
+                  echo $sort->link('price_month') . ' | ' . $sort->link('name');
           ?>
         </div>
     </div>
