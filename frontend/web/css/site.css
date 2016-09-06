@@ -155,13 +155,22 @@ div.required label.control-label:after {
     color: red;
 }
 
+/* Кликабельная карточка центра */
+.center-index-col { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
+.center-index-col:hover { background-color: #f8f8f8;}
 
 .center-index {margin: 15px auto 15px;}
 .center-index-title {font-size: 1.6em; padding-right: 10px; }
 .center-index-form {margin-bottom: 30px; }
+.center-index-logo {display: none;}
+.center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}
+.center-view-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
+@media (max-width: 389px) 
+{
+  .center-view-logo {width: 60px;}
+  .center-view-logo img {width: calc(100% - 10px); margin: 5px; }
+}
 
-.center-index-col { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
-.center-index-col:hover { background-color: #f8f8f8;}
 
 @media (max-width: 389px)
 {
@@ -177,10 +186,10 @@ div.required label.control-label:after {
 @media (min-width: 768px)
 {
 	.center-index-image {margin: 15px 0 15px 15px; width: 25%; float: right;}
+  .center-index-logo {display: block; margin: 15px 15px 15px 0; width: 10%; float: left; border: 1px solid #aaa;}
+  .center-index-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
 }
 
-.center-index-logo {margin: 15px 15px 15px 0; width: 10%; float: left; border: 1px solid #aaa;}
-.center-index-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
 
 .center-index-params ul
 {
@@ -208,3 +217,6 @@ div.required label.control-label:after {
 .contacts td:first-child  {width: 37%;}
 
 .contacts td {padding: 20px 30px; border: 1px solid #ddd;}
+
+
+.main-page-center-image {width: 100%; margin-top: 30px;}

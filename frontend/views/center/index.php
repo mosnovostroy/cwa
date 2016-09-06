@@ -48,13 +48,26 @@ else
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за месяц, от'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за месяц, до'])->label(false) ?>
+
                 <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
+
+                <!-- <div class="form-group field-centersearch-is24x7" data-toggle="buttons">
+                    <input type="hidden" name="CenterSearch[is24x7]" value="0">
+                    <label  class="btn btn-default active">
+                        <input type="checkbox" id="centersearch-is24x7" name="CenterSearch[is24x7]" value="1"> Круглосуточно
+                    </label>
+                    <div class="help-block"></div>
+                </div> -->
+
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
                 <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
+
+
+
 <div class="row">
     <div class="col-xs-12" style="">
         <?php
@@ -80,6 +93,8 @@ else
     </div>
 </div>
 
+
+
 		<div class="center-index">
 		<?php foreach ($dataProvider->getModels() as $center): ?>
 			<?php $url = Url::to(['view', 'id' => $center->id]); ?>
@@ -87,7 +102,7 @@ else
           <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
       				<div class="clearfix" >
                 <?php if ($center->logoImage) echo '<div class="center-index-logo"><image src="'.$center->logoImage.'"></div>'; ?>
-      					<?php if ($center->anonsImage) echo '<image class="center-index-image" src="'.$center->anonsImage.'">'; ?>
+      					<?php if ($center->anons3x2) echo '<image class="center-index-image" src="'.$center->anons3x2.'">'; ?>
       					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
                 <?php
                     if ($center->paramsList || $center->is24x7())

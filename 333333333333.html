@@ -1,0 +1,31 @@
+
+<?= $form->field($searchModel, 'is24x7')->checkbox() ?>
+
+<div class="form-group field-centersearch-is24x7">
+    <input type="hidden" name="CenterSearch[is24x7]" value="0">
+    <label>
+        <input type="checkbox" id="centersearch-is24x7" name="CenterSearch[is24x7]" value="1"> Круглосуточно
+    </label>
+    <div class="help-block"></div>
+</div>
+
+
+<div class="btn-group" data-toggle="buttons">
+  <label class="btn btn-primary active">
+    <input type="checkbox" autocomplete="off" checked> Checkbox 1 (pre-checked)
+  </label>
+</div>
+
+
+<span class="formgroup">
+    <input type="checkbox" name="fancy-checkbox-default" id="fancy-checkbox-default" autocomplete="off" />
+    <div class="btn-group">
+        <label for="fancy-checkbox-default" class="btn btn-default">
+            <span class="glyphicon glyphicon-ok"></span>
+            <span> </span>
+        </label>
+        <label for="fancy-checkbox-default" class="btn btn-default active">
+            Всегда
+        </label>
+    </div>
+</span>

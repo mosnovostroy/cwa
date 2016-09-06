@@ -75,6 +75,49 @@ class ImageBehavior extends Behavior
 		return '';
     }
 
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		// Generate preview with 4:3 ratio for main page, return the relative url:
+		public function getAnons4x3()
+    {
+				return $this->doGetAnons(400, 300, '4x3');
+    }
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		// Generate preview with 3:2 ratio for centers list, return the relative url:
+		public function getAnons3x2()
+    {
+				return $this->doGetAnons(450, 300, '3x2');
+    }
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		// Generate preview with specified sizes, saves to file with $prefix, return the relative url:
+		public function doGetAnons($width, $height, $prefix)
+    {
+				$entity = $this->entity;
+				$entityId = $this->entityId;
+				if (!$entity || !$entityId)
+            return '';
+
+				$upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
+				$tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
+				$tmp_url = '/tmp/'.$entity.'/'.$entityId;
+
+				$filename = Yii::$app->db->createCommand('SELECT name FROM image WHERE entity = :entity AND cid = :cid AND is_anons = 1', [':entity' => $entity, ':cid' => $entityId])
+						->queryScalar();
+
+				if ($filename && 1)
+				{
+						$original = $upload_path.'/'.$filename;
+						$anons4x3 = $tmp_path.'/'.$prefix.'_'.$filename;
+						if (file_exists($original) && !file_exists($anons4x3))
+								Image::thumbnail($original, $width, $height)
+										->save($anons4x3, ['quality' => 50]);
+						return $tmp_url.'/'.$prefix.'_'.$filename;
+				}
+
+				return '';
+    }
+
 		public function doGetImages ($include_logo = true)
 		{
 			$entity = $this->entity;

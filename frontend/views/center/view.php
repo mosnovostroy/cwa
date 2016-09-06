@@ -41,8 +41,11 @@ $this->params['hasYandexMap'] = true;
 
 <div class="row">
     <div class="col-md-7">
-        <p><?= $model->address?></p>
-        <p><?= $model->description?></p>
+        <div class="clearfix">
+            <?php if ($model->logoImage) echo '<div class="center-view-logo"><image src="'.$model->logoImage.'"></div>'; ?>
+            <p><?= $model->address?></p>
+            <p><?= $model->description?></p>
+        </div>
         <!-- <h3>Общие условия</h3> -->
         <div class="row">
             <div class="col-sm-6">

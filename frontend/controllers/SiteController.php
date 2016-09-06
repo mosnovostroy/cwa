@@ -14,6 +14,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use frontend\models\Index;
+use common\models\CenterSearch;
 
 /**
  * Site controller
@@ -79,9 +80,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-		$model = new Index();
+        $model = new Index();
+        $searchModel = new CenterSearch();
+        $centers = $searchModel->searchFour();
         return $this->render('index', [
             'model' => $model,
+            'centers' => $centers,
         ]);
     }
 
@@ -118,7 +122,7 @@ class SiteController extends Controller
             // ]);
         // }
     // }
-	
+
     public function actionLogin() {
         $serviceName = Yii::$app->getRequest()->getQueryParam('service');
         if (isset($serviceName)) {
@@ -126,14 +130,14 @@ class SiteController extends Controller
             $eauth = Yii::$app->get('eauth')->getIdentity($serviceName);
             $eauth->setRedirectUrl(Yii::$app->getUser()->getReturnUrl());
             $eauth->setCancelUrl(Yii::$app->getUrlManager()->createAbsoluteUrl('site/login'));
- 
+
             try {
                 if ($eauth->authenticate()) {
 //                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
- 
+
                     $identity = User::findByEAuth($eauth);
-					Yii::$app->getUser()->login($identity); 
- 
+					Yii::$app->getUser()->login($identity);
+
                     // special redirect with closing popup window
                     $eauth->redirect();
                 }
@@ -145,13 +149,13 @@ class SiteController extends Controller
             catch (\nodge\eauth\ErrorException $e) {
                 // save error to show it later
                 Yii::$app->getSession()->setFlash('error', 'EAuthException: '.$e->getMessage());
- 
+
                 // close popup window and redirect to cancelUrl
 //              $eauth->cancel();
                 $eauth->redirect($eauth->getCancelUrl());
             }
         }
- 
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -164,7 +168,7 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }	
+    }
 
     /**
      * Logs out the current user.

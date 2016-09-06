@@ -148,4 +148,23 @@ class CenterSearch extends Center
         }
         return json_encode($coords_data);
     }
+
+    public function searchFour()
+    {
+        $query = Center::find();
+
+        $adpParams = ['query' => $query,
+              'pagination' => ['pageSize' => 10],
+              'sort' => [
+                  'defaultOrder' => [
+                      'name' => SORT_ASC,
+                  ]
+              ],
+        ];
+
+        $dataProvider = new ActiveDataProvider($adpParams);
+
+        return $dataProvider;
+    }
+
 }
