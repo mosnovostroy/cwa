@@ -67,7 +67,7 @@ class CenterSearch extends Center
             $adpParams = ['query' => $query];
         else
             $adpParams = ['query' => $query,
-                  'pagination' => ['pageSize' => 4],
+                  'pagination' => ['pageSize' => 10],
                   'sort' => [
                       'defaultOrder' => [
                           'name' => SORT_ASC,
