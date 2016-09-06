@@ -73,8 +73,9 @@ $this->title = 'Коворкинг-ревю: коворкинг-центры и 
 </style>
 
 <div class="row row-flex1234 row-flex1234-wrap">
+    <?php $count = 1; ?>
     <?php foreach ($centers->getModels() as $center): ?>
-        <?php $url = Url::to(['center/view', 'id' => $center->id]); ?>
+        <?php if ($count > 4) break; $url = Url::to(['center/view', 'id' => $center->id]); ?>
         <div class="col-lg-3 col-xs-6 tgbcol" onclick="location.href='<?= $url ?>';">
             <div class="tgb" id="tgb1184" tblank="1">
                 <?php if ($center->anonsImage)
@@ -87,5 +88,5 @@ $this->title = 'Коворкинг-ревю: коворкинг-центры и 
                 <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
             </div>
         </div>
-    <?php endforeach; ?>
+    <?php $count++; endforeach; ?>
 </div>
