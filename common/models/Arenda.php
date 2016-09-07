@@ -45,7 +45,7 @@ class Arenda extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'alias'], 'required'],
+            [['name'], 'required'],
             [['description'], 'string', 'max' => 1500],
             [['gmap_lat', 'gmap_lng', 'region', 'rating'], 'number'],
             [['name', 'alias', 'contacts'], 'string', 'max' => 150],
@@ -128,4 +128,16 @@ class Arenda extends \yii\db\ActiveRecord
         parent::afterFind();
     }
 
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert))
+        {
+            $this->alias = 'id10'.$this->id;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+     }
 }
