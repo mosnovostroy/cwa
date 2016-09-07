@@ -69,7 +69,7 @@ else
 
 <div class="arenda-index">
 <?php foreach ($dataProvider->getModels() as $center): ?>
-  <?php $url = Url::to(['view', 'id' => $center->id]); ?>
+  <?php $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
   <div class="row">
       <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
           <div class="clearfix" >
