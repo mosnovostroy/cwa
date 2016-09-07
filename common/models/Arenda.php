@@ -10,6 +10,7 @@ use common\behaviors\ImageBehavior;
 use common\behaviors\RegionInfoBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use common\models\User;
 
 /**
  * This is the model class for table "arenda".
@@ -26,6 +27,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class Arenda extends \yii\db\ActiveRecord
 {
+    public $username;
+
     /**
      * @inheritdoc
      */
@@ -41,13 +44,13 @@ class Arenda extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'alias'], 'required'],
-            [['description', 'meta_title', 'meta_description', 'meta_keywords'], 'string'],
-            [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
-            [['name', 'alias'], 'string', 'max' => 255],
-			[['createdBy', 'updatedBy', 'createdAt', 'updatedAt'], 'integer'],
+            [['description'], 'string', 'max' => 1500],
+            [['gmap_lat', 'gmap_lng', 'region', 'rating'], 'number'],
+            [['name', 'alias', 'contacts'], 'string', 'max' => 150],
+			      [['createdBy', 'updatedBy', 'createdAt', 'updatedAt'], 'integer'],
         ];
     }
-	
+
     /**
      * Returns a list of behaviors that this component should behave as.
      *
@@ -73,7 +76,7 @@ class Arenda extends \yii\db\ActiveRecord
                 'updatedAtAttribute' => 'updatedAt'
             ],
         ];
-    }	
+    }
 
     /**
      * @inheritdoc
@@ -82,17 +85,25 @@ class Arenda extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название',
+            'name' => 'Заголовок объявления',
             'alias' => 'Алиас',
-            'description' => 'Описание',
+            'description' => 'Текст объявления',
             'meta_title' => 'Meta Title',
             'meta_description' => 'Meta Description',
             'meta_keywords' => 'Meta Keywords',
             'gmap_lat' => 'Широта',
             'gmap_lng' => 'Долгота',
             'region' => 'Регион',
-            'price_day' => 'цена',
+            'contacts' => 'Контакты',
             'rating' => 'рейтинг',
+            'createdAt' => 'дата',
         ];
     }
+
+    public function afterFind()
+    {
+        $this->username = User::findOne($this->createdBy)->username;
+				parent::afterFind();
+    }
+
 }

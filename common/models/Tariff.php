@@ -32,9 +32,6 @@ class Tariff extends \yii\base\Model
   	//Закреплено ли рабочее место
   	public $is_fixed;
 
-  	// Параметры типа "есть ли"
-  	//public $options;
-
     // Параметры типа "есть ли" - хранение
     public $optionsStorage;
 
@@ -49,6 +46,9 @@ class Tariff extends \yii\base\Model
 
     // Параметры типа "есть ли" - остальное
     public $optionsMisc;
+
+    // Дополнительные параметры (указываются через запятую)
+  	public $options;
 
   	//Принтер
   	public $printer_mode; // Режим доступа к принтеру
@@ -112,10 +112,10 @@ class Tariff extends \yii\base\Model
     {
         return [
 			[['id'], 'integer'],
-			[['name', 'descr'], 'string'],
+			[['name', 'descr', 'options'], 'string'],
       [['price_minute', 'price_hour', 'price_day', 'price_week', 'price_month'], 'integer'],
 			[['is_fixed'], 'integer'],
-			[[/*'options',*/ 'optionsStorage', 'optionsMeal', 'optionsRecr', 'optionsTech', 'optionsMisc'], 'each', 'rule' => ['integer']],
+			[['optionsStorage', 'optionsMeal', 'optionsRecr', 'optionsTech', 'optionsMisc'], 'each', 'rule' => ['integer']],
 			[['printer_pages', 'printer_mode'], 'integer'],
 			[['meeting_room_hours', 'meeting_room_mode'], 'integer'],
       [['courier_count', 'courier_mode'], 'integer'],
@@ -139,12 +139,12 @@ class Tariff extends \yii\base\Model
 			'name' => 'Название тарифа',
       'descr' => 'Описание тарифа',
 			'is_fixed' => 'Рабочее место закрепляется',
-			//'options' => 'Предоставляется',
       'optionsStorage' => 'Хранение',
       'optionsMeal' => 'Питание',
       'optionsRecr' => 'Спорт и развлечения',
       'optionsTech' => 'Технологии',
-      'optionsMisc' => 'А также',
+      'optionsMisc' => 'Прочее',
+      'options' => 'Также предоставляется',
 			'price_minute' => 'Цена за минуту',
 			'price_hour' => 'Цена за час',
 			'price_day' => 'Цена за день',
@@ -204,7 +204,7 @@ class Tariff extends \yii\base\Model
     //Рендеринг элементов блока: принтер, переговорная, курьерская доставка, гостевые визиты
     public function getPrinterModeMap()
   	{
-  		return [ 0 => 'Не указано', 1 => 'Не более N страниц в день', 2 => 'Нет', 3 => 'Не ограничено', 4 => 'Предоставляется' ];
+  		return [ 0 => 'Не указано', 1 => 'Не более N страниц в день', 2 => 'Нет', 3 => 'Не ограничено', 4 => 'Предоставляется', 5 => 'Не более N страниц в неделю', 6 => 'Не более N страниц в месяц' ];
   	}
 
     public function getMeetingRoomModeMap()
@@ -258,11 +258,11 @@ class Tariff extends \yii\base\Model
   	// }
     public function getOptionsStorageMap()
   	{
-  		return [ 1 => 'Сейф', 2 => 'Ящик', 3 => 'Шкаф', 4 => 'Шкафчик', 5 => 'Личный ящик', 6 => 'Ниша для бумаг', 7 => 'Личный шкафчик для вещей' ];
+  		return [ 1 => 'Сейф', 2 => 'Ящик', 3 => 'Шкаф', 4 => 'Шкафчик', 5 => 'Личный ящик', 6 => 'Ниша для бумаг', 7 => 'Личный шкафчик для вещей', 8 => 'Камера хранения' ];
   	}
     public function getOptionsMealMap()
   	{
-  		return [ 1 => 'Кухня', 2 => 'Кофе-брейк', 3 => 'Напитки' ];
+  		return [ 1 => 'Кухня', 2 => 'Кофе-брейк', 3 => 'Чай/кофе' ];
   	}
     public function getOptionsRecrMap()
   	{
@@ -307,6 +307,13 @@ class Tariff extends \yii\base\Model
           if ($this->optionsMisc)
 							foreach($this->optionsMisc as $v)
 									$arr[] = $this->optionsMiscMap[$v];
+
+          if ($this->options)
+          {
+              $arr_options = explode(',', $this->options);
+              foreach ($arr_options as $v)
+							    $arr[] = trim($v);
+          }
 
 					$this->_optionsList = $arr;
 			}

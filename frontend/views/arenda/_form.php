@@ -10,34 +10,36 @@ use yii\widgets\ActiveForm;
 
 <div class="arenda-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+  <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'region')->dropDownList($model->regionsArray) ?>
+  <div class="row">
+      <div class="col-md-7">
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'region')->dropDownList($model->regionsArray) ?>
 
-    <?= $form->field($model, 'alias')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Не более 150 символов') ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+          <?= $form->field($model, 'description')->textarea(['rows' => 10, 'maxlength' => true])->hint('Не боле 1500 символов') ?>
 
-    <?= $form->field($model, 'meta_title')->textarea(['rows' => 1]) ?>
+          <?= $form->field($model, 'contacts')->textInput() ?>
 
-    <?= $form->field($model, 'meta_description')->textarea(['rows' => 1]) ?>
+          <br><br>
+          <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success center-block' : 'btn btn-primary center-block']) ?>
 
-    <?= $form->field($model, 'meta_keywords')->textarea(['rows' => 1]) ?>
+      </div>
 
-    <?= $form->field($model, 'gmap_lat')->textInput(['maxlength' => true]) ?>
+      <div class="col-md-5">
 
-    <?= $form->field($model, 'gmap_lng')->textInput(['maxlength' => true]) ?>
+          <?php if ($model->anonsImage) echo '<image src="'.$model->anonsImage.'" width=100%>'; ?>
 
-    <?= $form->field($model, 'price_day')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'gmap_lat')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'rating')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'gmap_lng')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+          <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16" ></div>
+
+        </div>
     </div>
 
-    <?php ActiveForm::end(); ?>
-
+  <?php ActiveForm::end(); ?>
 </div>

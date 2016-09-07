@@ -46,8 +46,6 @@ else
                                         'options' => ['class' => 'form-inline']]); ?>
                 <span style="font-size: 1.6em; padding-right: 10px;">Объявления</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
                 <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
@@ -73,7 +71,7 @@ else
           <?php
               $sort = $dataProvider->getSort();
               if ($sort)
-                  echo $sort->link('rating') . ' | ' . $sort->link('price_day');
+                  echo $sort->link('createdAt');
           ?>
         </div>
     </div>
@@ -86,7 +84,6 @@ else
                 <li>
                     <?= Html::a(Html::encode("{$arenda->name}"), ['view', 'id' => $arenda->id]) ?><br>
                     <p><?= $arenda->description ?></p>
-                    <?php if($arenda->price_day) echo '<p>Стоимость: '.$arenda->price_day.' руб. в день</p>';?>
                     <?php if($arenda->rating) echo '<p>Рейтинг: '.$arenda->rating.'</p>';?>
                 </li>
             <?php endforeach; ?>

@@ -15,8 +15,6 @@ use common\behaviors\ImageBehavior;
  */
 class ArendaSearch extends Arenda
 {
-    public $price_day_min;
-    public $price_day_max;
     public $text;
 
     /**
@@ -27,11 +25,11 @@ class ArendaSearch extends Arenda
         return [
             [['id'], 'integer'],
             [['name', 'description', 'meta_title', 'meta_description', 'meta_keywords','text'], 'safe'],
-            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_day', 'price_day_min', 'price_day_max'], 'number'],
+            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'contacts'], 'number'],
 			[['createdBy', 'updatedBy', 'createdAt', 'updatedAt'], 'integer'],
         ];
     }
-	
+
     /**
      * @inheritdoc
      */
@@ -44,12 +42,7 @@ class ArendaSearch extends Arenda
     public function fields()
     {
         $fields = parent::fields();
-        //if ($this->price_day_min)
-            $fields['price_day_min'] = 'price_day_min';
-        //if ($this->price_day_max)
-            $fields['price_day_max'] = 'price_day_max';
-        //if ($this->text)
-            $fields['text'] = 'text';
+        $fields['text'] = 'text';
 
         return $fields;
     }
@@ -69,10 +62,10 @@ class ArendaSearch extends Arenda
             $adpParams = ['query' => $query];
         else
             $adpParams = ['query' => $query,
-                  'pagination' => ['pageSize' => 1],
+                  'pagination' => ['pageSize' => 10],
                   'sort' => [
                       'defaultOrder' => [
-                          'price_day' => SORT_ASC,
+                          'createdAt' => SORT_DESC,
                       ]
                   ],
             ];
@@ -107,8 +100,6 @@ class ArendaSearch extends Arenda
 
             ->andFilterWhere(['like', 'name', $this->text]);
 
-        $query->andFilterWhere(['>=', 'price_day', $this->price_day_min])
-              ->andFilterWhere(['<=', 'price_day', $this->price_day_max]);
 
         return $dataProvider;
     }

@@ -8,11 +8,13 @@ $this->registerMetaTag(['name' => 'description', 'content' => $model->meta_descr
 $this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords]);
 $this->params['breadcrumbs'] =
 [
-    ['label' => 'Коворкинг-центры', 'url' => ['arenda/index']],
-    ['label' => $model->regionName, 'url' => ['arenda/index', 'ArendaSearch' => ['region' => $model->region]]]
+    ['label' => 'Совместная аренда', 'url' => ['arenda/index']],
+    ['label' => $model->regionName, 'url' => ['arenda/index', 'ArendaSearch' => ['region' => $model->region]]],
+    ['label' => $model->alias],
 ];
 $this->params['hasYandexMap'] = true;
 ?>
+
 
 <div class="row">
     <div class="col-xs-12">
@@ -26,22 +28,38 @@ $this->params['hasYandexMap'] = true;
                     echo Html::a('Удалить', ['delete', 'id' => $model->id], [
                         'class' => 'btn btn-default',
                           'data' => [
-                              'confirm' => 'Действительно хотите удалить центр?',
+                              'confirm' => 'Действительно хотите удалить объявление?',
                                 'method' => 'post',
                                 ],
                               ]);
                 }
             ?>
-        </h1>		
+        </h1>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-6">
-        <p><?= $model->regionName?></p>
-        <p><?= $model->description?></p>
+    <div class="col-md-7">
+
+        <div style="font-style: italic;">
+            <?php Yii::$app->formatter->locale = 'ru-RU'; ?>
+            Размещено: <?= $model->username?>, <?= Yii::$app->formatter->asDate($model->createdAt, 'long') ?>
+          </div>
+
+        <div style="margin-top: 5px;"><?= $model->description?></div>
+
+        <div style="margin-top: 5px;"><?= $model->contacts?></div>
+
+        <?php echo \yii2mod\comments\widgets\Comment::widget([
+            'model' => $model,
+            //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
+        	'relatedTo' => '', // for example
+            'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
+            'showDeletedComments' => true // show deleted comments. Defaults to `false`.
+        ]); ?>
+
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
 			  [
@@ -71,20 +89,9 @@ $this->params['hasYandexMap'] = true;
 			}
 			$fotorama->end();
         ?>
+
+        <h4>Расположение объекта:</h4>
+            <div id="yandexmap" class="inline-yandexmap" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
+
     </div>
 </div>
-
-<div class="row">
-    <div class="col-xs-12">
-        <div id="yandexmap" class="wideyandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
-    </div>
-</div>
-
-<?php echo \yii2mod\comments\widgets\Comment::widget([
-    'model' => $model,
-    //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
-	'relatedTo' => '', // for example
-    'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
-    'showDeletedComments' => true // show deleted comments. Defaults to `false`.
-]); ?>
-

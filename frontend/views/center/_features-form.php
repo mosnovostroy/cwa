@@ -15,6 +15,7 @@ use yii\bootstrap\ActiveForm;
 	<?php $templ_col7 = '{label}<div class="col-sm-7">{input}<span style="font-size:0.7em;">{error}</span></div>'; ?>
 	<?php $templ_col8 = '{label}<div class="col-sm-8">{input}<span style="font-size:0.7em;">{error}</span></div>'; ?>
 	<?php $templ_col9 = '{label}<div class="col-sm-9">{input}<span style="font-size:0.7em;">{error}</span></div>'; ?>
+	<?php $templ_col9hint = '{label}<div class="col-sm-9">{input}{hint}<span style="font-size:0.7em;">{error}</span></div>'; ?>
 	<?php $templ_col11 = '<div class="col-sm-11">{input}<span style="font-size:0.7em;">{error}</span></div>'; ?>
 
 	<?php $templ1 = '{label}<div class="col-sm-3">{input}<span style="font-size:0.7em;">{error}</span></div>'; ?>
@@ -24,6 +25,7 @@ use yii\bootstrap\ActiveForm;
 		'layout' => 'horizontal',
 		'fieldConfig' => [
 			'labelOptions' => ['class' => 'col-sm-3 control-label'],
+			'hintOptions' => ['class' => 'col-sm-12', 'style' => 'color:#aaa;']
 		]
 	]); ?>
 
@@ -51,7 +53,6 @@ use yii\bootstrap\ActiveForm;
 
 				<?php echo $form->field($model, 'optionsMisc', ['labelOptions' => ['class' => 'col-md-5 control-label'], 'template' => $templ_col7])->checkboxList($model->optionsMiscMap); ?>
 
-
 			</div>
 			<div class="col-md-8">
 
@@ -77,6 +78,9 @@ use yii\bootstrap\ActiveForm;
 
 				<?= $form->field($model, 'guest_mode', ['options' => ['class' => ''], 'template' => $templ_col6])->dropDownList($model->guestModeMap, ['class' => 'selectpicker', 'data-width' => '100%']); ?>
 				<?= $form->field($model, 'guest_count', ['options' => ['class' => 'clearfix'], 'template' => $templ_col3])->textInput()->label(false) ?>
+
+				<?= $form->field($model, 'options', ['labelOptions' => ['class' => 'col-md-3 control-label'], 'template' => $templ_col9hint])->textarea(['rows' => 5])->hint('Специфические опции, которые не могут быть включены в группы (Хранение, Питание и пр.): перечисляем через запятую и пробел') ?>
+
 
 				<br>
 				<?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary center-block']) ?>
