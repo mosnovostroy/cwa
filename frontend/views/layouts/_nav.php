@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use Yii;
 ?>
 
-<?php	
+<?php
     NavBar::begin([
         'brandLabel' => 'Коворкинг-ревю',
         'brandUrl' => Yii::$app->homeUrl,
@@ -42,10 +42,15 @@ use Yii;
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
     } else {
+        $temp = array();
+        $temp['label'] = Yii::$app->user->identity->username;
+        $temp['url'] = ['/site/my'];
+        $menuItems[] = $temp;
+        //$menuItems[] = ['label' => 'Мой КР', 'url' => ['/site/cabinet']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Выход (' . Yii::$app->user->identity->username . ')',
+                'Выход',
                 ['class' => 'btn btn-link']
             )
             . Html::endForm()
@@ -57,4 +62,3 @@ use Yii;
     ]);
     NavBar::end();
 ?>
-

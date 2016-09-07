@@ -15,6 +15,7 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use frontend\models\Index;
 use common\models\CenterSearch;
+use common\models\ArendaSearch;
 
 /**
  * Site controller
@@ -29,7 +30,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'my'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -38,6 +39,11 @@ class SiteController extends Controller
                     ],
                     [
                         'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['my'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -210,6 +216,18 @@ class SiteController extends Controller
      *
      * @return mixed
      */
+
+     public function actionMy()
+     {
+         $searchModel = new ArendaSearch();
+         $dataProvider = $searchModel->searchMy();
+
+         return $this->render('my', [
+             'searchModel' => $searchModel,
+             'dataProvider' => $dataProvider,
+         ]);
+     }
+
     public function actionAbout()
     {
         return $this->render('about');

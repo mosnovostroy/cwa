@@ -54,7 +54,7 @@ class ArendaSearch extends Arenda
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $all = false)
+    public function search($params, $all = false, $my = false)
     {
         $query = Arenda::find();
 
@@ -79,7 +79,14 @@ class ArendaSearch extends Arenda
         //     $this->text = $params['ArendaSearch']['text'];
 
         //Загружаем данные из GET, пришедшие из формы поиска (остальные параметры вида ArendaSearch[region])
-        $this->load($params);
+        if ($my && !Yii::$app->user->isGuest)
+        {
+            $this->createdBy = Yii::$app->user->identity->id;
+        }
+        else
+        {
+            $this->load($params);
+        }
 
         if (!$this->validate())
             return $dataProvider;
@@ -90,6 +97,7 @@ class ArendaSearch extends Arenda
             'gmap_lat' => $this->gmap_lat,
             'gmap_lng' => $this->gmap_lng,
             'region' => $this->region,
+            'createdBy' => $this->createdBy,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
@@ -106,7 +114,7 @@ class ArendaSearch extends Arenda
 
     public function searchCoords($params)
     {
-        $result = $this->search($params, true)->getModels();
+        $result = $this->search($params, true, false)->getModels();
 
         $coords_data = array();
         $coords_data['type'] = 'FeatureCollection';
@@ -130,5 +138,10 @@ class ArendaSearch extends Arenda
             $coords_data['features'][] = $coords_item;
         }
         return json_encode($coords_data);
+    }
+
+    public function searchMy()
+    {
+        return $this->search([], false, true);
     }
 }

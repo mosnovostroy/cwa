@@ -165,7 +165,7 @@ div.required label.control-label:after {
 .center-index-logo {display: none;}
 .center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}
 .center-view-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
-@media (max-width: 389px) 
+@media (max-width: 389px)
 {
   .center-view-logo {width: 60px;}
   .center-view-logo img {width: calc(100% - 10px); margin: 5px; }
@@ -175,17 +175,20 @@ div.required label.control-label:after {
 @media (max-width: 389px)
 {
 	.center-index-image {margin: 15px 10px 10px 0px; width: 42%; float: left;}
+  .arenda-index-image {margin: 15px 10px 10px 0px; width: 42%; float: left;}
 	h1 {font-size: 1.65em;} h2 {font-size: 1.50em;} h3 {font-size: 1.40em; /* margin-top:12px; */}
 	p {font-size:0.9em;}
 }
 @media (min-width: 390px) and (max-width: 767px)
 {
 	.center-index-image {margin: 15px 0 15px 15px; width: 32%; float: right;}
+  .arenda-index-image {margin: 15px 0 15px 15px; width: 32%; float: right;}
 	h1 {font-size: 1.80em;} h2 {font-size: 1.50em;} h3 {font-size: 1.20em;}
 }
 @media (min-width: 768px)
 {
 	.center-index-image {margin: 15px 0 15px 15px; width: 25%; float: right;}
+  .arenda-index-image {margin: 15px 30px 15px 0px; width: 25%; float: left;}
   .center-index-logo {display: block; margin: 15px 15px 15px 0; width: 10%; float: left; border: 1px solid #aaa;}
   .center-index-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
 }

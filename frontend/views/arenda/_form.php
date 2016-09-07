@@ -15,11 +15,11 @@ use yii\widgets\ActiveForm;
   <div class="row">
       <div class="col-md-7">
 
-          <?= $form->field($model, 'region')->dropDownList($model->regionsArray) ?>
+          <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem) ?>
 
           <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Не более 150 символов') ?>
 
-          <?= $form->field($model, 'description')->textarea(['rows' => 10, 'maxlength' => true])->hint('Не боле 1500 символов') ?>
+          <?= $form->field($model, 'description')->textarea(['rows' => 10, 'maxlength' => true])->hint('Не более 1500 символов') ?>
 
           <?= $form->field($model, 'contacts')->textInput() ?>
 

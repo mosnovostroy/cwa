@@ -42,24 +42,14 @@ else
 				document.getElementById('mainform-large').className = 'raw hidden-xs';
 				">Скрыть</a>
 		</span>
-        <?php   $form = ActiveForm::begin(['method' => 'get', 'action' => ['arenda/index-submit'],
-                                        'options' => ['class' => 'form-inline']]); ?>
-                <span style="font-size: 1.6em; padding-right: 10px;">Объявления</span>
-                <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-                <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
+    <span style="font-size: 1.6em; padding-right: 10px;">Мои объявления</span>
+    <?php
+        if (User::isUser())
+            echo Html::a('Разместить объявление', ['arenda/create'], ['class' => 'btn btn-default']);
+    ?>
+    </div>
+</div>
 
-                <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
-        <?php ActiveForm::end(); ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-12" style="">
-        <?php
-            if (User::isUser())
-                echo Html::a('Разместить объявление', ['create'], ['class' => 'btn btn-default']);
-        ?>
-    </div>
-</div>
 <div class="row">
     <div class="col-xs-12" style="">
         <div class="pull-left">

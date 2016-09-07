@@ -42,8 +42,8 @@ $this->params['hasYandexMap'] = true;
     <div class="col-md-7">
 
         <div style="font-style: italic;">
-            <?php Yii::$app->formatter->locale = 'ru-RU'; ?>
-            Размещено: <?= $model->username?>, <?= Yii::$app->formatter->asDate($model->createdAt, 'long') ?>
+            <?php  ?>
+            Размещено: <?= $model->username?>, <?= $model->date ?>
           </div>
 
         <div style="margin-top: 5px;"><?= $model->description?></div>

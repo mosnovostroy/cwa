@@ -28,6 +28,8 @@ use common\models\User;
 class Arenda extends \yii\db\ActiveRecord
 {
     public $username;
+    public $date;
+    public $anons_text;
 
     /**
      * @inheritdoc
@@ -102,8 +104,28 @@ class Arenda extends \yii\db\ActiveRecord
 
     public function afterFind()
     {
-        $this->username = User::findOne($this->createdBy)->username;
-				parent::afterFind();
+        $user = User::findOne($this->createdBy);
+        if ($user)
+            $this->username = $user->username;
+
+        Yii::$app->formatter->locale = 'ru-RU';
+        $this->date = Yii::$app->formatter->asDate($this->createdAt, 'long');
+
+        $len = 500;
+        $string = $this->description;
+        if (mb_strlen($string) > $len)
+        {
+            $string = mb_substr($string, 0, $len);
+            $limit = mb_strrpos($string, ' ');
+            if ($limit)
+            {
+                $string = mb_substr($string, 0, $limit);
+            }
+            $string .= '...';
+        }
+        $this->anons_text = $string;
+
+        parent::afterFind();
     }
 
 }
