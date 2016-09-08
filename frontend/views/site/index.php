@@ -127,23 +127,29 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
     </div>
 
     <h3 style="margin-top: 50px;">Совместная аренда офиса</h3>
-    <div class="row row-flex1234 row-flex1234-wrap" style="margin-top: -5px;">
+
+    <div class="">
         <?php $count = 1; ?>
         <?php foreach ($arenda->getModels() as $center): ?>
-            <?php if ($count > 4) break; $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
-            <div class="col-lg-3 col-xs-6 tgbcol" onclick="location.href='<?= $url ?>';">
-                <div class="tgb" id="tgb1184" tblank="1">
-                    <?php /*if ($center->anonsImage)
-                        echo '<div class="tgbimg"><img src="'.$center->anons4x3.'"></div>';*/
+        <?php if ($count > 4) break; $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
+          <div class="row">
+              <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
+                  <div class="clearfix" >
+                    <?php if ($center->anons3x2) echo '<image class="arenda-index-image" src="'.$center->anons3x2.'">'; ?>
+                    <h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
+                    <?php
                     ?>
-                    <div class="tgbtext">
-                      <div class="tgbtitle"><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></div>
-                      <div class="tgbdescr"><?= $center->anons_text ?></div>
-                      <div class="tgbdate"><?= $center->date ?></div>
-                    </div>
-                    <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
-                </div>
-            </div>
+                    <?php
+                        echo '<div class="center-index-params">';
+                            echo '<p>'.$center->regionName.'</p>';
+                            echo '<p>'.$center->date.'</p>';
+                        echo '</div>';
+                    ?>
+
+                    <div><?= $center->anons_text ?></div>
+                  </div>
+              </div>
+          </div>
         <?php $count++; endforeach; ?>
     </div>
 
