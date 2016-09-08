@@ -144,4 +144,23 @@ class ArendaSearch extends Arenda
     {
         return $this->search([], false, true);
     }
+
+    public function searchFour()
+    {
+        $query = Arenda::find();
+
+        $adpParams = ['query' => $query,
+              'pagination' => ['pageSize' => 10],
+              'sort' => [
+                  'defaultOrder' => [
+                      'createdAt' => SORT_DESC,
+                  ]
+              ],
+        ];
+
+        $dataProvider = new ActiveDataProvider($adpParams);
+
+        return $dataProvider;
+    }
+
 }

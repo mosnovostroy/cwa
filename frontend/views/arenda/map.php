@@ -10,15 +10,15 @@ use common\models\User;
 /* @var $this yii\web\View */
 if ($searchModel->regionNameTp)
 {
-    $this->title = 'Коворкинг-центры в '.$searchModel->regionNameTp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->regionName]);
+    $this->title = 'Совместная аренда офиса  в '.$searchModel->regionNameTp.' - объявления на карте | Коворкинг-ревю';
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Объявления о совместной аренде офиса в  '.$searchModel->regionNameTp.'. Бесплатное размещение, поиск объявлений на карте региона']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса, бесплатные объявления, '.$searchModel->regionName]);
 }
 else
 {
-    $this->title = 'Коворкинг-центры: поиск';
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкинг-центров в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры в россии']);
+    $this->title = 'Совместная аренда офиса - все объявления на карте | Коворкинг-ревю';
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Объявления о совместной аренде офиса в Москве и регионах РФ. Цены, условия, фото, расположение на карте']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса, поиск партнеров для аренды, аренда офиса в регионах россии, бесплатные объявления, объявления на карте']);
 }
 
 $this->params['hasYandexMap'] = true;
@@ -31,13 +31,11 @@ $this->params['hasYandexMap'] = true;
 				<a class="btn btn-default" onclick="
 					document.getElementById('mainform-large').classList.add('hidden');
 					">Скрыть</a>
-			</span>		
+			</span>
 			<?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['arenda/map-submit'],
 											'options' => ['class' => 'form-inline']]); ?>
 					<span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
 					<?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-					<?= $form->field($searchModel, 'price_day_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-					<?= $form->field($searchModel, 'price_day_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
 					<?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
 			<?php ActiveForm::end(); ?>
 			<?php
@@ -68,4 +66,3 @@ $this->params['hasYandexMap'] = true;
   ymaps_lng = "<?= $searchModel->regionMapLng ?>"
   ymaps_scale = "<?= $searchModel->regionMapZoom ?>"
 ></div>
-

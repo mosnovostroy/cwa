@@ -155,12 +155,17 @@ div.required label.control-label:after {
     color: red;
 }
 
+.serp-title {font-size: 1.6em; padding-right: 10px; }
+.serp-text {color: #bbb; margin-top: 0px; margin-bottom: 7px;}
+.serp-links {margin-top: 8px; margin-bottom: 5px;}
+
+
+
 /* Кликабельная карточка центра */
 .center-index-col { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
 .center-index-col:hover { background-color: #f8f8f8;}
 
-.center-index {margin: 15px auto 15px;}
-.center-index-title {font-size: 1.6em; padding-right: 10px; }
+
 .center-index-form {margin-bottom: 30px; }
 .center-index-logo {display: none;}
 .center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}

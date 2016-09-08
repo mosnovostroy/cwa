@@ -86,12 +86,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'mainpage';
+
         $model = new Index();
         $searchModel = new CenterSearch();
         $centers = $searchModel->searchFour();
+
+        $searchModel2 = new ArendaSearch();
+        $arenda = $searchModel2->searchFour();
+
         return $this->render('index', [
             'model' => $model,
             'centers' => $centers,
+            'arenda' => $arenda,
         ]);
     }
 

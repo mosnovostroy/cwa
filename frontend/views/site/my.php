@@ -7,24 +7,15 @@ use yii\widgets\LinkSorter;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use common\models\User;
-/* @var $this yii\web\View */
-if ($searchModel->regionNameTp)
-{
-    $this->title = 'Совместная аренда офиса в '.$searchModel->regionNameTp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Совместная аренда офиса в '.$searchModel->regionNameTp.': объявления. Условия, фото, цены']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса, '.$searchModel->regionName]);
-}
-else
-{
-    $this->title = 'Совместная аренда офиса: размещение объявлений';
-    $this->registerMetaTag(['name' => 'description', 'content' => 'База объявлений о совместной аренде офиса в Москве и регионах РФ. Условия, фото, цены']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса']);
-}
+
+$this->title = 'Страница пользователя: | Коворкинг-ревю';
+$this->registerMetaTag(['name' => 'description', 'content' => 'База объявлений о совместной аренде офиса в Москве и регионах РФ. Условия, фото, цены']);
+$this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса']);
 ?>
 
 <div id="mainform-small" class="row visible-xs">
     <div class="col-xs-12" style="">
-        <span style="font-size: 1.6em; padding-right: 10px;">Объявления</span>
+        <span class="serp-title">Объявления</span>
 		<span class="pull-right">
 			<a class="btn btn-default" onclick="
 				document.getElementById('mainform-small').className = 'hidden';
@@ -42,15 +33,15 @@ else
 				document.getElementById('mainform-large').className = 'raw hidden-xs';
 				">Скрыть</a>
 		</span>
-    <span style="font-size: 1.6em; padding-right: 10px;">Мои объявления</span>
+    <span class="serp-title">Мои объявления</span>
     <?php
         if (User::isUser())
-            echo Html::a('Разместить объявление', ['arenda/create'], ['class' => 'btn btn-default']);
+            echo Html::a('Разместить объявление', ['arenda/create'], ['class' => 'btn btn-info', 'style' => 'margin-top: -5px;']);
     ?>
     </div>
 </div>
 
-<div class="row">
+<div class="row serp-links">
     <div class="col-xs-12" style="">
         <div class="pull-left">
             список
@@ -67,7 +58,7 @@ else
     </div>
 </div>
 
-<div class="arenda-index">
+<div class="">
 <?php foreach ($dataProvider->getModels() as $center): ?>
   <?php $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
   <div class="row">

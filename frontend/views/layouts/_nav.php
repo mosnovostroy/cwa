@@ -23,7 +23,7 @@ use Yii;
 	<div class="form-group input-group">
 		<?= Html::input('text', 'CenterSearch[text]',
 		  isset(Yii::$app->request->queryParams['CenterSearch']['text']) ? Yii::$app->request->queryParams['CenterSearch']['text'] : null,
-		  ['class' => 'form-control', 'style' => 'border-radius: 0;', 'placeholder' => 'Коворкинг-центры'])?>
+		  ['class' => 'form-control', 'style' => 'border-radius: 0;', 'placeholder' => 'Поиск по сайту'])?>
 
 
 		  <?= isset(Yii::$app->request->queryParams['CenterSearch']['region']) ? Html::input('hidden', 'CenterSearch[region]', Yii::$app->request->queryParams['CenterSearch']['region']) : '' ?>
@@ -36,7 +36,7 @@ use Yii;
 
 <?php
     $menuItems = [
-        ['label' => 'Коворкинг-центры', 'url' => ['/center/index']],
+        ['label' => 'Коворкинги', 'url' => ['/center/index']],
         ['label' => 'Совместная аренда', 'url' => ['/arenda/index']],
     ];
     if (Yii::$app->user->isGuest) {

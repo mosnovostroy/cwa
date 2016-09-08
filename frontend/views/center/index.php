@@ -10,21 +10,21 @@ use common\models\User;
 /* @var $this yii\web\View */
 if ($searchModel->regionNameTp)
 {
-    $this->title = 'Коворкинг-центры в '.$searchModel->regionNameTp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->regionName]);
+    $this->title = 'Коворкинги в '.$searchModel->regionNameTp;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
 }
 else
 {
     $this->title = 'Коворкинг-центры: поиск';
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкинг-центров в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры в россии']);
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
 }
 ?>
 
 <div id="mainform-small" class="row visible-xs">
     <div class="col-xs-12 center-index-form">
-        <span class="center-index-title">Коворкинг-центры</span>
+        <span class="serp-title">Коворкинги</span>
 		<span class="pull-right">
 			<a class="btn btn-default" onclick="
 				document.getElementById('mainform-small').className = 'hidden';
@@ -35,16 +35,16 @@ else
 </div>
 
 <div id="mainform-large" class="row hidden-xs">
-    <div class="col-xs-12 center-index-form">
+    <div class="col-xs-12">
 		<span class="pull-right visible-xs">
 			<a class="btn btn-default" onclick="
 				document.getElementById('mainform-small').className = 'row visible-xs';
 				document.getElementById('mainform-large').className = 'row hidden-xs';
 				">Скрыть</a>
 		</span>
-        <?php   $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
+        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
                                         'options' => ['class' => 'form-inline']]); ?>
-                <span class="center-index-title">Коворкинг-центры</span>
+                <span class="serp-title">Коворкинги</span>
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за месяц, от'])->label(false) ?>
                 <?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за месяц, до'])->label(false) ?>
@@ -66,18 +66,23 @@ else
     </div>
 </div>
 
-
+<div class="row">
+    <div class="col-xs-12 serp-text">
+        Найдено коворкингов <?= $searchModel->regionNameTp ? 'в '.$searchModel->regionNameTp.' ' : ''?>с учетом фильтра: <?= $dataProvider->getTotalCount() ?>
+    </div>
+</div>
 
 <div class="row">
-    <div class="col-xs-12" style="">
+    <div class="col-xs-12">
         <?php
             if (User::isAdmin())
                 echo Html::a('Создать новый', ['create'], ['class' => 'btn btn-default']);
         ?>
     </div>
 </div>
+
 <div class="row">
-    <div class="col-xs-12" style="">
+    <div class="col-xs-12 serp-links">
         <div class="pull-left">
             список
             | <?= Html::a('карта', ['center/map', 'CenterSearch' => $searchModel->toArray()]) ?>
@@ -93,11 +98,9 @@ else
     </div>
 </div>
 
-
-
-		<div class="center-index">
+<div class="">
 		<?php foreach ($dataProvider->getModels() as $center): ?>
-			<?php $url = Url::to(['view', 'id' => $center->id]); ?>
+		<?php $url = Url::to(['view', 'id' => $center->id]); ?>
       <div class="row">
           <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
       				<div class="clearfix" >
@@ -136,5 +139,6 @@ else
           </div>
       </div>
 		<?php endforeach; ?>
-		</div>
-        <?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>
+</div>
+
+<?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>

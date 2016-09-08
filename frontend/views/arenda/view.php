@@ -2,15 +2,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\User;
-/* @var $this yii\web\View */
-$this->title = $model->meta_title;
-$this->registerMetaTag(['name' => 'description', 'content' => $model->meta_description]);
-$this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords]);
+
+$this->title = 'Совместная аренда офиса ('.$model->regionName.') - объявление '.$model->alias.' | Коворкинг-ревю';
+$this->registerMetaTag(['name' => 'description', 'content' => $model->name.' (объявление размещено '.$model->date.'). '.$model->anons_text ]);
+$this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса, бесплатные объявления, поиск партнера для аренды, сдаю часть офиса, сниму часть офиса']);
 $this->params['breadcrumbs'] =
 [
-    ['label' => 'Совместная аренда', 'url' => ['arenda/index']],
+    ['label' => 'Совместная аренда офиса', 'url' => ['arenda/index']],
     ['label' => $model->regionName, 'url' => ['arenda/index', 'ArendaSearch' => ['region' => $model->region]]],
-    ['label' => $model->alias],
 ];
 $this->params['hasYandexMap'] = true;
 ?>
@@ -41,9 +40,9 @@ $this->params['hasYandexMap'] = true;
 <div class="row">
     <div class="col-md-7">
 
-        <div style="font-style: italic;">
+        <div style="font-style: italic; color: #bbb;">
             <?php  ?>
-            Размещено: <?= $model->username?>, <?= $model->date ?>
+            Объявление <?= $model->alias?>, размещено: <?= $model->username?>, <?= $model->date ?>
           </div>
 
         <div style="margin-top: 5px;"><?= $model->description?></div>
