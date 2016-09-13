@@ -42,19 +42,29 @@ use Yii;
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
     } else {
-        $temp = array();
-        $temp['label'] = Yii::$app->user->identity->username;
-        $temp['url'] = ['/site/my'];
-        $menuItems[] = $temp;
-        //$menuItems[] = ['label' => 'Мой КР', 'url' => ['/site/cabinet']];
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Выход',
-                ['class' => 'btn btn-link']
-            )
-            . Html::endForm()
-            . '</li>';
+        $menuItems[] = [
+                         'label' => Yii::$app->user->identity->username,
+                         'items' => [
+                                [
+                                   'label' => 'Мои объявления',
+                                   'url' => ['/site/my'],
+                                ],
+                                [
+                                   'label' => 'Подать объявление',
+                                   'url' => ['/arenda/create'],
+                                ],
+                                [
+                                   'label' => 'Настройки',
+                                   'url' => ['/site/profile'],
+                                ],
+                                [
+                                    'label' => 'Выход',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                ],
+                         ],
+                       ];
+
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

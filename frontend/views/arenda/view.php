@@ -40,14 +40,14 @@ $this->params['hasYandexMap'] = true;
 <div class="row">
     <div class="col-md-7">
 
-        <div style="font-style: italic; color: #bbb;">
+        <div style="font-style: normal; color: #bbb; margin-top: -7px;">
             <?php  ?>
-            Объявление <?= $model->alias?>, размещено: <?= $model->username?>, <?= $model->date ?>
+            Размещено <?= $model->date ?>
           </div>
 
         <div style="margin-top: 5px;"><?= $model->description?></div>
 
-        <div style="margin-top: 5px;"><?= $model->contacts?></div>
+        <div style="margin-top: 5px;">Контакты: <?= $model->username?>, <?= $model->contacts?></div>
 
         <?php echo \yii2mod\comments\widgets\Comment::widget([
             'model' => $model,
@@ -59,6 +59,7 @@ $this->params['hasYandexMap'] = true;
 
     </div>
     <div class="col-md-5">
+        <div class="fotorama-colontitul">Объявление <?= $model->alias ?> </div>
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
 			  [

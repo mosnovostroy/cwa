@@ -159,7 +159,7 @@ $this->params['hasYandexMap'] = true;
         <?php } ?>
     </div>
     <div class="col-md-5">
-        <?= $model->site ? '<div style="position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; color: #aaa;  float: right;">Фото: '.$model->site.'</div>' : '' ?>
+        <?= $model->site ? '<div class="fotorama-colontitul">Фото: '.$model->site.'</div>' : '' ?>
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
 			  [

@@ -228,3 +228,5 @@ div.required label.control-label:after {
 
 
 .main-page-center-image {width: 100%; margin-top: 30px;}
+
+.fotorama-colontitul {position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; color: #aaa;  float: right;}

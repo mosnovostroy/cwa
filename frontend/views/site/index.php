@@ -18,12 +18,16 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
       .main-form-container {width: 85%; margin: 30px auto 15px; text-align: left;}
       .main-form-list {width: 100%; float: left; margin-bottom:30px;}
       .main-form-button {width: 100%!important; float: left;}
+      /*.main-arenda-control-container {width: 85%; margin: 0 auto;}
+      .main-arenda-control-button {width: 100%;}*/
     }
     @media (min-width: 768px)
     {
       .main-form-container {width: calc(70% + 150px); margin: 40px auto 45px; text-align: left;}
       .main-form-list {width: calc(50% - 75px); float: left; border-radius: 0!important;}
       .main-form-button {width: 150px!important; float: left;}
+      /*.main-arenda-control-container {width: 100%;}
+      .main-arenda-control-button {width: 100%;}*/
     }
     .main-center-links {margin-top: 10px;}
 </style>
@@ -91,10 +95,23 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
     .row-flex1234-wrap {	-webkit-flex-flow: row wrap; align-content: flex-start; flex:0;	}
     .row-flex1234 > div[class*='col-'] { margin:-.2px;}
   }
+  .main-h3 {margin-right: 30px; }
+  .main-city {font-size: 1em; margin: 10px 30px 10px 0;}
+  .main-city.main-city-all{font-weight: bold;}
 </style>
 
 <div class="container" style="padding-top: 0px;">
-    <h3>Коворкинги</h3>
+    <h3><?= Html::a('Коворкинги', ['center/index'], ['class' => 'main-h3']) ?></h3>
+    <div class="row">
+      <div class="col-xs-12">
+        <?= Html::a('Москва', ['centers/moscow'], ['class' => 'main-city']) ?>
+         <?= Html::a('Санкт-Петербург', ['centers/piter'], ['class' => 'main-city']) ?>
+         <?= Html::a('Новосибирск', ['centers/novosibirsk'], ['class' => 'main-city']) ?>
+         <?= Html::a('Самара', ['centers/samara'], ['class' => 'main-city']) ?>
+         <?= Html::a('Все&nbsp;регионы', ['center/index'], ['class' => 'main-city main-city-all']) ?>
+       </div>
+    </div>
+    <div class="clearfix">&nbsp;</div>
     <div class="row row-flex1234 row-flex1234-wrap" style="margin-top: -5px;">
         <?php $count = 1; ?>
         <?php foreach ($centers->getModels() as $center): ?>
@@ -114,21 +131,39 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
         <?php $count++; endforeach; ?>
     </div>
 
-    <div class="main-center-links">
-        <?= Html::a('Все коворкинги РФ', ['center/index'], ['class' => 'btn btn-warning', 'style' => '']) ?>
-        <?= Html::a('Москва', ['centers/moscow'], ['class' => 'btn btn-link', 'style' =>
-         '']) ?>
-         <?= Html::a('Санкт-Петербург', ['centers/piter'], ['class' => 'btn btn-link', 'style' =>
-          '']) ?>
-         <?= Html::a('Новосибирск', ['centers/novosibirsk'], ['class' => 'btn btn-link', 'style' =>
-           '']) ?>
-         <?= Html::a('Самара', ['centers/samara'], ['class' => 'btn btn-link', 'style' =>
-            '']) ?>
+
+<style>
+    @media (max-width: 519px)
+    {
+        .main-arenda-control-button {width: 100%; margin-bottom: 30px;}
+    }
+    @media (min-width: 520px) and (max-width: 767px)
+    {
+        .main-arenda-control-button {width: 45%; margin-bottom: 30px;}
+    }
+    @media (min-width: 767px)
+    {
+        .main-arenda-control-button {width: 100%; margin-bottom: 30px;}
+    }
+</style>
+
+    <h3 style="margin-top: 50px; margin-bottom: 0px;"><?= Html::a('Совместная аренда офиса', ['arenda/index'], ['class' => 'main-h3']) ?></h3>
+
+    <div class="row">
+      <div class="col-xs-12">
+          <div style=" margin-bottom: 20px;">Объявления о поиске партнеров для совместной аренды офиса</div>
+       </div>
     </div>
 
-    <h3 style="margin-top: 50px;">Совместная аренда офиса</h3>
 
-    <div class="">
+
+    <div class="row">
+      <div class="col-sm-3">
+        <!-- <div class="main-arenda-control-container"> -->
+          <?= Html::a('Подать объявление', ['arenda/create'], ['class' => 'btn btn-danger btn-lg main-arenda-control-button']) ?>
+          <!-- </div> -->
+      </div>
+      <div class="col-sm-9">
         <?php $count = 1; ?>
         <?php foreach ($arenda->getModels() as $center): ?>
         <?php if ($count > 4) break; $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
@@ -150,13 +185,8 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
                   </div>
               </div>
           </div>
-        <?php $count++; endforeach; ?>
+          <?php $count++; endforeach; ?>
+      </div>
     </div>
 
-    <div class="main-center-links">
-        <?= Html::a('Поиск по объявлениям', ['arenda/index'], ['class' => 'btn btn-warning', 'style' => '']) ?>
-        <?= Html::a('Разместить объявление', ['arenda/create'], ['class' => 'btn btn-info', 'style' => '']) ?>
-        <?php /*if (User::isUser()) echo Html::a('Мои объявления', ['site/my'], ['class' => 'btn btn-default']);*/ ?>
-
-    </div>
 </div>

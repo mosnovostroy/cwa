@@ -63,7 +63,7 @@ else
     <div class="col-xs-12">
         <?php
             if (User::isUser())
-                echo Html::a('Разместить объявление', ['create'], ['class' => 'btn btn-info']);
+                echo Html::a('Подать объявление', ['create'], ['class' => 'btn btn-danger']);
         ?>
     </div>
 </div>

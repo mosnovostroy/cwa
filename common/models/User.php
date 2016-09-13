@@ -28,13 +28,13 @@ class User extends ActiveRecord implements IdentityInterface
 
     const ROLE_USER = 10;
     const ROLE_ADMIN = 20;
-	
-	
-    /**
+
+
+     /**
      * @var array EAuth attributes
      */
-    public $profile;
-	public $authKey;
+     public $profile;
+	   public $authKey;
 
     /**
      * @param \nodge\eauth\ServiceBase $service
@@ -48,27 +48,27 @@ class User extends ActiveRecord implements IdentityInterface
 
 		//Идентификатор пользователя типа mailru-10964094557919501470 - мы будем фиксировать его в поле таблицы user.email (моя идея-костыль)
         $id = $service->getServiceName().'-'.$service->getId();
-		
+
 		//Если такого юзера из соцсетей еще не было, запишем его в таблицу (мой код).
-		$user = User::find()->where(['email' => $id])->one();		
+		$user = User::find()->where(['social_id' => $id])->one();
 		if (!$user)
-		{			
+		{
 			$values = [
 				'username' => $service->getAttribute('name'),
 				'role' => self::ROLE_USER,
-				'email' => $id,
+				'social_id' => $id,
 			];
-			
+
 			$user = new User();
 			$user->attributes = $values;
 			if($user->save())
 			{
 				// $auth = Yii::$app->authManager;
 				// $authorRole = $auth->getRole('author');
-				// $auth->assign($authorRole, $user->getId());			
+				// $auth->assign($authorRole, $user->getId());
 			}
-		}				
-		
+		}
+
 		//Пишем специфические для авторизации через сети вещи в сессию (код автора расширения):
         $attributes = [
             'id' => $id,
@@ -78,11 +78,11 @@ class User extends ActiveRecord implements IdentityInterface
         ];
         $attributes['profile']['service'] = $service->getServiceName();
         Yii::$app->getSession()->set('user-'.$id, $attributes);
-		
-		//Yii::info($user->getAttributes(), 'myd');		
+
+		//Yii::info($user->getAttributes(), 'myd');
         return $user;
     }
-	
+
     /**
      * @inheritdoc
      */
@@ -93,7 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
         else {
             return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-        }		
+        }
     }
 
     /**
@@ -300,4 +300,14 @@ class User extends ActiveRecord implements IdentityInterface
             // return false;
         // }
     // }
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Имя пользователя',
+            'email' => 'Email',
+            'created_at' => 'Дата регистрации',
+        ];
+    }
+
 }

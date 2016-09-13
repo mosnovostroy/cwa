@@ -30,7 +30,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup', 'my'],
+                'only' => ['logout', 'signup', 'profile', 'my'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -39,6 +39,11 @@ class SiteController extends Controller
                     ],
                     [
                         'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['profile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -218,14 +223,22 @@ class SiteController extends Controller
         }
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
+     public function actionProfile()
+     {
+         if (Yii::$app->user->isGuest)
+            return $this->goHome();
+
+         $model = User::findIdentity(Yii::$app->user->identity->id);
+         return $this->render('profile', [
+             'model' => $model,
+         ]);
+     }
 
      public function actionMy()
      {
+         if (Yii::$app->user->isGuest)
+            return $this->goHome();
+
          $searchModel = new ArendaSearch();
          $dataProvider = $searchModel->searchMy();
 

@@ -13,40 +13,18 @@ $this->registerMetaTag(['name' => 'description', 'content' => 'База объя
 $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса']);
 ?>
 
-<div id="mainform-small" class="row visible-xs">
-    <div class="col-xs-12" style="">
-        <span class="serp-title">Объявления</span>
-		<span class="pull-right">
-			<a class="btn btn-default" onclick="
-				document.getElementById('mainform-small').className = 'hidden';
-				document.getElementById('mainform-large').className = 'raw';
-				">Фильтр</a>
-		</span>
-    </div>
-</div>
-
-<div id="mainform-large" class="row hidden-xs">
-    <div class="col-xs-12" style="">
-		<span class="pull-right visible-xs">
-			<a class="btn btn-default" onclick="
-				document.getElementById('mainform-small').className = 'raw visible-xs';
-				document.getElementById('mainform-large').className = 'raw hidden-xs';
-				">Скрыть</a>
-		</span>
-    <span class="serp-title">Мои объявления</span>
-    <?php
-        if (User::isUser())
-            echo Html::a('Разместить объявление', ['arenda/create'], ['class' => 'btn btn-info', 'style' => 'margin-top: -5px;']);
-    ?>
-    </div>
-</div>
+<h3>Мои объявления</h3>
+<?php
+    if (User::isUser())
+        echo Html::a('Подать объявление', ['arenda/create'], ['class' => 'btn btn-danger', 'style' => 'margin-top: -5px;']);
+?>
 
 <div class="row serp-links">
     <div class="col-xs-12" style="">
-        <div class="pull-left">
+        <!-- <div class="pull-left">
             список
             | <?= Html::a('карта', ['arenda/map', 'ArendaSearch' => $searchModel->toArray()]) ?>
-        </div>
+        </div> -->
 
         <div class="pull-right">
           <?php
