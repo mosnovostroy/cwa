@@ -13,14 +13,24 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
 
 <h3>Профиль и настройки</h3>
 
-<?= DetailView::widget([
-    'model' => $model,
-    'attributes' => [
+<?php
+    $attributes = [
         'username',
         'email',
         [
             'label' => 'Дата регистрации',
             'value' => Yii::$app->formatter->asDate($model->created_at, 'long'),
         ],
-    ],
+      ];
+
+      if ($model->social_id)
+      $attributes[] =
+      [
+          'label' => 'Авторизация через',
+          'value' => $model->social_id,
+      ];
+?>
+<?= DetailView::widget([
+    'model' => $model,
+    'attributes' => $attributes,
 ]) ?>
