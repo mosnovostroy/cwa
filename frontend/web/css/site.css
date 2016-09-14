@@ -230,3 +230,14 @@ div.required label.control-label:after {
 .main-page-center-image {width: 100%; margin-top: 30px;}
 
 .fotorama-colontitul {position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; color: #aaa;  float: right;}
+
+
+.login-button {width: 100%;}
+@media (max-width: 389px)
+{
+    .login-button-container {width: 100%; margin: 15px auto 30px;}
+}
+@media (min-width: 390px)
+{
+    .login-button-container {width: 200px; margin: 15px auto 30px;}
+}
