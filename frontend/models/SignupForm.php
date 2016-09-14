@@ -23,7 +23,7 @@ class SignupForm extends Model
         return [
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой логин уже занят.'],
+            //['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой логин уже занят.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'filter', 'filter' => 'trim'],
@@ -40,8 +40,8 @@ class SignupForm extends Model
     public function attributeLabels()
     {
         return [
-            'username' => 'Логин',
-			'email' => 'Email',
+            'username' => 'Имя',
+			      'email' => 'Электронная почта',
             'password' => 'Пароль',
         ];
     }

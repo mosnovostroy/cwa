@@ -11,7 +11,7 @@ $this->title = 'Восстановление доступа';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-request-password-reset">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2><?= Html::encode($this->title) ?></h2>
 
     <p>Ведите адрес электронный почты, указанный при регистрации:</p>
 

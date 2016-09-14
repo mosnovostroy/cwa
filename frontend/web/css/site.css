@@ -233,11 +233,13 @@ div.required label.control-label:after {
 
 
 .login-button {width: 100%;}
+.login-button-container {margin: 15px auto 30px;}
+.register-button-container {margin: -5px auto 30px;}
 @media (max-width: 389px)
 {
-    .login-button-container {width: 100%; margin: 15px auto 30px;}
+    .login-button-container, .register-button-container {width: 100%;}
 }
 @media (min-width: 390px)
 {
-    .login-button-container {width: 200px; margin: 15px auto 30px;}
+  .login-button-container, .register-button-container {width: 200px;}
 }

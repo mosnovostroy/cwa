@@ -11,43 +11,38 @@ $this->title = 'Регистрация';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
-
     <div class="row">
-        <div class="col-lg-2">
-		</div>
-        <div class="col-lg-8">
-			<h1><?= Html::encode($this->title) ?></h1>
-			<div class="row">
-				<div class="col-lg-7">
-					<?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+        <div class="col-md-2">
+		    </div>
+        <div class="col-md-8">
+			      <h2><?= Html::encode($this->title) ?></h2>
+			      <div class="row">
+                <div class="col-md-7">
+					          <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-						<?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-						<span id="helpBlock" class="help-block">
-							Например, "Иван Фёдоров" или "ivan31415". Ваш логин понадобится для входа на сайт и будет отображаться как Ваше имя. 
-						</span>				
+						              <?= $form->field($model, 'username')->textInput(['autofocus' => true])->hint('Отображается в объявлениях и комментариях') ?>
 
-						<?= $form->field($model, 'email') ?>
-						<span id="helpBlock" class="help-block">
-							На указанный адрес будет выслана ссылка для активации. 
-						</span>				
+						              <?= $form->field($model, 'email')->hint('Не отображается на сайте. Используется для подтверждения регистрации и в качестве логина') ?>
 
-						<?= $form->field($model, 'password')->passwordInput() ?>
+						              <?= $form->field($model, 'password')->passwordInput()->hint('Минимум 6 символов') ?>
 
-						<div class="form-group">
-							<?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success', 'name' => 'signup-button']) ?>
-						</div>
+						              <div class="login-button-container">
+							                <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success login-button', 'name' => 'signup-button']) ?>
+						              </div>
 
-					<?php ActiveForm::end(); ?>
-				</div>
-				<div class="col-lg-1">
-				</div>
-				<div class="col-lg-4">
-					<div style="font-weight: normal; margin-bottom: 5px;">Уже зарегистрированы?</div>
-					<?= Html::a('Вход на сайт', ['site/login'], ['class' => 'btn btn-primary']) ?>
-				</div>				
-			</div>
+					          <?php ActiveForm::end(); ?>
+				        </div>
+                <div class="col-md-1">
+				        </div>
+                <div class="col-md-4">
+                    <p>Уже зарегистрированы?</p>
+					          <div class="register-button-container">
+					              <?= Html::a('Вход на сайт', ['site/login'], ['class' => 'btn btn-primary login-button']) ?>
+				            </div>
+			          </div>
+           </div>
         </div>
-        <div class="col-lg-2">
-		</div>
+        <div class="col-md-2">
+        </div>
     </div>
 </div>

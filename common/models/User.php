@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use common\behaviors\RegionInfoBehavior;
 
 /**
  * User model
@@ -111,6 +112,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             TimestampBehavior::className(),
+            'regionInfo' => [
+                'class' => RegionInfoBehavior::className(),
+            ],
         ];
     }
 
@@ -123,7 +127,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
             ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
-			      [['username', 'email', 'social_id'], 'safe'],
+			      [['username', 'email', 'social_id', 'region'], 'safe'],
         ];
     }
 
@@ -309,10 +313,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'username' => 'Имя пользователя',
+            'username' => 'Имя',
             'email' => 'Email',
             'created_at' => 'Дата регистрации',
+            'region' => 'Ваш регион',
         ];
     }
-
 }

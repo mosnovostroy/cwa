@@ -85,11 +85,16 @@ class RegionInfoBehavior extends Behavior
         return $this->dogetRegionsArray(false);
 	}
 
-  public function doGetRegionsArray($all = true)
+  public function getRegionsArrayForProfile()
+	{
+        return $this->dogetRegionsArray(true, true);
+	}
+
+  public function doGetRegionsArray($all = true, $none = false)
 	{
       $regions = array();
       if ($all)
-          $regions[0] = 'Все регионы';
+          $regions[0] = $none ? 'Не установлен' : 'Все регионы';
       $result = Region::find()->where(['parent' => 0])->all();
       $subregions = ArrayHelper::map($result,'id','name');
       $regions = $regions + $subregions;

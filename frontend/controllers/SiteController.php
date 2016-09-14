@@ -323,4 +323,18 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionUpdateUser($id)
+    {
+        if (($model = User::findOne($id)) !== null)
+        {
+            if ($model->load(Yii::$app->request->post()) && $model->save())
+                return $this->render('profile', ['model' => $model]);
+            else
+                return $this->render('profile', ['model' => $model]);
+        } 
+        else
+            return false;
+    }
+
+
 }
