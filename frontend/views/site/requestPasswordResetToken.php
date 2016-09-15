@@ -9,6 +9,15 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = 'Восстановление доступа';
 //$this->params['breadcrumbs'][] = $this->title;
+
+// Yii::$app->mailer->compose()
+//     ->setFrom('inbox@mosnovostroy.ru')
+//     ->setTo('mosnovostroy@ya.ru')
+//     ->setSubject('Тема сообщения')
+//     ->setTextBody('Текст сообщения')
+//     ->setHtmlBody('<b>текст сообщения в формате HTML</b>')
+//     ->send();
+
 ?>
 <div class="site-request-password-reset">
     <h2><?= Html::encode($this->title) ?></h2>
