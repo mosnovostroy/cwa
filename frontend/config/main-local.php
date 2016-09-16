@@ -54,6 +54,13 @@ $config = [
 			],
         ],
 
+        'reCaptcha' => [
+            'name' => 'reCaptcha',
+            'class' => 'himiklab\yii2\recaptcha\ReCaptcha',
+            'siteKey' => '6Le3JyoTAAAAAAPRmrBO85LXHjR6AVfQzCN5nNvi',
+            'secret' => '6Le3JyoTAAAAAClPSsqK9Fw5adC4UC5xXcc6EJpg',
+        ],
+
         'i18n' => [
             'translations' => [
                 'eauth' => [
@@ -110,7 +117,7 @@ if (!YII_ENV_TEST) {
     ];
 	$config['modules']['debug']['allowedIPs'] = ['93.191.17.238'];
 
-	
+
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',

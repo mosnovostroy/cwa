@@ -23,7 +23,8 @@
         "metalguardian/yii2-fotorama-widget": "*",
         "yiisoft/yii2-imagine": "^2.0",
 		"nodge/yii2-eauth": "^2.4",
-        "yii2mod/yii2-comments": "*"
+        "yii2mod/yii2-comments": "*",
+        "himiklab/yii2-recaptcha-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
