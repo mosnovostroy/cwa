@@ -27,7 +27,7 @@ $this->title = 'Регистрация';
 						              <?= $form->field($model, 'password')->passwordInput()->hint('Минимум 6 символов') ?>
 
                           <?= $form->field($model, 'reCaptcha')->widget(
-                              \himiklab\yii2\recaptcha\ReCaptcha::className(), ['siteKey' => '6Le3JyoTAAAAAAPRmrBO85LXHjR6AVfQzCN5nNvi']) ?>
+                              \himiklab\yii2\recaptcha\ReCaptcha::className(), ['siteKey' => '6Le3JyoTAAAAAAPRmrBO85LXHjR6AVfQzCN5nNvi'])->label(false) ?>
 
 						              <div class="login-button-container">
 							                <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success login-button', 'name' => 'signup-button']) ?>
