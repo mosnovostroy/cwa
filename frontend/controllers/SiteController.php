@@ -356,7 +356,6 @@ class SiteController extends Controller
         Yii::$app->session->setFlash('danger', 'Ошибка при подтверждении регистрации!');
 
         return $this->goHome();
-        ]);
     }
 
     public function actionUpdateUser($id)
