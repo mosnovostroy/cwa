@@ -61,18 +61,31 @@ class SignupForm extends Model
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
-        //$user->status = User::STATUS_INACTIVE;
+        $user->status = User::STATUS_INACTIVE;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generatePasswordResetToken();
         if($user->save())
-		{
-			// $auth = Yii::$app->authManager;
-			// $authorRole = $auth->getRole('author');
-			// $auth->assign($authorRole, $user->getId());
-			return $user;
-		}
+		    {
+			      // $auth = Yii::$app->authManager;
+			      // $authorRole = $auth->getRole('author');
+			      // $auth->assign($authorRole, $user->getId());
 
-		return null;
+            Yii::$app
+                 ->mailer
+                 ->compose(
+                     ['html' => 'signup-html', 'text' => 'signup-text'],
+                     ['user' => $user]
+                 )
+                 ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ''])
+                 ->setTo($this->email)
+                 ->setSubject('Подтверждение регистрации')
+                 ->send();
+
+			      return $user;
+		    }
+
+		    return null;
     }
+
 }

@@ -12,6 +12,7 @@ use common\models\User;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
+use frontend\models\SignupConfirm;
 use frontend\models\ContactForm;
 use frontend\models\Index;
 use common\models\CenterSearch;
@@ -276,7 +277,7 @@ class SiteController extends Controller
             {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
                 return $this->goHome();
-              
+
                 // if (Yii::$app->getUser()->login($user))
                 // {
                 //     return $this->goHome();
@@ -335,6 +336,26 @@ class SiteController extends Controller
 
         return $this->render('resetPassword', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionSignupConfirm($token)
+    {
+        try {
+            $model = new SignupConfirm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->signupConfirm()) {
+            Yii::$app->session->setFlash('success', 'Регистрация успешно подтверждена!');
+
+            return $this->goHome();
+        }
+
+        Yii::$app->session->setFlash('danger', 'Ошибка при подтверждении регистрации!');
+
+        return $this->goHome();
         ]);
     }
 
