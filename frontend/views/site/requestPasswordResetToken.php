@@ -22,7 +22,7 @@ $this->title = 'Восстановление доступа';
 <div class="site-request-password-reset">
     <h2><?= Html::encode($this->title) ?></h2>
 
-    <p>Ведите адрес электронный почты, указанный при регистрации:</p>
+    <p>Введите адрес электронный почты, указанный при регистрации:</p>
 
     <div class="row">
         <div class="col-lg-5">

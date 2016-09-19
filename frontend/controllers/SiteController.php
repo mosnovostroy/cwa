@@ -260,12 +260,27 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        // $model = new SignupForm();
+        // if ($model->load(Yii::$app->request->post())) {
+        //     if ($user = $model->signup()) {
+        //         if (Yii::$app->getUser()->login($user)) {
+        //             return $this->goHome();
+        //         }
+        //     }
+        // }
+
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if ($user = $model->signup())
+            {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                return $this->goHome();
+              
+                // if (Yii::$app->getUser()->login($user))
+                // {
+                //     return $this->goHome();
+                // }
             }
         }
 
@@ -331,7 +346,7 @@ class SiteController extends Controller
                 return $this->render('profile', ['model' => $model]);
             else
                 return $this->render('profile', ['model' => $model]);
-        } 
+        }
         else
             return false;
     }
