@@ -33,7 +33,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
               'value' => $model->social_id,
           ];
 
-          $eauth = Yii::$app->get('eauth')
+          $eauth = Yii::$app->get('eauth');
           $identity = User::findByEAuth($eauth);
           var_dump($eauth);
 
