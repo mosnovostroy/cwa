@@ -39,13 +39,8 @@ BootstrapSelectAsset::register($this);
             'homeLink' => false,
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <?= Alert::widget() ?>
-        <?php
-          foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
-            echo '<div class="alert alert-' . $key . '">' . $message . '</div>';
-          }
-        ?>
         <?=  $content ?>
+        <?= Alert::widget() ?>
     <!-- </div> -->
 </div>
 
