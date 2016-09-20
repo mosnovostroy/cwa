@@ -11,4 +11,4 @@ $confirmLink = Yii::$app->urlManager->createAbsoluteUrl(['site/signup-confirm', 
 
 <?= $confirmLink ?>
 
-Ссылка активна до <?= Yii::$app->formatter->asDate($user->createdAt, 'long') ?>.
+Ссылка активна до <?= Yii::$app->formatter->asDate($user->created_at, 'long') ?>.
