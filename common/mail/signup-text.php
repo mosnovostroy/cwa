@@ -10,8 +10,8 @@ Yii::$app->formatter->locale = 'ru-RU';
 ?>
 Здравствуйте,  <?= $user->username ?>!
 
-Для подтверждения регистрации перейдите по ссылке:
+Для подтверждения регистрации на сайте Коворкинг-ревю перейдите по ссылке:
 
 <?= $confirmLink ?>
 
-Ссылка активна до <?= Yii::$app->formatter->asDate($user->created_at, 'long') ?>.
+Ссылка активна до <?= Yii::$app->formatter->asDate($user->created_at + Yii::$app->params['user.signupConfirmTokenExpire'], 'long') ?>.
