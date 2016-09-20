@@ -34,7 +34,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
           ];
 
           $eauth = Yii::$app->get('eauth');
-          $identity = User::findByEAuth($eauth);
+          //$identity = User::findByEAuth($eauth);
           var_dump($eauth);
 
     ?>
