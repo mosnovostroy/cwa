@@ -14,4 +14,4 @@ Yii::$app->formatter->locale = 'ru-RU';
 
 <?= $confirmLink ?>
 
-Ссылка активна до <?= Yii::$app->formatter->asDate($user->created_at + Yii::$app->params['user.signupConfirmTokenExpire'], 'long') ?>.
+Ссылка активна до <?= Yii::$app->formatter->asDate($user->created_at + Yii::$app->params['user.signupConfirmTokenExpire'], 'long') ?>
