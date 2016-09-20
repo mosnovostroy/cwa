@@ -9,30 +9,30 @@ class CenterUrlManager extends UrlManager
 {
     public function createUrl($params)
     {
-
         $route = trim($params[0], '/');
+
         // Страница-окно авторизации через соцсеть:
-		if ($route === 'site/login')
+		    if ($route === 'site/login')
         {
             if (isset($params['service']))
             {
                 return '/login/' . $params['service'] . '/';
             }
-			return '/login/';
+			      return '/login/';
         }
 
         // Страница центра:
-		if ($route === 'center/view')
+		    if ($route === 'center/view')
         {
             if (isset($params['id']))
             {
                 //По id объекта определяем алиасы центра и региона верхнего уровня:
                 $alias = Yii::$app->db
-                    ->createCommand('SELECT c.alias AS `center`, r.alias AS `region`
+                                  ->createCommand('SELECT c.alias AS `center`, r.alias AS `region`
                                       FROM center AS `c`, region AS `r`
                                       WHERE c.region = r.id
                                       AND c.id=:cid', [':cid' => $params['id']])
-                    ->queryOne();
+                                  ->queryOne();
 
                 //Возвращаем урл вида centers/moscow/romashka/
                 return '/centers/' . $alias['region'] . '/' . $alias['center'] . '/';
@@ -40,160 +40,101 @@ class CenterUrlManager extends UrlManager
         }
 
         // Страница аренды:
-		if ($route === 'arenda/view')
+		    if ($route === 'arenda/view')
         {
             if (isset($params['id']))
             {
                 //По id объекта определяем алиасы объявления и региона верхнего уровня:
                 $alias = Yii::$app->db
-                    ->createCommand('SELECT c.alias AS `arenda_alias`, r.alias AS `region_alias`
+                                  ->createCommand('SELECT c.alias AS `arenda_alias`, r.alias AS `region_alias`
                                       FROM arenda AS `c`, region AS `r`
                                       WHERE c.region = r.id
                                       AND c.id=:cid', [':cid' => $params['id']])
-                    ->queryOne();
+                                  ->queryOne();
 
                 //Возвращаем урл вида arenda/moscow/romashka/
                 return '/arenda/' . $alias['region_alias'] . '/' . $alias['arenda_alias'] . '/';
             }
         }
 
-		if (isset($params['CenterSearch']))
-		{
-			//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
-			$region_alias = '';
-			if (isset($params['CenterSearch']['region']))
-			{
-				//По id региона определяем алиас:
-				$region_alias = Yii::$app->db
-					->createCommand('SELECT alias FROM region
-									  WHERE id=:id', [':id' => $params['CenterSearch']['region']])
-					->queryScalar();
-			}
+  		if (isset($params['CenterSearch']))
+  		{
+    			//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
+    			$region_alias = '';
+    			if (isset($params['CenterSearch']['region']))
+    			{
+    				//По id региона определяем алиас:
+    				$region_alias = Yii::$app->db
+    					->createCommand('SELECT alias FROM region
+    									  WHERE id=:id', [':id' => $params['CenterSearch']['region']])
+    					->queryScalar();
+  			  }
 
-			unset($params['CenterSearch']['region']);
+    			unset($params['CenterSearch']['region']);
 
-			//Не передаем пустые значения:
-			foreach($params['CenterSearch'] as $k => $v)
-      {
-				  if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '')
-					    unset($params['CenterSearch'][$k]);
-      }
-      if (isset($params['CenterSearch']['is24x7']) && $params['CenterSearch']['is24x7'] == '0')
-          unset($params['CenterSearch']['is24x7']);
+    			//Не передаем пустые значения:
+    			foreach($params['CenterSearch'] as $k => $v)
+          {
+    				  if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '')
+    					    unset($params['CenterSearch'][$k]);
+          }
+          if (isset($params['CenterSearch']['is24x7']) && $params['CenterSearch']['is24x7'] == '0')
+              unset($params['CenterSearch']['is24x7']);
 
-      // Yii::info('Запрос в CreateUrl: ', 'myd');
-      // Yii::info($params, 'myd');
+    			$url = parent::createUrl($params);
+    			if($region_alias)
+    				$url = str_replace('centers', 'centers/'.$region_alias, $url);
+  		}
+  		else if  (isset($params['ArendaSearch']))
+  		{
+    			//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
+    			$region_alias = '';
+    			if (isset($params['ArendaSearch']['region']))
+    			{
+    				//По id региона определяем алиас:
+    				$region_alias = Yii::$app->db
+    					->createCommand('SELECT alias FROM region
+    									  WHERE id=:id', [':id' => $params['ArendaSearch']['region']])
+    					->queryScalar();
+    			}
 
+    			unset($params['ArendaSearch']['region']);
 
-			$url = parent::createUrl($params);
-			if($region_alias)
-				$url = str_replace('centers', 'centers/'.$region_alias, $url);
-		}
-		else if  (isset($params['ArendaSearch']))
-		{
-			//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
-			$region_alias = '';
-			if (isset($params['ArendaSearch']['region']))
-			{
-				//По id региона определяем алиас:
-				$region_alias = Yii::$app->db
-					->createCommand('SELECT alias FROM region
-									  WHERE id=:id', [':id' => $params['ArendaSearch']['region']])
-					->queryScalar();
-			}
+    			//Не передаем пустые значения:
+    			foreach($params['ArendaSearch'] as $k => $v)
+    				if (isset($params['ArendaSearch'][$k]) && $params['ArendaSearch'][$k] == '')
+    					unset($params['ArendaSearch'][$k]);
+    			$url = parent::createUrl($params);
+    			if($region_alias)
+    				$url = str_replace('arenda', 'arenda/'.$region_alias, $url);
+  		}
+  		else
+  		{
+  			  $url = parent::createUrl($params);
+  		}
 
-			unset($params['ArendaSearch']['region']);
-
-			//Не передаем пустые значения:
-			foreach($params['ArendaSearch'] as $k => $v)
-				if (isset($params['ArendaSearch'][$k]) && $params['ArendaSearch'][$k] == '')
-					unset($params['ArendaSearch'][$k]);
-			$url = parent::createUrl($params);
-			if($region_alias)
-				$url = str_replace('arenda', 'arenda/'.$region_alias, $url);
-		}
-		else
-		{
-			$url = parent::createUrl($params);
-		}
-
-		return $url;
-
-        /*//В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
-        $region_alias = '';
-        if (isset($params['CenterSearch']) && isset($params['CenterSearch']['region']))
-        {
-            //По id региона определяем алиас:
-            $region_alias = Yii::$app->db
-                ->createCommand('SELECT alias FROM region
-                                  WHERE id=:id', [':id' => $params['CenterSearch']['region']])
-                ->queryScalar();
-        }
-
-        unset($params['CenterSearch']['region']);
-
-        //Не передаем пустые значения:
-        if (isset($params['CenterSearch']))
-            foreach($params['CenterSearch'] as $k => $v)
-                if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '')
-                    unset($params['CenterSearch'][$k]);
-        $url = parent::createUrl($params);
-        if($region_alias)
-            $url = str_replace('centers', 'centers/'.$region_alias, $url);
-
-
-
-        //В общем случае надо переделать GET-параметр региона в "поддиректорию" ЧПУ:
-        $region_alias = '';
-        if (isset($params['ArendaSearch']) && isset($params['ArendaSearch']['region']))
-        {
-            //По id региона определяем алиас:
-            $region_alias = Yii::$app->db
-                ->createCommand('SELECT alias FROM region
-                                  WHERE id=:id', [':id' => $params['ArendaSearch']['region']])
-                ->queryScalar();
-        }
-
-        unset($params['ArendaSearch']['region']);
-
-        //Не передаем пустые значения:
-        if (isset($params['ArendaSearch']))
-            foreach($params['ArendaSearch'] as $k => $v)
-                if (isset($params['ArendaSearch'][$k]) && $params['ArendaSearch'][$k] == '')
-                    unset($params['ArendaSearch'][$k]);
-        $url = parent::createUrl($params);
-        if($region_alias)
-            $url = str_replace('arenda', 'arenda/'.$region_alias, $url);
-
-
-        return $url;*/
+  		return $url;
     }
 
     public function parseRequest($request)
     {
-
-        // Yii::info($request->pathInfo, 'myd');
-        // Yii::info($request->queryString, 'myd');
-        // Yii::info('Параметры запроса', 'myd');
-        // Yii::info($request->queryParams, 'myd');
-
         $pathInfo = $request->pathInfo;
         $params = $request->queryParams;
 
-		//Страница авторизации:
-		if (preg_match('%^login/$%', $pathInfo, $matches))
-		{
-			return ['site/login', $params];
-		}
+    		//Страница авторизации:
+    		if (preg_match('%^login/$%', $pathInfo, $matches))
+    		{
+    			return ['site/login', $params];
+    		}
 
-		// Страница-окно авторизации через соцсеть:
-		if (preg_match('%^login/([a-z0-9-_]+)/$%', $pathInfo, $matches))
-		{
-			$params['service'] = $matches[1];
-			return ['site/login', $params];
-		}
+    		// Страница-окно авторизации через соцсеть:
+    		if (preg_match('%^login/([a-z0-9-_]+)/$%', $pathInfo, $matches))
+    		{
+    			$params['service'] = $matches[1];
+    			return ['site/login', $params];
+    		}
 
-		//Центр или список или карта:
+		    //Центр или список или карта:
         if (preg_match('%^centers/([a-z0-9-_]+)/(\S*)$%', $pathInfo, $matches))
         {
             // Два кармана после centers:
@@ -205,10 +146,6 @@ class CenterUrlManager extends UrlManager
                 ->createCommand('SELECT id FROM region
                                   WHERE alias=:region' , [':region' => $matches[1]])
                 ->queryScalar();
-
-            // Yii::info($pathInfo, 'myd');
-            // Yii::info($matches, 'myd');
-            // Yii::info($region_id, 'myd');
 
             //Если нашли - можно о чем-то говорить дальше:
             if ($region_id)
@@ -225,8 +162,6 @@ class CenterUrlManager extends UrlManager
                                           AND r.alias=:region' , [':center' => $detailed_matches[1], ':region' => $matches[1]])
                         ->queryScalar();
 
-                    //Yii::info('Center: '.$center_id, 'myd');
-
                     // Если таки да, это страница центра. Настраиваем и отдаем ['center/view', $params]
                     if ($center_id)
                     {
@@ -240,9 +175,6 @@ class CenterUrlManager extends UrlManager
                 // Настраиваем и отдаем либо ['center/index', $params], либо ['center/map', $params], либо ['center/coordinates', $params]
                 $params['CenterSearch']['region'] = $region_id;
 
-                // Yii::info('Запрос: ', 'myd');
-                // Yii::info($params, 'myd');
-
                 if(preg_match('%^map/\S*$%', $matches[2]))
                 //if ($detailed_matches[1] === 'map')
                     return ['center/map', $params];
@@ -253,7 +185,7 @@ class CenterUrlManager extends UrlManager
             }
         }
 
-		//Центр или список или карта:
+		    //Центр или список или карта:
         if (preg_match('%^arenda/([a-z0-9-_]+)/(\S*)$%', $pathInfo, $matches))
         {
             // Два кармана после arenda:
@@ -265,10 +197,6 @@ class CenterUrlManager extends UrlManager
                 ->createCommand('SELECT id FROM region
                                   WHERE alias=:region' , [':region' => $matches[1]])
                 ->queryScalar();
-
-            // Yii::info($pathInfo, 'myd');
-            // Yii::info($matches, 'myd');
-            // Yii::info($region_id, 'myd');
 
             //Если нашли - можно о чем-то говорить дальше:
             if ($region_id)
@@ -284,8 +212,6 @@ class CenterUrlManager extends UrlManager
                                           AND c.alias=:arenda
                                           AND r.alias=:region' , [':arenda' => $detailed_matches[1], ':region' => $matches[1]])
                         ->queryScalar();
-
-                    //Yii::info('Arenda: '.$arenda_id, 'myd');
 
                     // Если таки да, это страница аренды. Настраиваем и отдаем ['arenda/view', $params]
                     if ($arenda_id)

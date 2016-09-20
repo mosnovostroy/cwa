@@ -32,6 +32,11 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
               'label' => 'Авторизация через',
               'value' => $model->social_id,
           ];
+
+          $eauth = Yii::$app->get('eauth')
+          $identity = User::findByEAuth($eauth);
+          var_dump($eauth);
+
     ?>
     <?= DetailView::widget([
         'model' => $model,

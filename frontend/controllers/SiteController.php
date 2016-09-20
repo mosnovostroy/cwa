@@ -126,46 +126,33 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    // public function actionLogin()
-    // {
-        // if (!Yii::$app->user->isGuest) {
-            // return $this->goHome();
-        // }
-
-        // $model = new LoginForm();
-        // if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            // return $this->goBack();
-        // } else {
-            // return $this->render('login', [
-                // 'model' => $model,
-            // ]);
-        // }
-    // }
-
-    public function actionLogin() {
+     public function actionLogin()
+     {
         $serviceName = Yii::$app->getRequest()->getQueryParam('service');
-        if (isset($serviceName)) {
-            /** @var $eauth \nodge\eauth\ServiceBase */
+        if (isset($serviceName))
+        {
             $eauth = Yii::$app->get('eauth')->getIdentity($serviceName);
             $eauth->setRedirectUrl(Yii::$app->getUser()->getReturnUrl());
             $eauth->setCancelUrl(Yii::$app->getUrlManager()->createAbsoluteUrl('site/login'));
 
-            try {
-                if ($eauth->authenticate()) {
-//                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
-
+            try
+            {
+                if ($eauth->authenticate())
+                {
                     $identity = User::findByEAuth($eauth);
-					Yii::$app->getUser()->login($identity);
+					          Yii::$app->getUser()->login($identity);
 
                     // special redirect with closing popup window
                     $eauth->redirect();
                 }
-                else {
+                else
+                {
                     // close popup window and redirect to cancelUrl
                     $eauth->cancel();
                 }
             }
-            catch (\nodge\eauth\ErrorException $e) {
+            catch (\nodge\eauth\ErrorException $e)
+            {
                 // save error to show it later
                 Yii::$app->getSession()->setFlash('error', 'EAuthException: '.$e->getMessage());
 
@@ -175,18 +162,14 @@ class SiteController extends Controller
             }
         }
 
-        if (!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest)
             return $this->goHome();
-        }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->login())
             return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
+        else
+            return $this->render('login', [ 'model' => $model ]);
     }
 
     /**
@@ -194,12 +177,12 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
+      public function actionLogout()
+      {
+          Yii::$app->user->logout();
 
-        return $this->goHome();
-    }
+          return $this->goHome();
+      }
 
     /**
      * Displays contact page.
@@ -224,30 +207,30 @@ class SiteController extends Controller
         }
     }
 
-     public function actionProfile()
-     {
-         if (Yii::$app->user->isGuest)
-            return $this->goHome();
+    public function actionProfile()
+    {
+       if (Yii::$app->user->isGuest)
+          return $this->goHome();
 
-         $model = User::findIdentity(Yii::$app->user->identity->id);
-         return $this->render('profile', [
-             'model' => $model,
-         ]);
-     }
+       $model = User::findIdentity(Yii::$app->user->identity->id);
+       return $this->render('profile', [
+           'model' => $model,
+       ]);
+    }
 
-     public function actionMy()
-     {
-         if (Yii::$app->user->isGuest)
-            return $this->goHome();
+    public function actionMy()
+    {
+       if (Yii::$app->user->isGuest)
+          return $this->goHome();
 
-         $searchModel = new ArendaSearch();
-         $dataProvider = $searchModel->searchMy();
+       $searchModel = new ArendaSearch();
+       $dataProvider = $searchModel->searchMy();
 
-         return $this->render('my', [
-             'searchModel' => $searchModel,
-             'dataProvider' => $dataProvider,
-         ]);
-     }
+       return $this->render('my', [
+           'searchModel' => $searchModel,
+           'dataProvider' => $dataProvider,
+       ]);
+    }
 
     public function actionAbout()
     {
@@ -261,15 +244,6 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        // $model = new SignupForm();
-        // if ($model->load(Yii::$app->request->post())) {
-        //     if ($user = $model->signup()) {
-        //         if (Yii::$app->getUser()->login($user)) {
-        //             return $this->goHome();
-        //         }
-        //     }
-        // }
-
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()))
         {
@@ -277,11 +251,6 @@ class SiteController extends Controller
             {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
                 return $this->goHome();
-
-                // if (Yii::$app->getUser()->login($user))
-                // {
-                //     return $this->goHome();
-                // }
             }
         }
 
@@ -298,13 +267,17 @@ class SiteController extends Controller
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            if ($model->sendEmail())
+            {
                 Yii::$app->session->setFlash('success', 'На указанный адрес выслано сообщение с дальнейшими инструкциями.');
-
-                return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+                return $this->redirect(['login']);
+                //return $this->goHome();
+            }
+            else
+            {
+                Yii::$app->session->setFlash('error', 'Для указанного адреса восстановление пароля невозможно');
             }
         }
 
@@ -322,16 +295,21 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
-        try {
+        try
+        {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        }
+        catch (InvalidParamException $e)
+        {
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password was saved.');
-
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword())
+        {
+            Yii::$app->session->setFlash('success', 'Новый пароль успешно сохранен.');
+            Yii::$app->getUser()->login($model->user);
             return $this->goHome();
+            //return $this->redirect(['my']);
         }
 
         return $this->render('resetPassword', [
@@ -370,6 +348,4 @@ class SiteController extends Controller
         else
             return false;
     }
-
-
 }

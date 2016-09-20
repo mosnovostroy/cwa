@@ -39,9 +39,9 @@ BootstrapSelectAsset::register($this);
             'homeLink' => false,
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <?= Alert::widget() ?>
+        <div class="alert-widget"><?= Alert::widget() ?></div>
         <?=  $content ?>
-    </div>    
+    </div>
 </div>
 
 <footer class="footer">
@@ -59,6 +59,3 @@ BootstrapSelectAsset::register($this);
 </body>
 </html>
 <?php $this->endPage() ?>
-
-
-
