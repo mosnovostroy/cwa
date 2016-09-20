@@ -28,7 +28,7 @@ class SignupConfirm extends Model
         if (empty($token) || !is_string($token)) {
             throw new InvalidParamException('Signup confirm token cannot be blank.');
         }
-        $this->_user = User::findByPasswordResetToken($token);
+        $this->_user = User::findBySignupConfirmToken($token);
         if (!$this->_user) {
             throw new InvalidParamException('Wrong signup confirm token.');
         }
