@@ -27,17 +27,13 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
           ];
 
           if ($model->social_id)
-          $attributes[] =
-          [
-              'label' => 'Авторизация через',
-              'value' => $model->social_id,
-          ];
+              $attributes[] =
+              [
+                  'label' => 'Авторизация через',
+                  'value' => $model->social_id,
+              ];
 
-          $eauth = Yii::$app->get('eauth');
-          //$identity = User::findByEAuth($eauth);
-          var_dump($eauth);
-
-    ?>
+     ?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => $attributes,
