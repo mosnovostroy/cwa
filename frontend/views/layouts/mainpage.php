@@ -40,6 +40,7 @@ BootstrapSelectAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?=  $content ?>
+        a
         <?= Alert::widget() ?>
     <!-- </div> -->
 </div>
