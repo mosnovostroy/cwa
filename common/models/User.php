@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use common\behaviors\RegionInfoBehavior;
+use yii\base\InvalidParamException;
 
 /**
  * User model
@@ -177,7 +178,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findBySignupConfirmToken($token)
     {
-        if (!static::isPasswordResetTokenValid($token)) {
+        if (!static::isSignupConfirmTokenValid($token)) {
             return null;
         }
 
@@ -201,6 +202,17 @@ class User extends ActiveRecord implements IdentityInterface
 
         $timestamp = (int) substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        return $timestamp + $expire >= time();
+    }
+
+    public static function isSignupConfirmTokenValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = Yii::$app->params['user.signupConfirmTokenExpire'];
         return $timestamp + $expire >= time();
     }
 
