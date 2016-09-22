@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use common\behaviors\RegionInfoBehavior;
 use yii\base\InvalidParamException;
+use yii\helpers\FileHelper;
 
 /**
  * User model
@@ -32,12 +33,32 @@ class User extends ActiveRecord implements IdentityInterface
     const ROLE_USER = 10;
     const ROLE_ADMIN = 20;
 
+    const AVATAR_NAME = 'av.jpg';
+
 
      /**
      * @var array EAuth attributes
      */
      public $profile;
 	   public $authKey;
+
+     // У разных сервисов подходящее нам фото называется по-разному. Здесь код для выбора нужного фото.
+     public function getPicture($service)
+     {
+        // ВКонтакте
+        if ($service->getAttribute('photo_medium'))
+            return $service->getAttribute('photo_medium');
+
+        // Mail.ru
+        if ($service->getAttribute('pic_190'))
+            return $service->getAttribute('pic_190');
+
+        // Одноклассники
+        if ($service->getAttribute('pic_3'))
+            return $service->getAttribute('pic_3');
+
+        return null;
+     }
 
     /**
      * @param \nodge\eauth\ServiceBase $service
@@ -60,21 +81,34 @@ class User extends ActiveRecord implements IdentityInterface
 				'username' => $service->getAttribute('name'),
 				'role' => self::ROLE_USER,
 				'social_id' => $id,
+        'social_service_name' => $service->getServiceName(),
+        'social_email' => $service->getAttribute('email'),
+        'social_avatar' => $this->getPicture($service),
 			];
 
 			$user = new User();
 			$user->attributes = $values;
 			if($user->save())
 			{
-          // Если создать юзера удалось, сохраним по возможности также аватарку:
-          // ............
-
+          //$user->updateAvatar();
 
           // $auth = Yii::$app->authManager;
 				  // $authorRole = $auth->getRole('author');
 				  // $auth->assign($authorRole, $user->getId());
 			}
 		}
+    else if ($user->social_id)
+    {
+        // Если в соцсети у пользователя поменялась картинка (следует ли это из смены урла?):
+        $current_service_picture = $this->getPicture($service);
+        if ($this->social_avatar != $current_service_picture)
+        {
+            $this->social_avatar = $current_service_picture;
+            $user->save();
+            $user->updateAvatar();
+        }
+    }
+
 
 		//Пишем специфические для авторизации через сети вещи в сессию (код автора расширения):
         $attributes = [
@@ -349,8 +383,68 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function updateAvatar()
+    {
+        $entity = 'user';
+			  $entityId = $this->id;
+			  if (!$entity || !$entityId)
+	         return false;
+
+	      $upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
+	      $tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
+
+        // Если нужно, создаем директорию для картинок юзера:
+        if(!is_dir($upload_path))
+        {
+            FileHelper::createDirectory($upload_path);
+            if (!is_dir($upload_path))
+                return false;
+        }
+
+        // Если нужно, создаем директорию для превью картинок юзера:
+        if(!is_dir($tmp_path))
+        {
+            FileHelper::createDirectory($tmp_path);
+            if (!is_dir($tmp_path))
+                return false;
+        }
+
+        // Скачиваем и сохраняем аватарку; генерируем превьюшку:
+        $file = null; //получить сюда файл по урлу $this->social_avatar
+        if ($file)
+        {
+            $file->saveAs($upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME);
+
+            // Генерируем 50х50 превью аватарки:
+            Image::thumbnail($file, 50, 50)
+                ->save($tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME, ['quality' => 50]);
+        }
+    }
+
     public function getAvatar()
     {
-        return $this->social_avatar ? $this->social_avatar : '';
+        $entity = 'user';
+        $entityId = $this->id;
+        if (!$entity || !$entityId)
+           return false;
+
+        $tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
+        $tmp_url = '/tmp/'.$entity.'/'.$entityId;
+
+
+        if (file_exists($tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME))
+        {
+            return $tmp_url . '/' . self::AVATAR_NAME;
+        }
+        else
+        {
+            $this->updateAvatar();
+            if (file_exists($tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME))
+            {
+                return $tmp_url . '/' . self::AVATAR_NAME;
+            }
+        }
+
+        return "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50";
     }
 }
