@@ -66,9 +66,13 @@ class User extends ActiveRecord implements IdentityInterface
 			$user->attributes = $values;
 			if($user->save())
 			{
-				// $auth = Yii::$app->authManager;
-				// $authorRole = $auth->getRole('author');
-				// $auth->assign($authorRole, $user->getId());
+          // Если создать юзера удалось, сохраним по возможности также аватарку:
+          // ............
+
+
+          // $auth = Yii::$app->authManager;
+				  // $authorRole = $auth->getRole('author');
+				  // $auth->assign($authorRole, $user->getId());
 			}
 		}
 
@@ -129,7 +133,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_DELETED, self::STATUS_ACTIVE, self::STATUS_INACTIVE ]],
             ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_ADMIN]],
-			      [['username', 'email', 'social_id', 'region'], 'safe'],
+			      [['username', 'email', 'social_id', 'social_service_name', 'social_email', 'social_avatar', 'region'], 'safe'],
         ];
     }
 
@@ -343,5 +347,10 @@ class User extends ActiveRecord implements IdentityInterface
             'created_at' => 'Дата регистрации',
             'region' => 'Ваш регион',
         ];
+    }
+
+    public function getAvatar()
+    {
+        return $this->social_avatar ? $this->social_avatar : '';
     }
 }
