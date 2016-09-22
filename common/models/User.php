@@ -83,7 +83,7 @@ class User extends ActiveRecord implements IdentityInterface
 				'social_id' => $id,
         'social_service_name' => $service->getServiceName(),
         'social_email' => $service->getAttribute('email'),
-        'social_avatar' => $this->getPicture($service),
+        'social_avatar' => User::getPicture($service),
 			];
 
 			$user = new User();
