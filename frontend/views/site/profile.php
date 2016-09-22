@@ -25,6 +25,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
       echo '<strong>EAuth profile:</strong><br/>';
       VarDumper::dump($identity->profile, 10, true);
       echo '</div>';
+    }
      ?>
 
 
