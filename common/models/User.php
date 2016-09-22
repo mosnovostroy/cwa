@@ -88,6 +88,9 @@ class User extends ActiveRecord implements IdentityInterface
         'social_avatar' => $service->getAttribute('pic_190'),
 			];
 
+      Yii::info('Доступны такие атрибуты:', 'myd');
+      Yii::info($service->attributes, 'myd');
+
       Yii::info('Значения таковы:', 'myd');
       Yii::info($values, 'myd');
 
