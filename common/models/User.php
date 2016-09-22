@@ -138,7 +138,7 @@ class User extends ActiveRecord implements IdentityInterface
         $attributes['profile']['service'] = $service->getServiceName();
         Yii::$app->getSession()->set('user-'.$id, $attributes);
 
-        Yii::info('getAttributes в конце функции')
+        Yii::info('getAttributes в конце функции');
 		    Yii::info($user->getAttributes(), 'myd');
 
         Yii::info('Или же так:', 'myd');
