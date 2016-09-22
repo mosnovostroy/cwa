@@ -91,6 +91,12 @@ class User extends ActiveRecord implements IdentityInterface
       Yii::info('Доступны такие атрибуты:', 'myd');
       Yii::info($service->attributes, 'myd');
 
+      Yii::info('Или же так:', 'myd');
+      $identity1 = Yii::$app->getUser()->getIdentity();
+      if (isset($identity1->profile)) {
+          Yii::info($identity1->profile, 'myd');
+      }
+
       Yii::info('Значения таковы:', 'myd');
       Yii::info($values, 'myd');
 
