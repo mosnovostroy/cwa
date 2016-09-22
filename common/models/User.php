@@ -43,7 +43,7 @@ class User extends ActiveRecord implements IdentityInterface
 	   public $authKey;
 
      // У разных сервисов подходящее нам фото называется по-разному. Здесь код для выбора нужного фото.
-     public function getPicture($service)
+     public static function getPicture($service)
      {
         // ВКонтакте
         if ($service->getAttribute('photo_medium'))
