@@ -45,7 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
      // У разных сервисов подходящее нам фото называется по-разному. Здесь код для выбора нужного фото.
      public static function getPicture($service)
      {
-       return $service->getAttribute('photo_medium');
+       //return $service->getAttribute('photo_medium');
 
         // ВКонтакте
         if ($service->getAttribute('photo_medium'))
@@ -84,8 +84,8 @@ class User extends ActiveRecord implements IdentityInterface
 				'role' => self::ROLE_USER,
 				'social_id' => $id,
         'social_service_name' => $service->getServiceName(),
-        'social_email' => User::getPicture($service),//$service->getAttribute('email'),
-        'social_avatar' => 'aaa',
+        'social_email' => $service->getAttribute('email'),
+        'social_avatar' => $service->getAttribute('photo_medium'),
 			];
 
 			$user = new User();
