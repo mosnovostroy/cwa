@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use common\models\User;
 use yii\widgets\DetailView;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\VarDumper;
 
 
 $this->title = 'Профиль пользователя: | Коворкинг-ревю';
@@ -15,6 +16,19 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
 <div class="row">
   <div class="col-md-6">
     <h3>Учетная запись</h3>
+
+
+    <?php
+    $identity = Yii::$app->getUser()->getIdentity();
+    if (isset($identity->profile)) {
+      echo '<div class="container">';
+      echo '<strong>EAuth profile:</strong><br/>';
+      VarDumper::dump($identity->profile, 10, true);
+      echo '</div>';
+     ?>
+
+
+
 
     <?php
         $attributes = [
