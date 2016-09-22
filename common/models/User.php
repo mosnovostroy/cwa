@@ -88,8 +88,15 @@ class User extends ActiveRecord implements IdentityInterface
         'social_avatar' => $service->getAttribute('pic_190'),
 			];
 
+      Yii::info('Значения таковы:', 'myd');
+      Yii::info($values, 'myd');
+
 			$user = new User();
 			$user->attributes = $values;
+
+      Yii::info('Передали в атрибуты вот что:', 'myd');
+      Yii::info($user->attributes, 'myd');
+
 			if($user->save())
 			{
           //$user->updateAvatar();
