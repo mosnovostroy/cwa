@@ -402,7 +402,17 @@ class User extends ActiveRecord implements IdentityInterface
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
           $response = curl_exec($ch);
           curl_close($ch);
-          file_put_contents($file, $response);
+
+          Yii::info('URL for picture: '.$this->social_avatar, 'myd');
+          if ($response === false)
+          {
+              Yii::info('Error while curl_exec', 'myd');
+          }
+          else
+          {
+              Yii::info('Success while curl_exec', 'myd');
+              file_put_contents($file, $response);
+          }
 
           // Генерируем 50х50 превью аватарки:
           Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
