@@ -421,10 +421,10 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getAvatar()
     {
-        return $this->social_avatar ? $this->social_avatar : '';
+        return $this->social_avatar ? $this->social_avatar : 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50';
 
 
-        
+
 
         $entity = 'user';
         $entityId = $this->id;
