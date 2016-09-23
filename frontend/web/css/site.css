@@ -245,3 +245,7 @@ div.required label.control-label:after {
 {
   .login-button-container, .register-button-container {width: 200px;}
 }
+
+.comments .comment-author-avatar img {
+    width: 50px;
+}
