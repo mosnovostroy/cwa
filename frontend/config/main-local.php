@@ -38,7 +38,8 @@ $config = [
                 ),
                 'mailru' => array(
                     // register your app here: http://api.mail.ru/sites/my/add
-                    'class' => 'nodge\eauth\services\MailruOAuth2Service',
+                    //'class' => 'nodge\eauth\services\MailruOAuth2Service',
+                    'class' => 'frontend\components\MailruOAuth2ServiceCustom',
                     'clientId' => '746565',
                     'clientSecret' => 'a337ba9e765e28680c7d36fa65a996a1',
                 ),
