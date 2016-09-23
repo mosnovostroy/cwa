@@ -89,7 +89,7 @@ class User extends ActiveRecord implements IdentityInterface
         {
             $user->social_avatar = $current_service_picture;
             $user->save();
-            $user->updateAvatar();
+            //$user->updateAvatar();
         }
     }
 
@@ -421,6 +421,11 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getAvatar()
     {
+        return $this->social_avatar ? $this->social_avatar : '';
+
+
+        
+
         $entity = 'user';
         $entityId = $this->id;
         if (!$entity || !$entityId)
