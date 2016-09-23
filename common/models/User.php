@@ -398,19 +398,14 @@ class User extends ActiveRecord implements IdentityInterface
         {
           $file = $upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
           $preview = $tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
-          $fp = fopen($file, 'wb');
-          if ($fp)
-          {
-            // Скачиваем и сохраняем файл:
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_exec($ch);
-            curl_close($ch);
-            fclose($fp);
 
-            // Генерируем 50х50 превью аватарки:
-            Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
-          }
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+          $response = curl_exec($ch);
+          curl_close($ch);
+          file_put_contents($file, $response);
+
+          // Генерируем 50х50 превью аватарки:
+          Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
         }
     }
 
