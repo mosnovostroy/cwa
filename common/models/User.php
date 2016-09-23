@@ -118,10 +118,10 @@ class User extends ActiveRecord implements IdentityInterface
     else if ($user->social_id)
     {
         // Если в соцсети у пользователя поменялась картинка (следует ли это из смены урла?):
-        $current_service_picture = $this->getPicture($service);
-        if ($this->social_avatar != $current_service_picture)
+        $current_service_picture = User::getPicture($service);
+        if ($user->social_avatar != $current_service_picture)
         {
-            $this->social_avatar = $current_service_picture;
+            $user->social_avatar = $current_service_picture;
             $user->save();
             $user->updateAvatar();
         }
