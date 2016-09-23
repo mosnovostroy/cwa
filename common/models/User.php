@@ -9,6 +9,7 @@ use yii\web\IdentityInterface;
 use common\behaviors\RegionInfoBehavior;
 use yii\base\InvalidParamException;
 use yii\helpers\FileHelper;
+use yii\imagine\Image;
 
 /**
  * User model
@@ -408,7 +409,7 @@ class User extends ActiveRecord implements IdentityInterface
             fclose($fp);
 
             // Генерируем 50х50 превью аватарки:
-            Image::thumbnail($filename, 50, 50) -> save($preview, ['quality' => 50]);            
+            Image::thumbnail($filename, 50, 50) -> save($preview, ['quality' => 50]);
           }
         }
     }
