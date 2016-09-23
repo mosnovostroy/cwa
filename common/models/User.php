@@ -409,7 +409,7 @@ class User extends ActiveRecord implements IdentityInterface
             fclose($fp);
 
             // Генерируем 50х50 превью аватарки:
-            Image::thumbnail($filename, 50, 50) -> save($preview, ['quality' => 50]);
+            Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
           }
         }
     }
