@@ -68,23 +68,8 @@ class User extends ActiveRecord implements IdentityInterface
         'social_avatar' => $service->getAttribute('avatar'),
 			];
 
-      Yii::info('Доступны такие атрибуты:', 'myd');
-      Yii::info($service->attributes, 'myd');
-
-      Yii::info('Или же так:', 'myd');
-      $identity1 = Yii::$app->getUser()->getIdentity();
-      if (isset($identity1->profile)) {
-          Yii::info($identity1->profile, 'myd');
-      }
-
-      Yii::info('Значения таковы:', 'myd');
-      Yii::info($values, 'myd');
-
 			$user = new User();
 			$user->attributes = $values;
-
-      Yii::info('Передали в атрибуты вот что:', 'myd');
-      Yii::info($user->attributes, 'myd');
 
 			if($user->save())
 			{
@@ -117,9 +102,6 @@ class User extends ActiveRecord implements IdentityInterface
         ];
         $attributes['profile']['service'] = $service->getServiceName();
         Yii::$app->getSession()->set('user-'.$id, $attributes);
-
-        Yii::info('attributes в конце функции', 'myd');
-		    Yii::info($attributes, 'myd');
 
         return $user;
     }
@@ -410,14 +392,24 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         // Скачиваем и сохраняем аватарку; генерируем превьюшку:
-        $file = null; //получить сюда файл по урлу $this->social_avatar
-        if ($file)
+        $ch = curl_init($this->social_avatar);
+        if ($ch)
         {
-            $file->saveAs($upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME);
+          $file = $upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
+          $preview = $tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
+          $fp = fopen($file, 'wb');
+          if ($fp)
+          {
+            // Скачиваем и сохраняем файл:
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_exec($ch);
+            curl_close($ch);
+            fclose($fp);
 
             // Генерируем 50х50 превью аватарки:
-            Image::thumbnail($file, 50, 50)
-                ->save($tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME, ['quality' => 50]);
+            Image::thumbnail($filename, 50, 50) -> save($preview, ['quality' => 50]);            
+          }
         }
     }
 
