@@ -1,7 +1,7 @@
 <?php
 namespace frontend\components;
 
-class YandexOAuth2Service extends nodge\eauth\services\YandexOAuth2Service
+class YandexOAuth2Service extends \nodge\eauth\services\YandexOAuth2Service
 {
 	protected function fetchAttributes()
 	{
