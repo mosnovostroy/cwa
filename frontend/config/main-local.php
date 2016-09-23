@@ -14,39 +14,44 @@ $config = [
             'services' => [ // You can change the providers and their classes.
                 'facebook' => [
                     // register your app here: https://developers.facebook.com/apps/
-                    'class' => 'nodge\eauth\services\FacebookOAuth2Service',
+                    //'class' => 'nodge\eauth\services\FacebookOAuth2Service',
+                    'class' => 'frontend\components\FacebookOAuth2Service',
                     'clientId' => '1077026359047962',
                     'clientSecret' => 'bbf173eb54af179c66c30600411bd41b',
                 ],
                 'google_oauth' => array(
                     // register your app here: https://code.google.com/apis/console/
-                    'class' => 'nodge\eauth\services\GoogleOAuth2Service',
+                    //'class' => 'nodge\eauth\services\GoogleOAuth2Service',
+                    'class' => 'frontend\components\GoogleOAuth2Service',
                     'clientId' => '817686579012-kg17i48081p5tft0c7qvg9v0c0p6rj9q.apps.googleusercontent.com',
                     'clientSecret' => 'Rpxj2Rr89RkCrG49VsB2ZzQO',
                 ),
                 'yandex_oauth' => array(
                     // register your app here: https://oauth.yandex.ru/client/my
-                    'class' => 'nodge\eauth\services\YandexOAuth2Service',
+                    //'class' => 'nodge\eauth\services\YandexOAuth2Service',
+                    'class' => 'frontend\components\YandexOAuth2Service',
                     'clientId' => 'e112643995a7489eaba28b61286ec6a0',
                     'clientSecret' => '2a0c47959a974264985ffd0198ba8e8f',
                 ),
                 'vkontakte' => array(
                     // register your app here: https://vk.com/editapp?act=create&site=1
-                    'class' => 'nodge\eauth\services\VKontakteOAuth2Service',
+                    //'class' => 'nodge\eauth\services\VKontakteOAuth2Service',
+                    'class' => 'frontend\components\VKontakteOAuth2Service',
                     'clientId' => '5579638',
                     'clientSecret' => 'eU8FDaUebJaRRaP69kt6',
                 ),
                 'mailru' => array(
                     // register your app here: http://api.mail.ru/sites/my/add
                     //'class' => 'nodge\eauth\services\MailruOAuth2Service',
-                    'class' => 'frontend\components\MailruOAuth2ServiceCustom',
+                    'class' => 'frontend\components\MailruOAuth2Service',
                     'clientId' => '746565',
                     'clientSecret' => 'a337ba9e765e28680c7d36fa65a996a1',
                 ),
                 'odnoklassniki' => array(
                     // register your app here: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
                     // ... or here: http://www.odnoklassniki.ru/dk?st.cmd=appsInfoMyDevList&st._aid=Apps_Info_MyDev
-                    'class' => 'nodge\eauth\services\OdnoklassnikiOAuth2Service',
+                    //'class' => 'nodge\eauth\services\OdnoklassnikiOAuth2Service',
+                    'class' => 'frontend\components\OdnoklassnikiOAuth2Service',
 					'clientId' => '1247873024',
                     'clientSecret' => 'A8E9D551AE41C8CAF89D46D5',
                     'clientPublic' => 'CBAJACGLEBABABABA',

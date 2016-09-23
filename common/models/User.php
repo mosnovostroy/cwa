@@ -42,26 +42,6 @@ class User extends ActiveRecord implements IdentityInterface
      public $profile;
 	   public $authKey;
 
-     // У разных сервисов подходящее нам фото называется по-разному. Здесь код для выбора нужного фото.
-     public static function getPicture($service)
-     {
-       //return $service->getAttribute('photo_medium');
-
-        // ВКонтакте
-        if ($service->getAttribute('photo_medium'))
-            return $service->getAttribute('photo_medium');
-
-        // Mail.ru
-        if ($service->getAttribute('pic_190'))
-            return $service->getAttribute('pic_190');
-
-        // Одноклассники
-        if ($service->getAttribute('pic_3'))
-            return $service->getAttribute('pic_3');
-
-        return null;
-     }
-
     /**
      * @param \nodge\eauth\ServiceBase $service
      * @return User
@@ -85,7 +65,7 @@ class User extends ActiveRecord implements IdentityInterface
 				'social_id' => $id,
         'social_service_name' => $service->getServiceName(),
         'social_email' => $service->getAttribute('email'),
-        'social_avatar' => $service->getAttribute('pic_190'),
+        'social_avatar' => $service->getAttribute('avatar'),
 			];
 
       Yii::info('Доступны такие атрибуты:', 'myd');
@@ -118,7 +98,7 @@ class User extends ActiveRecord implements IdentityInterface
     else if ($user->social_id)
     {
         // Если в соцсети у пользователя поменялась картинка (следует ли это из смены урла?):
-        $current_service_picture = User::getPicture($service);
+        $current_service_picture = $service->getAttribute('avatar');
         if ($user->social_avatar != $current_service_picture)
         {
             $user->social_avatar = $current_service_picture;
