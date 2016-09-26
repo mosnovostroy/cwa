@@ -398,12 +398,14 @@ class User extends ActiveRecord implements IdentityInterface
         $im = imagecreatefromstring(file_get_contents($this->social_avatar));
         if ($im !== false)
         {
-            unlink($file);
-            unlink($preview);
+            if (file_exists($file))
+                unlink($file);
+
+            if (file_exists($preview))
+                unlink($preview);
+
             if (imagejpeg($im, $file, 80)) // Если успешно сохранили в файл, генерируем аватарку:
-            {
                 Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
-            }
         }
     }
 
