@@ -17,20 +17,6 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
   <div class="col-md-6">
     <h3>Учетная запись</h3>
 
-
-    <?php
-    $identity = Yii::$app->getUser()->getIdentity();
-    if (isset($identity->profile)) {
-      echo '<div class="container">';
-      echo '<strong>EAuth profile:</strong><br/>';
-      VarDumper::dump($identity->profile, 10, true);
-      echo '</div>';
-    }
-     ?>
-
-
-
-
     <?php
         $attributes = [
             'username',
@@ -41,11 +27,11 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
             ],
           ];
 
-          if ($model->social_id)
+          if ($model->social_service_name)
               $attributes[] =
               [
                   'label' => 'Авторизация через',
-                  'value' => $model->social_id,
+                  'value' => $model->social_service_name,
               ];
 
      ?>
@@ -54,7 +40,11 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
         'attributes' => $attributes,
     ]) ?>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-2>
+      <h3>Фото</h3>
+      <?php echo Html::img(User::getAvatar(), ['alt' => $model->username]); ?>
+  </div>
+  <div class="col-md-4">
     <h3>Ваш регион</h3>
 
     <?php $form = ActiveForm::begin(['id' => 'profile-form', 'action' => ['site/update-user', 'id' => $model->id]]); ?>

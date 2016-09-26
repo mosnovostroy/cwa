@@ -370,7 +370,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $entity = 'user';
 			  $entityId = $this->id;
-			  if (!$entity || !$entityId)
+			  if (!$entity || !$entityId || !$this->social_avatar)
 	         return false;
 
 	      $upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
@@ -411,8 +411,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getAvatar()
     {
-        // return $this->social_avatar ? $this->social_avatar : 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50';
-
         $entity = 'user';
         $entityId = $this->id;
         if (!$entity || !$entityId)
@@ -437,4 +435,32 @@ class User extends ActiveRecord implements IdentityInterface
 
         return "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50";
     }
+
+    public function getFoto()
+    {
+        $entity = 'user';
+        $entityId = $this->id;
+        if (!$entity || !$entityId)
+           return false;
+
+        $upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
+        $upload_url = '/upload/'.$entity.'/'.$entityId;
+
+
+        if (file_exists($upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME))
+        {
+            return $upload_url . '/' . self::AVATAR_NAME;
+        }
+        else
+        {
+            $this->updateAvatar();
+            if (file_exists($upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME))
+            {
+                return $upload_url . '/' . self::AVATAR_NAME;
+            }
+        }
+
+        return "http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50";
+    }
+
 }
