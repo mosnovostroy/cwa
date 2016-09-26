@@ -42,7 +42,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
   </div>
   <div class="col-md-2>
       <h3>Фото</h3>
-      <?php echo Html::img(User::getAvatar(), ['alt' => $model->username]); ?>
+      <?php echo Html::img($model->getAvatar(), ['alt' => $model->username]); ?>
   </div>
   <div class="col-md-4">
     <h3>Ваш регион</h3>
