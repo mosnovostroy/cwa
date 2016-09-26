@@ -74,7 +74,7 @@ class User extends ActiveRecord implements IdentityInterface
 
 			if($user->save())
 			{
-          //$user->updateAvatar();
+          $user->updateAvatar();
 
           // $auth = Yii::$app->authManager;
 				  // $authorRole = $auth->getRole('author');
@@ -89,7 +89,7 @@ class User extends ActiveRecord implements IdentityInterface
         {
             $user->social_avatar = $current_service_picture;
             $user->save();
-            //$user->updateAvatar();
+            $user->updateAvatar();
         }
     }
 
@@ -392,39 +392,24 @@ class User extends ActiveRecord implements IdentityInterface
                 return false;
         }
 
-        // Скачиваем и сохраняем аватарку; генерируем превьюшку:
-        $ch = curl_init($this->social_avatar);
-        if ($ch)
+        // Скачиваем заново; удаляем старое; сохраняем аватарку; генерируем и сохраняем превью:
+        $file = $upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
+        $preview = $tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
+        $im = imagecreatefromstring(file_get_contents($this->social_avatar));
+        if ($im !== false)
         {
-          $file = $upload_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
-          $preview = $tmp_path . DIRECTORY_SEPARATOR . self::AVATAR_NAME;
-
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-          $response = curl_exec($ch);
-          curl_close($ch);
-
-          Yii::info('URL for picture: '.$this->social_avatar, 'myd');
-          if ($response === false)
-          {
-              Yii::info('Error while curl_exec', 'myd');
-          }
-          else
-          {
-              Yii::info('Success while curl_exec', 'myd');
-              file_put_contents($file, $response);
-          }
-
-          // Генерируем 50х50 превью аватарки:
-          Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
+            unlink($file);
+            unlink($preview);
+            if (imagejpeg($im, $file, 80)) // Если успешно сохранили в файл, генерируем аватарку:
+            {
+                Image::thumbnail($file, 50, 50) -> save($preview, ['quality' => 50]);
+            }
         }
     }
 
     public function getAvatar()
     {
-        return $this->social_avatar ? $this->social_avatar : 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50';
-
-
-
+        // return $this->social_avatar ? $this->social_avatar : 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=50';
 
         $entity = 'user';
         $entityId = $this->id;
