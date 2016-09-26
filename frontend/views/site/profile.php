@@ -40,7 +40,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
         'attributes' => $attributes,
     ]) ?>
   </div>
-  <div class="col-md-2>
+  <div class="col-md-2">
       <h3>Фото</h3>
       <?php echo Html::img($model->getAvatar(), ['alt' => $model->username]); ?>
   </div>
