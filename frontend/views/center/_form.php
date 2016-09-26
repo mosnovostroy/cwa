@@ -15,7 +15,11 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-md-7">
 
-            <?= $form->field($model, 'region')->dropDownList($model->regionsArray) ?>
+            <?= $form->field($model, 'region')->dropDownList($model->regionsArray,
+              [
+                //'onchange' => "alert(this.options[this.selectedIndex].value)"
+              ])
+            ?>
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Без кавычек и без слова "коворкинг", если только оно не является частью бренда. Ромашка | Romashka | Коворкинг 14') ?>
 
