@@ -95,7 +95,7 @@ class Arenda extends \yii\db\ActiveRecord
             'meta_keywords' => 'Meta Keywords',
             'gmap_lat' => 'Широта',
             'gmap_lng' => 'Долгота',
-            'region' => 'Регион',
+            'region' => 'Расположение объекта',
             'contacts' => 'Контакты',
             'rating' => 'рейтинг',
             'createdAt' => 'дата',
@@ -128,16 +128,10 @@ class Arenda extends \yii\db\ActiveRecord
         parent::afterFind();
     }
 
-    public function beforeSave($insert)
+    public function createAlias()
     {
-        if (parent::beforeSave($insert))
-        {
-            $this->alias = 'id10'.$this->id;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $this->alias = 'id10'.$this->id;
+        $this->save();
      }
+
 }

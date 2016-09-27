@@ -113,7 +113,7 @@ class Tariff extends \yii\base\Model
         return [
 			[['id'], 'integer'],
 			[['name', 'descr', 'options'], 'string'],
-      [['price_minute', 'price_hour', 'price_day', 'price_week', 'price_month'], 'integer'],
+      [['price_minute', 'price_hour', 'price_day', 'price_week', 'price_month'], 'number'],
 			[['is_fixed'], 'integer'],
 			[['optionsStorage', 'optionsMeal', 'optionsRecr', 'optionsTech', 'optionsMisc'], 'each', 'rule' => ['integer']],
 			[['printer_pages', 'printer_mode'], 'integer'],

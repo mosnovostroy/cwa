@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\Center */
 
-$this->title = 'Новый коворкинг-центр';
-$this->params['breadcrumbs'][] = ['label' => 'Коворкинг-центры', 'url' => ['index']];
+$this->title = 'Новый коворкинг';
+$this->params['breadcrumbs'][] = ['label' => 'Коворкинги', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['hasYandexMap'] = true;
 ?>

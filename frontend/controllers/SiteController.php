@@ -17,6 +17,8 @@ use frontend\models\ContactForm;
 use frontend\models\Index;
 use common\models\CenterSearch;
 use common\models\ArendaSearch;
+use common\models\Region;
+use common\models\Center;
 
 /**
  * Site controller
@@ -348,4 +350,13 @@ class SiteController extends Controller
         else
             return false;
     }
+
+    public function actionMapParams($id)
+    {
+        if (($model = Region::findOne($id)) !== null)
+        {
+            header("Content-Type: application/json; charset=UTF-8");
+            echo $model->getMapParams();
+        }
+     }
 }

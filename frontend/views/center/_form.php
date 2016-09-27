@@ -15,12 +15,6 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-md-7">
 
-            <?= $form->field($model, 'region')->dropDownList($model->regionsArray,
-              [
-                //'onchange' => "alert(this.options[this.selectedIndex].value)"
-              ])
-            ?>
-
             <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Без кавычек и без слова "коворкинг", если только оно не является частью бренда. Ромашка | Romashka | Коворкинг 14') ?>
 
             <?= $form->field($model, 'alias')->textInput(['maxlength' => true])->hint('Отдельные слова соединяем дефисом: siniy-kaktus. используем только маленькие латинские буквы и цифры') ?>
@@ -48,13 +42,19 @@ use yii\widgets\ActiveForm;
 
         <div class="col-md-5">
 
-            <?php if ($model->anonsImage) echo '<image src="'.$model->anonsImage.'" width=100%>'; ?>
+            <?php if ($model->anonsImage) echo '<div style="margin-bottom: 30px;"><image src="'.$model->anonsImage.'" width=100%></div>'; ?>
 
-            <?= $form->field($model, 'gmap_lat')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem,
+              [
+                'onchange' => "locate_yandex_maps(this.options[this.selectedIndex].value)"
+              ])->hint('Укажите точку на карте:')
+            ?>
 
-            <?= $form->field($model, 'gmap_lng')->textInput(['maxlength' => true]) ?>
+            <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
 
-            <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16" ></div>
+            <?= $form->field($model, 'gmap_lat')->hiddenInput()->label(false) ?>
+
+            <?= $form->field($model, 'gmap_lng')->hiddenInput()->label(false) ?>
 
           </div>
       </div>

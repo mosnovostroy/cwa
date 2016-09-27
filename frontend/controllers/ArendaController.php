@@ -70,7 +70,7 @@ class ArendaController extends \yii\web\Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-	
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Actions for everyone (guests and users):
     public function actionIndex()
@@ -90,7 +90,7 @@ class ArendaController extends \yii\web\Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$this->layout = 'map';
-		
+
         return $this->render('map', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -108,7 +108,7 @@ class ArendaController extends \yii\web\Controller
     public function actionIndexSubmit()
     {
         $params = Yii::$app->request->queryParams;
-        $params[0] = 'arenda/index';        
+        $params[0] = 'arenda/index';
         return $this->redirect($params);
     }
 
@@ -139,6 +139,7 @@ class ArendaController extends \yii\web\Controller
     {
         $model = new Arenda();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->createAlias();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -146,7 +147,7 @@ class ArendaController extends \yii\web\Controller
             ]);
         }
     }
-	
+
     /**
      * Updates an existing Arenda model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -158,7 +159,7 @@ class ArendaController extends \yii\web\Controller
 		$model = $this->findModel($id);
 		if (!User::isAdminOrOwner($model->createdBy))
 			throw new ForbiddenHttpException;
-		
+
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			return $this->redirect(['view', 'id' => $model->id]);
 		} else {
@@ -176,7 +177,7 @@ class ArendaController extends \yii\web\Controller
      */
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);		
+        $model = $this->findModel($id);
 		if (!User::isAdminOrOwner($model->createdBy))
 			throw new ForbiddenHttpException;
 		$model->delete();
@@ -188,16 +189,16 @@ class ArendaController extends \yii\web\Controller
 		$model = $this->findModel($id);
 		if (!User::isAdminOrOwner($model->createdBy))
 			throw new ForbiddenHttpException;
-        if (Yii::$app->request->isPost) 
+        if (Yii::$app->request->isPost)
             $model->upload();
-        return $this->render('pictures', ['model' => $model]);		
+        return $this->render('pictures', ['model' => $model]);
     }
 
     public function actionDeleteFile($id, $filename)
     {
 		$model = $this->findModel($id);
 		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;	
+			throw new ForbiddenHttpException;
 		$model->deleteImage($filename);
         return $this->redirect(['pictures', 'id' => $id]);
     }
@@ -206,7 +207,7 @@ class ArendaController extends \yii\web\Controller
     {
 		$model = $this->findModel($id);
 		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;	
+			throw new ForbiddenHttpException;
 		$model->setAnonsImage($filename);
 		return $this->redirect(['pictures', 'id' => $id]);
     }

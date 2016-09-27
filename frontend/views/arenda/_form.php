@@ -15,8 +15,6 @@ use yii\widgets\ActiveForm;
   <div class="row">
       <div class="col-md-7">
 
-          <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem) ?>
-
           <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Не более 150 символов') ?>
 
           <?= $form->field($model, 'description')->textarea(['rows' => 10, 'maxlength' => true])->hint('Не более 1500 символов') ?>
@@ -32,11 +30,17 @@ use yii\widgets\ActiveForm;
 
           <?php if ($model->anonsImage) echo '<image src="'.$model->anonsImage.'" width=100%>'; ?>
 
-          <?= $form->field($model, 'gmap_lat')->textInput(['maxlength' => true]) ?>
+          <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem,
+            [
+              'onchange' => "locate_yandex_maps(this.options[this.selectedIndex].value)"
+            ])->hint('Укажите точку на карте:')
+          ?>
 
-          <?= $form->field($model, 'gmap_lng')->textInput(['maxlength' => true]) ?>
+          <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
 
-          <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16" ></div>
+          <?= $form->field($model, 'gmap_lat')->hiddenInput()->label(false) ?>
+
+          <?= $form->field($model, 'gmap_lng')->hiddenInput()->label(false) ?>
 
         </div>
     </div>

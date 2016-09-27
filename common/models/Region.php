@@ -71,4 +71,29 @@ class Region extends \yii\db\ActiveRecord
         $regions = $regions + $subregions;
         return $regions;
     }
+
+    public function getMapParams()
+    {
+        $data= array();
+        $data['lat'] = $this->map_lat;
+        $data['lng'] = $this->map_lng;
+        $data['zoom'] = $this->map_zoom;
+
+        return json_encode($data);
+
+        // $data = array();
+        // $data['type'] = 'FeatureCollection';
+        // $data['features'] = array();
+        //
+        // $item = array();
+        // $item['type'] = 'Feature';
+        // $item['lat'] = $this->map_lat;
+        // $item['lng'] = $this->map_lng;
+        // $item['zoom'] = $this->map_zoom;
+        //
+        // $data['features'][] = $item;
+
+        // return json_encode($data);
+    }
+
 }
