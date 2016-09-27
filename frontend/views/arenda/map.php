@@ -34,24 +34,17 @@ $this->params['hasYandexMap'] = true;
 			</span>
 			<?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['arenda/map-submit'],
 											'options' => ['class' => 'form-inline']]); ?>
-					<span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
+					<span style="font-size: 1.6em; padding-right: 10px;">Объявления</span>
 					<?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
 					<?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
 			<?php ActiveForm::end(); ?>
-			<?php
-				if (User::isUser())
-					echo Html::a('Создать новый', ['create'], ['class' => 'btn btn-default']);
-			?>
 		</div>
 	</div>
-	<div class="row hidden">
-		<div class="col-xs-12" style="">
-			<div class="pull-left">
-				<?= Html::a('список', ['arenda/index', 'ArendaSearch' => $searchModel->toArray()]) ?>
-				| карта
-			</div>
-		</div>
-	</div>
+  <div class="row">
+      <div class="col-xs-12 serp-text">
+          Совместная аренда офиса<?= $searchModel->regionNameTp ? ' в '.$searchModel->regionNameTp : ''?>. Найдено объявлений: <?= $dataProvider->getTotalCount() ?>
+      </div>
+  </div>
 </div>
 
 <div id="yandexmap" class="wide-yandex-map"

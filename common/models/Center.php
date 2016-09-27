@@ -75,7 +75,7 @@ class Center extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название',
+            'name' => 'название',
             'alias' => 'Алиас',
             'description' => 'Описание',
             'meta_title' => 'Meta Title',
