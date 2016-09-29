@@ -140,7 +140,7 @@ class ArendaController extends \yii\web\Controller
         $model = new Arenda();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->createAlias();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['site/my']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -161,7 +161,7 @@ class ArendaController extends \yii\web\Controller
 			throw new ForbiddenHttpException;
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['view', 'id' => $model->id]);
+			return $this->redirect(['site/my']);
 		} else {
 			return $this->render('update', [
 				'model' => $model,
@@ -181,7 +181,7 @@ class ArendaController extends \yii\web\Controller
 		if (!User::isAdminOrOwner($model->createdBy))
 			throw new ForbiddenHttpException;
 		$model->delete();
-        return $this->redirect(['index']);
+        return $this->redirect(['site/my']);
     }
 
     public function actionPictures($id)

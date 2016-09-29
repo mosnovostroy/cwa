@@ -76,18 +76,30 @@ function init_yandex_maps ()
   		myMap.behaviors.disable('scrollZoom');
   	}
 
+    var ButtonLayout = ymaps.templateLayoutFactory.createClass([
+            '<div alt="{{ data.title }}" class="bg-primary my-button ',
+            '{% if state.size == "small" %}my-button_small{% endif %}',
+            '{% if state.size == "medium" %}my-button_medium{% endif %}',
+            '{% if state.size == "large" %}my-button_large{% endif %}',
+            '{% if state.selected %} my-button-selected{% endif %}">',
+            // '<img class="my-button__img" src="{{ data.image }}" alt="{{ data.title }}">',
+            '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>',
+            '<span class="my-button__text">{{ data.content }}</span>',
+            '</div>'
+        ].join(''));
+
   	var myButton = new ymaps.control.Button({
-           data: {
-               // Зададим иконку для кнопки
-               //image: 'images/button.jpg',
-               // Текст на кнопке.
+           data:
+           {
                content: 'Фильтр',
-               // Текст всплывающей подсказки.
                title: 'Показать фильтр'
+           },
+           options:
+           {
+                maxWidth: [170, 190, 220],
+                layout: ButtonLayout,
+                selectOnClick: false
            }
-      }, {
-          // Зададим опции для кнопки.
-          selectOnClick: false
       });
   	myMap.controls.add(myButton, {
   		float: "right"

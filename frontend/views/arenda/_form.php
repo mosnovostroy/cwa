@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
   <?php $form = ActiveForm::begin(); ?>
 
   <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-6">
 
           <?= $form->field($model, 'name')->textInput(['maxlength' => true])->hint('Не более 150 символов') ?>
 
@@ -21,22 +21,19 @@ use yii\widgets\ActiveForm;
 
           <?= $form->field($model, 'contacts')->textInput() ?>
 
-          <br><br>
-          <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success center-block' : 'btn btn-primary center-block']) ?>
-
       </div>
 
-      <div class="col-md-5">
+      <div class="col-md-6">
 
           <?php if ($model->anonsImage) echo '<image src="'.$model->anonsImage.'" width=100%>'; ?>
 
           <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem,
             [
               'onchange' => "locate_yandex_maps(this.options[this.selectedIndex].value)"
-            ])->hint('Укажите точку на карте:')
+            ])->hint('Выберите регион и укажите точку на карте')
           ?>
 
-          <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
+          <div id="yandexmap" class="h360-yandexmap" style="margin-bottom: 30px;" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
 
           <?= $form->field($model, 'gmap_lat')->hiddenInput()->label(false) ?>
 
@@ -44,6 +41,9 @@ use yii\widgets\ActiveForm;
 
         </div>
     </div>
+
+    <?= Html::submitButton($model->isNewRecord ? 'Опубликовать объявление' : 'Сохранить изменения', ['class' => 'btn btn-primary center-block']) ?>
+
 
   <?php ActiveForm::end(); ?>
 </div>

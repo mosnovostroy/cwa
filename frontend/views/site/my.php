@@ -13,26 +13,38 @@ $this->registerMetaTag(['name' => 'description', 'content' => 'База объя
 $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса']);
 ?>
 
-<h3>Мои объявления</h3>
-<?php
-    if (User::isUser())
-        echo Html::a('Подать объявление', ['arenda/create'], ['class' => 'btn btn-danger', 'style' => 'margin-top: -5px;']);
-?>
+<div class="row">
+    <div class="col-sm-6">
+        <h3>Мои объявления</h3>
+        <?php
+            if ($dataProvider->getTotalCount() == 0)
+            {
+                echo "Пока у вас нет ни одного объявления.";
+            }
+        ?>
+    </div>
+    <div class="col-sm-6">
+      <div class="new-arenda-button-container">
+      <?php
+          if (User::isUser())
+              echo Html::a('Подать объявление', ['arenda/create'], ['class' => 'btn btn-danger new-arenda-button']);
+      ?>
+    </div>
+    </div>
+</div>
 
 <div class="row serp-links">
     <div class="col-xs-12" style="">
-        <!-- <div class="pull-left">
-            список
-            | <?= Html::a('карта', ['arenda/map', 'ArendaSearch' => $searchModel->toArray()]) ?>
-        </div> -->
-
-        <div class="pull-right">
           <?php
-              $sort = $dataProvider->getSort();
-              if ($sort)
-                  echo $sort->link('createdAt');
+              if ($dataProvider->getTotalCount() > 4)
+              {
+                  echo '<div class="pull-right">';
+                  $sort = $dataProvider->getSort();
+                  if ($sort)
+                      echo $sort->link('createdAt');
+                  echo '</div>';
+              }
           ?>
-        </div>
     </div>
 </div>
 
@@ -53,7 +65,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная
                 echo '</div>';
             ?>
 
-            <div><?= $center->anons_text ?></div>
+            <div class="center-index-text"><?= $center->anons_text ?></div>
           </div>
       </div>
   </div>

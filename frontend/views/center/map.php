@@ -39,7 +39,7 @@ $this->params['hasYandexMap'] = true;
 					<?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
 					<?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
           <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
-					<?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
+					<?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
 			<?php ActiveForm::end(); ?>
 			<?php
 				if (User::isAdmin())

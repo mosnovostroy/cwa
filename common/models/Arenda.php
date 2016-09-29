@@ -96,7 +96,7 @@ class Arenda extends \yii\db\ActiveRecord
             'gmap_lat' => 'Широта',
             'gmap_lng' => 'Долгота',
             'region' => 'Расположение объекта',
-            'contacts' => 'Контакты',
+            'contacts' => 'Контактный телефон',
             'rating' => 'рейтинг',
             'createdAt' => 'дата',
         ];

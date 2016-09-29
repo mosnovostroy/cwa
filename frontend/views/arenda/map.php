@@ -36,7 +36,7 @@ $this->params['hasYandexMap'] = true;
 											'options' => ['class' => 'form-inline']]); ?>
 					<span style="font-size: 1.6em; padding-right: 10px;">Объявления</span>
 					<?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-					<?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
+					<?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
 			<?php ActiveForm::end(); ?>
 		</div>
 	</div>

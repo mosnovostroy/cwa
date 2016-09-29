@@ -50,7 +50,7 @@ use yii\widgets\ActiveForm;
               ])->hint('Укажите точку на карте:')
             ?>
 
-            <div id="yandexmap" class="inline-yandexmap" style="height: 650px!important; margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
+            <div id="yandexmap" class="admin-yandexmap" style="margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
 
             <?= $form->field($model, 'gmap_lat')->hiddenInput()->label(false) ?>
 

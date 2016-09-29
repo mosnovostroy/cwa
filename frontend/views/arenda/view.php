@@ -91,7 +91,7 @@ $this->params['hasYandexMap'] = true;
         ?>
 
         <h4>Расположение объекта:</h4>
-            <div id="yandexmap" class="inline-yandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
+            <div id="yandexmap" class="h360-yandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
 
     </div>
 </div>

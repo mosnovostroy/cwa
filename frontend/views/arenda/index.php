@@ -48,7 +48,7 @@ else
                 <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
-                <?= Html::submitButton('Применить', ['class' => 'btn btn-default', 'style' => 'margin-top: -10px;']) ?>
+                <?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
         <?php ActiveForm::end(); ?>
     </div>
 </div>
@@ -102,7 +102,7 @@ else
                     echo '</div>';
                 ?>
 
-                <div><?= $center->anons_text ?></div>
+                <div class="center-index-text"><?= $center->anons_text ?></div>
               </div>
           </div>
       </div>

@@ -53,8 +53,8 @@ body {
 }
 
 .wide-yandex-map {width: 100%; height: 100%; margin: 0; padding: 0;}
-
 .inline-yandexmap {width: 100%; margin: 0; height: 250px;}
+.h360-yandexmap {width: 100%; margin: 0; height: 360px;}
 
 /* .mainform-active {
 	position: absolute!important;
@@ -161,12 +161,16 @@ div.required label.control-label:after {
 .serp-text {color: #bbb; margin-top: 0px; margin-bottom: 7px;}
 .serp-links {margin-top: 8px; margin-bottom: 5px;}
 
+.new-arenda-button {margin-top: 10px;}
+@media (max-width: 389px) {.new-arenda-button {width: 100%!important; } }
+@media (min-width: 768px) {.new-arenda-button-container {float: right !important; } }
 
 
 /* Кликабельная карточка центра */
 .center-index-col { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
 .center-index-col:hover { background-color: #f8f8f8;}
 
+.center-index-text {margin-bottom: 15px;}
 
 .center-index-form {margin-bottom: 30px; }
 .center-index-logo {display: none;}
@@ -248,4 +252,45 @@ div.required label.control-label:after {
 
 .comments .comment-author-avatar img {
     width: 50px;
+}
+
+/* Кнопка "Фильтр" на яндекс-картах: */
+.my-button {
+    display: inline-block;
+    padding: 4px 10px;
+    /*background: #eee;*/
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+.my-button__text {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    /*color: #333;*/
+    margin-left: 10px;
+}
+
+.my-button__img {
+    padding: 0;
+    margin-bottom: -3px;
+}
+
+.my-button_small .my-button__text {
+    display: none;
+}
+
+.my-button_medium .my-button__img {
+    display: none;
+}
+
+.my-button_large .my-button__text {
+    margin-left: 10px;
+}
+.my-button-selected {
+    color: #333333;
+    background-color: #e6e6e6;
+    border: 2px dashed #333;
 }
