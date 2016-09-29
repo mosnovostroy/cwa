@@ -47,15 +47,22 @@ $this->params['hasYandexMap'] = true;
 			?>
 		</div>
 	</div>
-	<div class="row hidden">
-		<div class="col-xs-12" style="">
-			<div class="pull-left">
-				<?= Html::a('список', ['center/index', 'CenterSearch' => $searchModel->toArray()]) ?>
-				| карта
-			</div>
-		</div>
-	</div>
+  <div class="row">
+      <div class="col-xs-12 serp-text">
+          Найдено коворкингов <?= $searchModel->regionNameTp ? 'в '.$searchModel->regionNameTp.' ' : ''?>с учетом фильтра: <?= $dataProvider->getTotalCount() ?>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-xs-12 serp-links">
+          <div class="pull-left">
+            <?= Html::a('список', ['center/index', 'CenterSearch' => $searchModel->toArray()]) ?>
+            | карта
+          </div>
+      </div>
+  </div>
 </div>
+
+
 
 <div id="yandexmap" class="wide-yandex-map"
 

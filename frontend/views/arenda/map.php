@@ -45,6 +45,14 @@ $this->params['hasYandexMap'] = true;
           Совместная аренда офиса<?= $searchModel->regionNameTp ? ' в '.$searchModel->regionNameTp : ''?>. Найдено объявлений: <?= $dataProvider->getTotalCount() ?>
       </div>
   </div>
+  <div class="row">
+      <div class="col-xs-12 serp-links">
+          <div class="pull-left">
+            <?= Html::a('список', ['arenda/index', 'ArendaSearch' => $searchModel->toArray()]) ?>
+            | карта
+          </div>
+      </div>
+  </div>
 </div>
 
 <div id="yandexmap" class="wide-yandex-map"
