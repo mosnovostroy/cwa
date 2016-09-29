@@ -64,7 +64,11 @@ class CenterSearch extends Center
         $query = Center::find();
 
         if ($all)
-            $adpParams = ['query' => $query];
+            $adpParams = [
+              'query' => $query,
+              'totalCount' => 1000,
+              'pagination' => ['pageSize' => 1000],
+            ];
         else
             $adpParams = ['query' => $query,
                   'pagination' => ['pageSize' => 10],
