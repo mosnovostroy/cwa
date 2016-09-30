@@ -55,6 +55,7 @@ body {
 .wide-yandex-map {width: 100%; height: 100%; margin: 0; padding: 0;}
 .inline-yandexmap {width: 100%; margin: 0; height: 250px;}
 .h360-yandexmap {width: 100%; margin: 0; height: 360px;}
+.h600-yandexmap {width: 100%; margin: 0; height: 600px;}
 
 /* .mainform-active {
 	position: absolute!important;

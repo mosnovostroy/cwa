@@ -35,9 +35,6 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'site')->textInput()->hint('Отображается не только в контактах, но и как источник фотографий') ?>
 
-            <br><br>
-            <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success center-block' : 'btn btn-primary center-block']) ?>
-
         </div>
 
         <div class="col-md-5">
@@ -50,7 +47,7 @@ use yii\widgets\ActiveForm;
               ])->hint('Укажите точку на карте:')
             ?>
 
-            <div id="yandexmap" class="admin-yandexmap" style="margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
+            <div id="yandexmap" class="h600-yandexmap" style="margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
 
             <?= $form->field($model, 'gmap_lat')->hiddenInput()->label(false) ?>
 
@@ -58,6 +55,8 @@ use yii\widgets\ActiveForm;
 
           </div>
       </div>
+
+    <?= Html::submitButton($model->isNewRecord ? 'Сохранить изменения' : 'Сохранить изменения', ['class' => 'btn btn-primary center-block']) ?>
 
     <?php ActiveForm::end(); ?>
 
