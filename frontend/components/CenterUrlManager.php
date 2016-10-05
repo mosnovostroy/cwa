@@ -21,6 +21,24 @@ class CenterUrlManager extends UrlManager
 			      return '/login/';
         }
 
+        // Страница "О проекте":
+		    if ($route === 'site/about')
+        {
+			      return '/about/';
+        }
+
+        // Страница "Контакты":
+		    if ($route === 'site/contacts')
+        {
+			      return '/contacts/';
+        }
+
+        // Страница "Реклама":
+		    if ($route === 'site/adv')
+        {
+			      return '/adv/';
+        }
+
         // Страница центра:
 		    if ($route === 'center/view')
         {
@@ -132,6 +150,24 @@ class CenterUrlManager extends UrlManager
     		{
     			$params['service'] = $matches[1];
     			return ['site/login', $params];
+    		}
+
+        // Страница "О проекте":
+    		if (preg_match('%^about/$%', $pathInfo, $matches))
+    		{
+    			return ['site/about', $params];
+    		}
+
+        // Страница "Контакты":
+    		if (preg_match('%^contacts/$%', $pathInfo, $matches))
+    		{
+    			return ['site/contacts', $params];
+    		}
+
+        // Страница "Реклама":
+    		if (preg_match('%^adv/$%', $pathInfo, $matches))
+    		{
+    			return ['site/adv', $params];
     		}
 
 		    //Центр или список или карта:

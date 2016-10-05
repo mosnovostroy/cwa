@@ -102,6 +102,13 @@ class ImageBehavior extends Behavior
 				$tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
 				$tmp_url = '/tmp/'.$entity.'/'.$entityId;
 
+				if(!is_dir($tmp_path))
+				{
+						FileHelper::createDirectory($tmp_path);
+						if (!is_dir($tmp_path))
+								return false;
+				}
+
 				$filename = Yii::$app->db->createCommand('SELECT name FROM image WHERE entity = :entity AND cid = :cid AND is_anons = 1', [':entity' => $entity, ':cid' => $entityId])
 						->queryScalar();
 
@@ -120,19 +127,21 @@ class ImageBehavior extends Behavior
 
 		public function doGetImages ($include_logo = true)
 		{
-			$entity = $this->entity;
-			$entityId = $this->entityId;
-			$generate_thumbnails = 1;
-			if (!$entity || !$entityId)
-	            return false;
+				$this->_images = [];
 
-	        $upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
-	        $upload_url = '/upload/'.$entity.'/'.$entityId;
-	        $tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
-	        $tmp_url = '/tmp/'.$entity.'/'.$entityId;
+				$entity = $this->entity;
+				$entityId = $this->entityId;
+				$generate_thumbnails = 1;
+				if (!$entity || !$entityId)
+	          return false;
 
-			if (is_dir($upload_path))
-	        {
+	      $upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
+	      $upload_url = '/upload/'.$entity.'/'.$entityId;
+	      $tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
+	      $tmp_url = '/tmp/'.$entity.'/'.$entityId;
+
+				if (is_dir($upload_path))
+	      {
 	            if(!is_dir($tmp_path) && $generate_thumbnails)
 	                FileHelper::createDirectory($tmp_path);
 
@@ -187,9 +196,10 @@ class ImageBehavior extends Behavior
 	// Uploads files from POST and place them into the model:
     public function upload()
     {
-		$this->ImageUploadModel->uploadFiles = UploadedFile::getInstances($this->ImageUploadModel, 'uploadFiles');
+				$this->ImageUploadModel->uploadFiles = UploadedFile::getInstances($this->ImageUploadModel, 'uploadFiles');
         if ($this->ImageUploadModel->validate())
         {
+						// Создаем при необходимости директорию:
             $path = Yii::getAlias('@webroot/upload/'.$this->entity.'/'.$this->entityId);
             if(!is_dir($path))
             {
@@ -197,6 +207,13 @@ class ImageBehavior extends Behavior
                 if (!is_dir($path))
                     return false;
             }
+
+						// Проверяем, были ли уже файлы до этой загрузки.
+						// Если еще не было, первый загружаемый файл сделаем потом анонсным:
+						$image_count = Yii::$app->db->createCommand('SELECT count(*) FROM image WHERE entity = :entity AND cid = :cid', [':entity' => $this->entity, ':cid' => $this->entityId])
+								->queryScalar();
+
+						// Сохраняем загруженные файлы
             foreach ($this->ImageUploadModel->uploadFiles as $file)
             {
                 $file->saveAs($path . DIRECTORY_SEPARATOR . $file->baseName.'.'.$file->extension);
@@ -204,14 +221,23 @@ class ImageBehavior extends Behavior
                     ->execute();
 
             }
+
+						// Выполняем обещание: при необходимости делаем первый из загруженных файлов анонсным:
+						if ( !$image_count && count($this->ImageUploadModel->uploadFiles) > 0 )
+						{
+								$file = $this->ImageUploadModel->uploadFiles[0];
+								Yii::$app->db->createCommand('UPDATE image SET is_anons = 1 WHERE entity = :entity AND name = :name AND cid = :cid' , [':entity' => $this->entity, ':name' => $file->baseName.'.'.$file->extension, ':cid' => $this->entityId])
+									->execute();
+						}
+
             return true;
         }
         else
             return false;
     }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Deletes specified file from model:
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Deletes specified file from model:
     public function deleteImage($filename)
     {
 		$entity = $this->entity;
@@ -242,8 +268,29 @@ class ImageBehavior extends Behavior
         return true;
     }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Choose specified file to be "main":
+		//////////////////////////////////////////////////////////////////////////////////////////
+		// Deletes all files from model:
+    public function deleteAllImages()
+    {
+				$entity = $this->entity;
+				$entityId = $this->entityId;
+				if (!$entity || !$entityId)
+            return false;
+
+        $upload_path = Yii::getAlias('@webroot/upload/'.$entity.'/'.$entityId);
+        $tmp_path = Yii::getAlias('@webroot/tmp/'.$entity.'/'.$entityId);
+
+				FileHelper::removeDirectory($upload_path);
+				FileHelper::removeDirectory($tmp_path);
+
+        Yii::$app->db->createCommand('DELETE FROM image WHERE entity = :entity AND cid = :cid', [':entity' => $entity, ':cid' => $entityId])
+                ->execute();
+
+				return true;
+    }
+
+		///////////////////////////////////////////////////////////////////////////////////////////
+		// Choose specified file to be "main":
     public function setAnonsImage($filename)
     {
 		$entity = $this->entity;

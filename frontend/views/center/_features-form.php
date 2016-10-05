@@ -56,7 +56,7 @@ use yii\bootstrap\ActiveForm;
 			</div>
 			<div class="col-md-8">
 
-				<?= $model->isTariff ? $form->field($model, 'descr', ['labelOptions' => ['class' => 'col-md-3 control-label'], 'template' => $templ_col9])->textarea(['rows' => 2]) : '' ?>
+				<?= $form->field($model, 'descr', ['labelOptions' => ['class' => 'col-md-3 control-label'], 'template' => $templ_col9])->textarea(['rows' => 2]) ?>
 
 				<?php
 					for ($i = 1; $i <= 7; $i++)

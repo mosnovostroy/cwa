@@ -49,23 +49,36 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная
 </div>
 
 <div class="">
-<?php foreach ($dataProvider->getModels() as $center): ?>
-  <?php $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
+<?php foreach ($dataProvider->getModels() as $model): ?>
+  <?php $url = Url::to(['arenda/view', 'id' => $model->id]); ?>
   <div class="row">
-      <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
+      <div class="col-xs-12 card arenda noclickable">
           <div class="clearfix" >
-            <?php if ($center->anons3x2) echo '<image class="arenda-index-image" src="'.$center->anons3x2.'">'; ?>
-            <h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
+            <?php if ($model->anons3x2) echo '<a href="'.$url.'"><image class="card-image" src="'.$model->anons3x2.'"></a>'; ?>
+            <h3><a href="<?=$url?>"><?=Html::encode("{$model->name}")?></a></h3>
             <?php
             ?>
             <?php
-                echo '<div class="center-index-params">';
-                    echo '<p>'.$center->regionName.'</p>';
-                    echo '<p>'.$center->date.'</p>';
+                echo '<div class="card-params">';
+
+                    echo Html::a('Редактировать', ['arenda/update', 'id' => $model->id], ['class' => 'btn btn-default buttton-width-100']);
+                    //echo '<br>';
+                    echo Html::a('Удалить', ['arenda/delete', 'id' => $model->id], [
+                        'class' => 'btn btn-default buttton-width-100',
+                          'data' => [
+                              'confirm' => 'Действительно хотите удалить объявление навсегда?',
+                                'method' => 'post',
+                                ],
+                              ]);
+                    //echo '<p>'.$model->regionName.'</p>';
+                    //echo '<p>'.$model->date.'</p>';
                 echo '</div>';
             ?>
 
-            <div class="center-index-text"><?= $center->anons_text ?></div>
+            <div class="card-text">
+                <?= '<p>'.$model->anons_text.'</p>' ?>
+                <?= '<p>'.$model->date.'</p>' ?>
+            </div>
           </div>
       </div>
   </div>

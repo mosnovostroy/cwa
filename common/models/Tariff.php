@@ -137,7 +137,7 @@ class Tariff extends \yii\base\Model
     {
         return [
 			'name' => 'Название тарифа',
-      'descr' => 'Описание тарифа',
+      'descr' => 'Описание',
 			'is_fixed' => 'Рабочее место закрепляется',
       'optionsStorage' => 'Хранение',
       'optionsMeal' => 'Питание',

@@ -51,14 +51,6 @@ else
 
                 <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
 
-                <!-- <div class="form-group field-centersearch-is24x7" data-toggle="buttons">
-                    <input type="hidden" name="CenterSearch[is24x7]" value="0">
-                    <label  class="btn btn-default active">
-                        <input type="checkbox" id="centersearch-is24x7" name="CenterSearch[is24x7]" value="1"> Круглосуточно
-                    </label>
-                    <div class="help-block"></div>
-                </div> -->
-
                 <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
 
                 <?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
@@ -98,47 +90,45 @@ else
     </div>
 </div>
 
-<div class="">
-		<?php foreach ($dataProvider->getModels() as $center): ?>
-		<?php $url = Url::to(['view', 'id' => $center->id]); ?>
-      <div class="row">
-          <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
-      				<div class="clearfix" >
-                <?php if ($center->logoImage) echo '<div class="center-index-logo"><image src="'.$center->logoImage.'"></div>'; ?>
-      					<?php if ($center->anons3x2) echo '<image class="center-index-image" src="'.$center->anons3x2.'">'; ?>
-      					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
-                <?php
-                    if ($center->paramsList || $center->is24x7())
+<?php foreach ($dataProvider->getModels() as $center): ?>
+    <?php $url = Url::to(['view', 'id' => $center->id]); ?>
+    <div class="row">
+      <div class="col-xs-12 card" onclick="location.href='<?= $url ?>';">
+    				<div class="clearfix" >
+            <?php if ($center->logoImage) echo '<div class="card-logo"><image src="'.$center->logoImage.'"></div>'; ?>
+    					<?php if ($center->anons3x2) echo '<image class="card-image" src="'.$center->anons3x2.'">'; ?>
+    					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
+            <?php
+                if ($center->paramsList || $center->is24x7())
+                {
+                    echo '<div class="card-params">';
+                    if ($center->paramsList)
                     {
-                        echo '<div class="center-index-params">';
-                        if ($center->paramsList)
-                        {
-                            echo '<ul>';
-                            foreach($center->paramsList as $param)
-                                echo '<li>'.$param.'</li>';
-                            echo '<ul>';
-                        }
-                        if ($center->is24x7())
-                        {
-                            echo '<ul style="margin-top: 10px;">';
-                            echo '<li style="font-weight: bold;">Круглосуточно</li>';
-                            echo '<ul>';
-                        }
-                        echo '</div>';
+                        echo '<ul>';
+                        foreach($center->paramsList as $param)
+                            echo '<li>'.$param.'</li>';
+                        echo '<ul>';
                     }
-                ?>
-                <?php
-                    $arr = array();
-                    if ($center->regionName) $arr[] = $center->regionName;
-                    if ($center->address) $arr[] = $center->address;
-                    echo '<p>'.implode(' | ', $arr).'</p>';
-                ?>
+                    if ($center->is24x7())
+                    {
+                        echo '<ul style="margin-top: 10px;">';
+                        echo '<li style="font-weight: bold;">Круглосуточно</li>';
+                        echo '<ul>';
+                    }
+                    echo '</div>';
+                }
+            ?>
+            <?php
+                $arr = array();
+                if ($center->regionName) $arr[] = $center->regionName;
+                if ($center->address) $arr[] = $center->address;
+                echo '<p>'.implode(' | ', $arr).'</p>';
+            ?>
 
-      					<p><?= $center->description ?></p>
-      				</div>
-          </div>
+    					<p><?= $center->description ?></p>
+    				</div>
       </div>
-		<?php endforeach; ?>
-</div>
+    </div>
+<?php endforeach; ?>
 
 <?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>

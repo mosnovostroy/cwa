@@ -12,10 +12,11 @@ body {
 
 .wrap > .container,  .wrap > .container-fluid {
     padding: 70px 15px 20px;
-    /*border: 1px solid #555;*/
 }
 
-.alert-widget {margin-top: 50px;}
+.alert-widget {
+    margin-top: 50px;
+}
 
 .footer {
     height: 60px;
@@ -49,20 +50,12 @@ body {
 
 .container-map > .container,  .container-map > .container-fluid {
     padding: 20px 15px 20px;
-    /*border: 1px solid #555;*/
 }
 
 .wide-yandex-map {width: 100%; height: 100%; margin: 0; padding: 0;}
 .inline-yandexmap {width: 100%; margin: 0; height: 250px;}
 .h360-yandexmap {width: 100%; margin: 0; height: 360px;}
 .h600-yandexmap {width: 100%; margin: 0; height: 600px;}
-
-/* .mainform-active {
-	position: absolute!important;
-	left: 0px!important;
-	top: 0px!important;
-} */
-
 
 .jumbotron {
     text-align: center;
@@ -158,23 +151,112 @@ div.required label.control-label:after {
     color: red;
 }
 
-.serp-title {font-size: 1.6em; padding-right: 10px; }
-.serp-text {color: #bbb; margin-top: 0px; margin-bottom: 7px;}
-.serp-links {margin-top: 8px; margin-bottom: 5px;}
-
-.new-arenda-button {margin-top: 10px;}
-@media (max-width: 389px) {.new-arenda-button {width: 100%!important; } }
-@media (min-width: 768px) {.new-arenda-button-container {float: right !important; } }
 
 
-/* Кликабельная карточка центра */
-.center-index-col { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
-.center-index-col:hover { background-color: #f8f8f8;}
 
-.center-index-text {margin-bottom: 15px;}
 
-.center-index-form {margin-bottom: 30px; }
-.center-index-logo {display: none;}
+/***********************************************************************************************/
+/* Список объектов, карта, Мои объявления */
+
+    /* форма поиска */
+    .center-index-form {margin-bottom: 30px; }
+
+    /* заголовок */
+    .serp-title {font-size: 1.6em; padding-right: 10px; }
+
+    /* текст-подсказка под заголовком */
+    .serp-text {color: #bbb; margin-top: 0px; margin-bottom: 7px;}
+
+    /* ссылки над результатами поиска */
+    .serp-links {margin-top: 8px; margin-bottom: 5px;}
+
+
+/***********************************************************************************************/
+/* Кликабельная карточка:
+/* по умолчанию - center, при указании вместо "card" "card arenda" - объявление */
+/* Также можно указать noclickable - перестанет быть кликабельным */
+
+    /* основной блок */
+    .card { margin-bottom: 30px; cursor: pointer; border: 1px solid #ddd;}
+    .card:hover { background-color: #f8f8f8;}
+    .card.noclickable {cursor: auto;}
+    .card.noclickable:hover {background-color: #fff;}
+
+    /* текст */
+    .card-text {margin-bottom: 15px;}
+
+    /* фото */
+    @media (max-width: 389px) {
+    	.card-image {margin: 15px 10px 10px 0px; width: 42%; float: left;}
+    }
+    @media (min-width: 390px) and (max-width: 767px) {
+    	.card-image {margin: 15px 0 15px 15px; width: 32%; float: right;}
+    }
+    @media (min-width: 768px) {
+    	.card-image {margin: 15px 0 15px 15px; width: 25%; float: right;}
+        .arenda .card-image {margin: 15px 30px 15px 0px; width: 25%; float: left;}
+    }
+
+    /* логотип */
+    .card-logo {display: none;}
+
+    @media (min-width: 768px)  {
+        .card-logo {
+            display: block;
+            margin: 15px 15px 15px 0;
+            width: 10%;
+            float: left;
+            border: 1px solid #aaa;
+        }
+        .card-logo img {
+            width: calc(100% - 20px);
+            margin: 10px 10px 10px 10px;
+        }
+    }
+
+    /* текст в правой колонке */
+    .card-params {margin-bottom: 15px;}
+    .card-params ul {
+        margin-left: 0; /* Отступ слева в браузере IE и Opera */
+        padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+    }
+
+    .card-params li {
+        list-style-type: none; /* Убираем маркеры */
+    }
+
+    @media (min-width: 768px) {
+    	 .card-params {float: right; width: 15%; margin-right: 30px; margin-left: 30px; }
+    }
+
+    .buttton-width-100 {width: 100%; margin-bottom: 15px;}
+
+
+/***********************************************************************************************/
+/* Шрифты */
+
+    @media (max-width: 389px) {
+        h1 {font-size: 1.65em;}
+        h2 {font-size: 1.50em;}
+        h3 {font-size: 1.40em; /* margin-top:12px; */}
+        p {font-size:0.9em;}
+    }
+
+    @media (min-width: 390px) and (max-width: 767px) {
+        h1 {font-size: 1.80em;}
+        h2 {font-size: 1.50em;}
+        h3 {font-size: 1.20em;}
+    }
+
+
+/*******************************************************************************************/
+/* Страница коворкинга */
+.tariff-label {color: #ccc; font-size: 0.5em;}
+
+.contacts {width: 100%; margin-top: 25px; border-collapse: collapse;}
+.contacts td:first-child  {width: 37%;}
+.contacts td {padding: 20px 30px; border: 1px solid #ddd;}
+
 .center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}
 .center-view-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
 @media (max-width: 389px)
@@ -183,62 +265,19 @@ div.required label.control-label:after {
   .center-view-logo img {width: calc(100% - 10px); margin: 5px; }
 }
 
+/*******************************************************************************************/
+/* Разные специальные классы */
+.fotorama-colontitul {position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; color: #aaa;  float: right;}
 
-@media (max-width: 389px)
-{
-	.center-index-image {margin: 15px 10px 10px 0px; width: 42%; float: left;}
-  .arenda-index-image {margin: 15px 10px 10px 0px; width: 42%; float: left;}
-	h1 {font-size: 1.65em;} h2 {font-size: 1.50em;} h3 {font-size: 1.40em; /* margin-top:12px; */}
-	p {font-size:0.9em;}
+.comments .comment-author-avatar img {
+    width: 50px;
 }
-@media (min-width: 390px) and (max-width: 767px)
-{
-	.center-index-image {margin: 15px 0 15px 15px; width: 32%; float: right;}
-  .arenda-index-image {margin: 15px 0 15px 15px; width: 32%; float: right;}
-	h1 {font-size: 1.80em;} h2 {font-size: 1.50em;} h3 {font-size: 1.20em;}
-}
-@media (min-width: 768px)
-{
-	.center-index-image {margin: 15px 0 15px 15px; width: 25%; float: right;}
-  .arenda-index-image {margin: 15px 30px 15px 0px; width: 25%; float: left;}
-  .center-index-logo {display: block; margin: 15px 15px 15px 0; width: 10%; float: left; border: 1px solid #aaa;}
-  .center-index-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
-}
-
-
-.center-index-params ul
-{
-    margin-left: 0; /* Отступ слева в браузере IE и Opera */
-    padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
-}
-
-.center-index-params li
-{
-    list-style-type: none; /* Убираем маркеры */
-}
-@media (max-width: 767px)
-{
-    .center-index-params {}
-}
-@media (min-width: 768px)
-{
-	 .center-index-params {float: right; margin-right: 30px; margin-left: 30px; }
-}
-
-
-.tariff-label {color: #ccc; font-size: 0.5em;}
-
-.contacts {width: 100%; margin-top: 25px; border-collapse: collapse;}
-.contacts td:first-child  {width: 37%;}
-
-.contacts td {padding: 20px 30px; border: 1px solid #ddd;}
-
 
 .main-page-center-image {width: 100%; margin-top: 30px;}
 
-.fotorama-colontitul {position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; color: #aaa;  float: right;}
 
-
+/*******************************************************************************************/
+/* Кнопки "Войти" и "Зарегистрироваться" */
 .login-button {width: 100%;}
 .login-button-container {margin: 15px auto 30px;}
 .register-button-container {margin: -5px auto 30px;}
@@ -251,10 +290,14 @@ div.required label.control-label:after {
   .login-button-container, .register-button-container {width: 200px;}
 }
 
-.comments .comment-author-avatar img {
-    width: 50px;
-}
+/*******************************************************************************************/
+/* Кнопка "Подать объявление" */
+.new-arenda-button {margin-top: 10px;}
+@media (max-width: 389px) {.new-arenda-button {width: 100%!important; } }
+@media (min-width: 768px) {.new-arenda-button-container {float: right !important; } }
 
+
+/*******************************************************************************************/
 /* Кнопка "Фильтр" на яндекс-картах: */
 .my-button {
     display: inline-block;

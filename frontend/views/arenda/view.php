@@ -22,15 +22,8 @@ $this->params['hasYandexMap'] = true;
             <?php
                 if (User::isAdminOrOwner($model->createdBy))
                 {
-                    echo Html::a('Редактирование', ['update', 'id' => $model->id], ['class' => 'btn btn-default']);
-                    echo Html::a('Картинки', ['pictures', 'id' => $model->id], ['class' => 'btn btn-default']);
-                    echo Html::a('Удалить', ['delete', 'id' => $model->id], [
-                        'class' => 'btn btn-default',
-                          'data' => [
-                              'confirm' => 'Действительно хотите удалить объявление?',
-                                'method' => 'post',
-                                ],
-                              ]);
+                    echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-default']);
+                    echo Html::a('Мои объявления', ['site/my'], ['class' => 'btn btn-default']);
                 }
             ?>
         </h1>
@@ -38,7 +31,7 @@ $this->params['hasYandexMap'] = true;
 </div>
 
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-6">
 
         <div style="font-style: normal; color: #bbb; margin-top: -7px;">
             <?php  ?>
@@ -47,18 +40,12 @@ $this->params['hasYandexMap'] = true;
 
         <div style="margin-top: 5px;"><?= $model->description?></div>
 
-        <div style="margin-top: 5px;">Контакты: <?= $model->username?>, <?= $model->contacts?></div>
+        <div style="margin-top: 5px;">Контактное лицо: <?= $model->username?></div>
 
-        <?php echo \yii2mod\comments\widgets\Comment::widget([
-            'model' => $model,
-            //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
-        	'relatedTo' => '', // for example
-            'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
-            'showDeletedComments' => true // show deleted comments. Defaults to `false`.
-        ]); ?>
+        <?php if ($model->contacts) echo '<div style="margin-top: 5px;">Телефон: '.$model->contacts.'</div>'; ?>
 
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="fotorama-colontitul">Объявление <?= $model->alias ?> </div>
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
@@ -89,9 +76,24 @@ $this->params['hasYandexMap'] = true;
 			}
 			$fotorama->end();
         ?>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-md-12">
         <h4>Расположение объекта:</h4>
-            <div id="yandexmap" class="h360-yandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
+        <div id="yandexmap" class="h360-yandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16" ymaps_hide_filter_button = "1"></div>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-md-12">
+        <?php echo \yii2mod\comments\widgets\Comment::widget([
+            'model' => $model,
+            //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
+            'relatedTo' => '', // for example
+            'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
+            'showDeletedComments' => true // show deleted comments. Defaults to `false`.
+        ]); ?>
     </div>
 </div>

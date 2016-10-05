@@ -25,8 +25,6 @@ use yii\widgets\ActiveForm;
 
       <div class="col-md-6">
 
-          <?php if ($model->anonsImage) echo '<image src="'.$model->anonsImage.'" width=100%>'; ?>
-
           <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem,
             [
               'onchange' => "locate_yandex_maps(this.options[this.selectedIndex].value)"
@@ -42,8 +40,48 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <?= Html::submitButton($model->isNewRecord ? 'Опубликовать объявление' : 'Сохранить изменения', ['class' => 'btn btn-primary center-block']) ?>
+        <?= $form->field($model->imageUploadModel, 'uploadFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
+        <!-- <h3>Загруженные изображения</h3> -->
+        <?php if ($model->images) {?>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th></th>
+                        <th>Имя</th>
+                        <th>Разрешение</th>
+                        <th>Размер, кб</th>
+                        <th>Дата</th>
+                        <th>Действия</th>
+                    </tr>
+                    <?php foreach ($model->images as $file) {?>
+                    <tr>
+                        <td><img src="<?= $file['thumbnail'] ?>" ></td>
+                        <td>
+                            <?= end(explode('/',$file['file'])) ?>
+                            <?= $file['is_anons'] ? '<span class="label label-primary label-lg">Анонс</span>' : Html::a('Анонс', ['file-set-as-anons', 'filename' => $name = end(explode('/',$file['file'])), 'id' => $model->id], ['class' => 'btn btn-default btn-xs']); ?>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <?= Html::a('Удалить', ['delete-file', 'filename' => $name = end(explode('/',$file['file'])), 'id' => $model->id], [
+                                'class' => 'btn btn-danger',
+                                'data' => [
+                                    'confirm' => 'Удалить файл?',
+                                    'method' => 'post',
+                                ],
+                            ]) ?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <?php } ?>
+
+    <?= Html::submitButton($model->isNewRecord ? 'Опубликовать объявление' : 'Сохранить изменения', ['class' => 'btn btn-primary center-block']) ?>
 
   <?php ActiveForm::end(); ?>
 </div>

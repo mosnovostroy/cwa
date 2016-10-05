@@ -51,9 +51,10 @@ $this->params['hasYandexMap'] = true;
             <div class="col-sm-6">
                 <?php
                     $features = $model->featuresModel;
-                    if ($features && ( $features->issetPrices || $features->issetOptions))
+                    if ($features && ( $features->issetPrices || $features->issetOptions || $features->descr))
                     {
                         echo '<h4>Общие условия:</h4>';
+                        echo '<p>'.$features->descr.'</p>';
                         echo '<ul>';
                             foreach ($features->prices as $v) echo '<li>'.$v.'</li>';
                             foreach ($features->paramsList as $v) echo '<li>'.$v.'</li>';

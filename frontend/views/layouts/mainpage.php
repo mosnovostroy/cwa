@@ -50,8 +50,11 @@ BootstrapSelectAsset::register($this);
             &copy; Коворкинг-ревю <?= date('Y') ?>
             &nbsp;&nbsp;&nbsp;
             <?= Html::a('О проекте', ['site/about']) ?>
+            &nbsp;&nbsp;&nbsp;
+            <?= Html::a('Контакты', ['site/contacts']) ?>
+            &nbsp;&nbsp;&nbsp;
+            <?= Html::a('Реклама', ['site/adv']) ?>
         </p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
 

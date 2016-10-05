@@ -138,13 +138,15 @@ class ArendaController extends \yii\web\Controller
     public function actionCreate()
     {
         $model = new Arenda();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save() && $model->upload() )
+        {
             $model->createAlias();
             return $this->redirect(['site/my']);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        }
+        else
+        {
+            $model->initMapParams();
+            return $this->render('create', [ 'model' => $model ]);
         }
     }
 
@@ -156,17 +158,18 @@ class ArendaController extends \yii\web\Controller
      */
     public function actionUpdate($id)
     {
-		$model = $this->findModel($id);
-		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;
+		    $model = $this->findModel($id);
+		    if (!User::isAdminOrOwner($model->createdBy))
+			     throw new ForbiddenHttpException;
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $this->redirect(['site/my']);
-		} else {
-			return $this->render('update', [
-				'model' => $model,
-			]);
-		}
+		    if ($model->load(Yii::$app->request->post()) && $model->save() && $model->upload() )
+        {
+			       return $this->redirect(['site/my']);
+		    }
+        else
+        {
+			       return $this->render('update', ['model' => $model]);
+		    }
     }
 
     /**
@@ -178,37 +181,50 @@ class ArendaController extends \yii\web\Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;
-		$model->delete();
+		    if (!User::isAdminOrOwner($model->createdBy))
+			     throw new ForbiddenHttpException;
+
+        $model->deleteAllImages();
+        $model->deleteAllComments();
+        $model->delete();
         return $this->redirect(['site/my']);
     }
 
     public function actionPictures($id)
     {
-		$model = $this->findModel($id);
-		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;
+		    $model = $this->findModel($id);
+		    if (!User::isAdminOrOwner($model->createdBy))
+			     throw new ForbiddenHttpException;
         if (Yii::$app->request->isPost)
             $model->upload();
         return $this->render('pictures', ['model' => $model]);
     }
 
+    public function actionUploadPictures($id)
+    {
+		    $model = $this->findModel($id);
+		    if (!User::isAdminOrOwner($model->createdBy))
+			     throw new ForbiddenHttpException;
+        if (Yii::$app->request->isPost)
+            $model->upload();
+        return $this->render('update', ['model' => $model]);
+    }
+
     public function actionDeleteFile($id, $filename)
     {
-		$model = $this->findModel($id);
-		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;
-		$model->deleteImage($filename);
-        return $this->redirect(['pictures', 'id' => $id]);
+		    $model = $this->findModel($id);
+		    if (!User::isAdminOrOwner($model->createdBy))
+			     throw new ForbiddenHttpException;
+		    $model->deleteImage($filename);
+        return $this->redirect(['update', 'id' => $id]);
     }
 
     public function actionFileSetAsAnons($id, $filename)
     {
-		$model = $this->findModel($id);
-		if (!User::isAdminOrOwner($model->createdBy))
-			throw new ForbiddenHttpException;
-		$model->setAnonsImage($filename);
-		return $this->redirect(['pictures', 'id' => $id]);
+		    $model = $this->findModel($id);
+		    if (!User::isAdminOrOwner($model->createdBy))
+			     throw new ForbiddenHttpException;
+		    $model->setAnonsImage($filename);
+		    return $this->redirect(['update', 'id' => $id]);
     }
 }

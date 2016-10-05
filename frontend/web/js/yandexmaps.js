@@ -56,6 +56,8 @@ function init_yandex_maps ()
     if(!ymaps_lat) ymaps_lat = 55.75396;
     var ymaps_lng = yandexmap.getAttribute('ymaps_lng');
     if(!ymaps_lng) ymaps_lng = 37.620393;
+    var ymaps_hide_filter_button = yandexmap.getAttribute('ymaps_hide_filter_button');
+    if(!ymaps_hide_filter_button) ymaps_hide_filter_button = 0;
 
     //alert(window.location.toString().replace('/map/','/coords/'));
     myMap = new ymaps.Map('yandexmap', {
@@ -76,36 +78,39 @@ function init_yandex_maps ()
   		myMap.behaviors.disable('scrollZoom');
   	}
 
-    var ButtonLayout = ymaps.templateLayoutFactory.createClass([
-            '<div alt="{{ data.title }}" class="bg-primary my-button ',
-            '{% if state.size == "small" %}my-button_small{% endif %}',
-            '{% if state.size == "medium" %}my-button_medium{% endif %}',
-            '{% if state.size == "large" %}my-button_large{% endif %}',
-            '{% if state.selected %} my-button-selected{% endif %}">',
-            // '<img class="my-button__img" src="{{ data.image }}" alt="{{ data.title }}">',
-            '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>',
-            '<span class="my-button__text">{{ data.content }}</span>',
-            '</div>'
-        ].join(''));
+    if (!ymaps_hide_filter_button)
+    {
+        var ButtonLayout = ymaps.templateLayoutFactory.createClass([
+                '<div alt="{{ data.title }}" class="bg-primary my-button ',
+                '{% if state.size == "small" %}my-button_small{% endif %}',
+                '{% if state.size == "medium" %}my-button_medium{% endif %}',
+                '{% if state.size == "large" %}my-button_large{% endif %}',
+                '{% if state.selected %} my-button-selected{% endif %}">',
+                // '<img class="my-button__img" src="{{ data.image }}" alt="{{ data.title }}">',
+                '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>',
+                '<span class="my-button__text">{{ data.content }}</span>',
+                '</div>'
+            ].join(''));
 
-  	var myButton = new ymaps.control.Button({
-           data:
-           {
-               content: 'Фильтр',
-               title: 'Показать фильтр'
-           },
-           options:
-           {
-                maxWidth: [170, 190, 220],
-                layout: ButtonLayout,
-                selectOnClick: false
-           }
-      });
-  	myMap.controls.add(myButton, {
-  		float: "right"
-  		//,		floatIndex: 500
-  	});
-  	myButton.events.add('press', function () { document.getElementById('mainform-large').classList.remove('hidden'); })
+      	var myButton = new ymaps.control.Button({
+               data:
+               {
+                   content: 'Фильтр',
+                   title: 'Показать фильтр'
+               },
+               options:
+               {
+                    maxWidth: [170, 190, 220],
+                    layout: ButtonLayout,
+                    selectOnClick: false
+               }
+          });
+      	myMap.controls.add(myButton, {
+      		float: "right"
+      		//,		floatIndex: 500
+      	});
+      	myButton.events.add('press', function () { document.getElementById('mainform-large').classList.remove('hidden'); })
+    }
 
     objectManager.objects.options.set('preset', 'islands#greenDotIcon');
     objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');

@@ -85,28 +85,28 @@ else
     </div>
 </div>
 
-<div class="">
-    <?php foreach ($dataProvider->getModels() as $center): ?>
-    <?php $url = Url::to(['view', 'id' => $center->id]); ?>
-      <div class="row">
-          <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
-              <div class="clearfix" >
-                <?php if ($center->anons3x2) echo '<image class="arenda-index-image" src="'.$center->anons3x2.'">'; ?>
-                <h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
-                <?php
-                ?>
-                <?php
-                    echo '<div class="center-index-params">';
-                        echo '<p>'.$center->regionName.'</p>';
-                        echo '<p>'.$center->date.'</p>';
-                    echo '</div>';
-                ?>
+<?php foreach ($dataProvider->getModels() as $model): ?>
+    <?php $url = Url::to(['view', 'id' => $model->id]); ?>
+    <div class="row">
+      <div class="col-xs-12 card arenda" onclick="location.href='<?= $url ?>';">
+          <div class="clearfix" >
+            <?php if ($model->anons3x2) echo '<image class="card-image" src="'.$model->anons3x2.'">'; ?>
+            <h3><a href="<?=$url?>"><?=Html::encode("{$model->name}")?></a></h3>
+            <?php
+            ?>
+            <?php
+                echo '<div class="card-params">';
+                    echo '<p>'.$model->regionName.'</p>';
+                echo '</div>';
+            ?>
 
-                <div class="center-index-text"><?= $center->anons_text ?></div>
-              </div>
-          </div>
+            <div class="card-text">
+                <?= '<p>'.$model->anons_text.'</p>' ?>
+                <?= '<p>'.$model->date.'</p>' ?>
+            </div>
+        </div>
       </div>
-    <?php endforeach; ?>
-</div>
+    </div>
+<?php endforeach; ?>
 
 <?= LinkPager::widget(['pagination' => $dataProvider->getPagination()]) ?>

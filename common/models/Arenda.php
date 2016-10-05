@@ -11,6 +11,7 @@ use common\behaviors\RegionInfoBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use common\models\User;
+use common\models\Region;
 
 /**
  * This is the model class for table "arenda".
@@ -132,6 +133,40 @@ class Arenda extends \yii\db\ActiveRecord
     {
         $this->alias = 'id10'.$this->id;
         $this->save();
+     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+ 	// Deletes all comments from model:
+     public function deleteAllComments()
+     {
+ 				$entity = 'c36fd1e1';
+ 				$entityId = $this->id;
+ 				if (!$entity || !$entityId)
+             return false;
+
+        Yii::$app->db->createCommand('DELETE FROM Comment WHERE entity = :entity AND entityId = :entityId', [':entity' => $entity, ':entityId' => $entityId])
+                 ->execute();
+
+ 				return true;
+     }
+
+     //////////////////////////////////////////////////////////////////////////////////////////
+  	 // Нужно для правильного позиционирования карты при создании нового объявления
+     public function initMapParams()
+     {
+         if (Yii::$app->user && Yii::$app->user->identity && Yii::$app->user->identity->id)
+         {
+             $user = User::findOne( Yii::$app->user->identity->id );
+             if ($user && $user->region)
+             {
+                 $this->region = $user->region;
+                 if (($model = Region::findOne($this->region)) !== null)
+                 {
+                     $this->gmap_lat = $model->map_lat;
+                     $this->gmap_lng = $model->map_lng;
+                 }
+             }
+         }
      }
 
 }

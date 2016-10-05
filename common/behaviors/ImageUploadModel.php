@@ -18,8 +18,16 @@ class ImageUploadModel extends Model
     public function rules()
     {
         return [
-            [['uploadFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, gif', 'maxFiles' => 10],
+            [['uploadFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, gif', 'maxFiles' => 10],
         ];
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'uploadFiles' => 'Изображения',
+        ];
+    }
+
 }
 ?>

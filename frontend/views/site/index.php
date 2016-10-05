@@ -168,14 +168,14 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
         <?php foreach ($arenda->getModels() as $center): ?>
         <?php if ($count > 4) break; $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
           <div class="row">
-              <div class="col-xs-12 center-index-col" onclick="location.href='<?= $url ?>';">
+              <div class="col-xs-12 card arenda" onclick="location.href='<?= $url ?>';">
                   <div class="clearfix" >
-                    <?php if ($center->anons3x2) echo '<image class="arenda-index-image" src="'.$center->anons3x2.'">'; ?>
+                    <?php if ($center->anons3x2) echo '<image class="card-image" src="'.$center->anons3x2.'">'; ?>
                     <h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
                     <?php
                     ?>
                     <?php
-                        echo '<div class="center-index-params">';
+                        echo '<div class="card-params">';
                             echo '<p>'.$center->regionName.'</p>';
                             echo '<p>'.$center->date.'</p>';
                         echo '</div>';

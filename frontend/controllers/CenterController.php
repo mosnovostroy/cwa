@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Center;
-use common\models\CenterFeatures;
 use common\models\Tariff;
 use yii\web\Controller;
 use common\models\CenterSearch;
