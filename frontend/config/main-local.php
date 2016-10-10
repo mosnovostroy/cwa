@@ -47,16 +47,16 @@ $config = [
                     'clientId' => '746565',
                     'clientSecret' => 'a337ba9e765e28680c7d36fa65a996a1',
                 ),
-                'odnoklassniki' => array(
-                    // register your app here: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
-                    // ... or here: http://www.odnoklassniki.ru/dk?st.cmd=appsInfoMyDevList&st._aid=Apps_Info_MyDev
-                    //'class' => 'nodge\eauth\services\OdnoklassnikiOAuth2Service',
-                    'class' => 'frontend\components\OdnoklassnikiOAuth2Service',
-					'clientId' => '1247873024',
-                    'clientSecret' => 'A8E9D551AE41C8CAF89D46D5',
-                    'clientPublic' => 'CBAJACGLEBABABABA',
-                    //'title' => 'Odnoklas.',
-                ),
+                // 'odnoklassniki' => array(
+                //     // register your app here: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
+                //     // ... or here: http://www.odnoklassniki.ru/dk?st.cmd=appsInfoMyDevList&st._aid=Apps_Info_MyDev
+                //     //'class' => 'nodge\eauth\services\OdnoklassnikiOAuth2Service',
+                //     'class' => 'frontend\components\OdnoklassnikiOAuth2Service',
+				// 	'clientId' => '1247873024',
+                //     'clientSecret' => 'A8E9D551AE41C8CAF89D46D5',
+                //     'clientPublic' => 'CBAJACGLEBABABABA',
+                //     //'title' => 'Odnoklas.',
+                // ),
 			],
         ],
 

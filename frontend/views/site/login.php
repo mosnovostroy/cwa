@@ -20,12 +20,12 @@ $this->title = 'Вход на сайт';
 	?>
 
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-1">
 		</div>
-        <div class="col-md-8">
+        <div class="col-md-10">
 			<h2><?= Html::encode($this->title) ?></h2>
 			<div class="row">
-				<div class="col-md-7">
+				<div class="col-md-5">
 					<?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
 						<?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
@@ -49,7 +49,7 @@ $this->title = 'Вход на сайт';
 				</div>
 				<div class="col-md-1">
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<p>Еще нет логина?</p>
           <div class="register-button-container">
 					       <?= Html::a('Регистрация', ['site/signup'], ['class' => 'btn btn-success login-button']) ?>
