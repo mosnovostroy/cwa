@@ -17,6 +17,7 @@ function init() {
         // Будем открывать балун кафе, который ближе всего к месту клика
         myMap.events.add('click', function (event) {
             cafe.getClosestTo(event.get('coords')).balloon.open();
+            console.log(cafe.getClosestTo(event.get('coords')).balloon.getContent());
         });
     }
 
@@ -57,15 +58,17 @@ function init() {
     }).addToMap(myMap);
 
 
-    var myGeocoder = ymaps.geocode([55.744828, 37.603423], {kind: 'metro'});
+    var myGeocoder = ymaps.geocode([55.744828, 37.603423], {kind: 'metro', results: '100'});
     myGeocoder.then(
         function (res) {
-            myMap.geoObjects.add(res.geoObjects);
-            // Выведем в консоль данные, полученные в результате геокодирования объекта.
-
-            console.log('aaa');
-            console.log(res.geoObjects.get(0).properties.get('metaDataProperty'));
-            //alert(res.geoObjects.get(0).properties.get('metaDataProperty'));
+            for (var i=0; i<100; i++)
+            {
+                var metr = res.geoObjects.get(i);
+                console.log(metr.properties.get('name'));
+                console.log(metr.properties.get('metaDataProperty.GeocoderMetaData.formerName'));
+                console.log(metr.properties.get('description'));
+                console.log(metr.geometry.getCoordinates());
+            }
         },
         function (err) {
             // обработка ошибки

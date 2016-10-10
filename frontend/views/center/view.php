@@ -193,6 +193,8 @@ $this->params['hasYandexMap'] = true;
 
 		<h4><?= $model->name?> на карте:</h4>
         <div id="yandexmap" class="inline-yandexmap" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
+        <div id="closest_metro" style="margin-top: 15px;">
+        </div>
 
         <h4>Контакты коворкинга</h4>
         <table class="contacts">

@@ -1,6 +1,7 @@
 var myMap;
 var objectManager;
 var currentObject;
+var myGeocoder;
 
 ymaps.ready(init_yandex_maps);
 
@@ -48,6 +49,38 @@ function init_objects ()
 
 }
 
+function init_closest_metro (coords)
+{
+    myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '3'});
+    myGeocoder.then(
+    function (res) {
+            var closest_metro_div = document.getElementById('closest_metro');
+            if (closest_metro_div)
+            {
+                var i, metr, mcoords, str = '<ul>';
+                for (i=0; i<3; i++)
+                {
+                    metr = res.geoObjects.get(i);
+                    mcoords = metr.geometry.getCoordinates();
+                    str += '<li>' + metr.properties.get('name') + ' - '
+                        +
+                        ymaps.formatter.distance(ymaps.coordSystem.geo.getDistance(mcoords, coords))
+                        + '</li>';
+                    //console.log(metr.properties.get('metaDataProperty.GeocoderMetaData.formerName'));
+                    //console.log(metr.properties.get('description'));
+                    //console.log(metr.geometry.getCoordinates());
+                }
+                str += '</ul>'
+                closest_metro_div.innerHTML = str;
+                //console.log(str);
+            }
+        },
+        function (err) {
+            // обработка ошибки
+    }
+    );
+}
+
 function init_yandex_maps ()
 {
     var ymaps_scale = yandexmap.getAttribute('ymaps_scale');
@@ -58,6 +91,8 @@ function init_yandex_maps ()
     if(!ymaps_lng) ymaps_lng = 37.620393;
     var ymaps_hide_filter_button = yandexmap.getAttribute('ymaps_hide_filter_button');
     if(!ymaps_hide_filter_button) ymaps_hide_filter_button = 0;
+
+    init_closest_metro ([ymaps_lat, ymaps_lng]);
 
     //alert(window.location.toString().replace('/map/','/coords/'));
     myMap = new ymaps.Map('yandexmap', {
@@ -165,7 +200,7 @@ MyBehavior.prototype =
             currentObject.geometry.setCoordinates(coords);
         }
 
-     		if (document.getElementById("center-gmap_lat"))
+     	if (document.getElementById("center-gmap_lat"))
             document.getElementById("center-gmap_lat").value = coords[0];
         if (document.getElementById("center-gmap_lng"))
             document.getElementById("center-gmap_lng").value = coords[1];
@@ -173,6 +208,9 @@ MyBehavior.prototype =
             document.getElementById("arenda-gmap_lat").value = coords[0];
         if (document.getElementById("arenda-gmap_lng"))
             document.getElementById("arenda-gmap_lng").value = coords[1];
+
+
+
     }
     // ,
     // _onContextMenu:
@@ -248,3 +286,20 @@ $(function () {
         init();
     });
 });
+
+myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '5'});
+myGeocoder.then(
+    function (res) {
+        for (var i=0; i<5; i++)
+        {
+            var metr = res.geoObjects.get(i);
+            console.log(metr.properties.get('name'));
+            console.log(metr.properties.get('metaDataProperty.GeocoderMetaData.formerName'));
+            console.log(metr.properties.get('description'));
+            console.log(metr.geometry.getCoordinates());
+        }
+    },
+    function (err) {
+        // обработка ошибки
+    }
+);
