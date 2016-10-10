@@ -64,7 +64,7 @@ function init() {
             // Выведем в консоль данные, полученные в результате геокодирования объекта.
 
             console.log('aaa');
-            console.log(res.geoObjects.get(0).properties);
+            console.log(res.geoObjects.get(0).properties.get('metaDataProperty'));
             //alert(res.geoObjects.get(0).properties.get('metaDataProperty'));
         },
         function (err) {

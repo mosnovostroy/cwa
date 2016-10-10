@@ -1,5 +1,5 @@
 <?php
-    
+
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
     <title>Примеры. Поиск ближайшего объекта.</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Если вы используете API локально, то в URL ресурса необходимо указывать протокол в стандартном виде (http://...)-->
-    <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     <script src="testtest.js" type="text/javascript"></script>
     <style>
         body, html {
