@@ -385,3 +385,7 @@ div.required label.control-label:after {
         background-color: #e6e6e6;
         border: 2px dashed #333;
     }
+
+    .redlabel {display: block !important; position: absolute; top: 7px; right: 0px; padding: 0 7px; color: #fff; background-color: #f00; font-size: 0.9em; font-weight: bold;}
+    /*.redlabel {display: block !important; position: absolute; top: 7px; left: 0px; padding: 0 7px; color: #fff; background-color: #f00; font-size: 0.9em; font-weight: bold;}*/
+    /*@media (max-width: 519px) { .redlabel {display: none;}}    */

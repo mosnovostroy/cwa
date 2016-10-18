@@ -82,18 +82,23 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
                 <div class="tgb">
                     <?php if ($center->anonsImage)
                         echo '<div class="tgbimg"><img src="'.$center->anons16x9.'"></div>';
+                        // echo '<div class="redlabel">'.$center->regionName.'</div>'
+                        if ($center->price_day > 0) echo '<div class="redlabel">'.$center->price_day.' руб./день</div>';
                     ?>
                     <h4><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h4>
+
                     <p style="margin-top: 0px;">
                         <?php
+
                             if ($center->metro)
                                 echo '<span style="background: url(\'/img/moscow_metro.png\') no-repeat 0px 0px; padding-left: 22px;"> '.$center->metro.'</span>';
                             else
                                 echo $center->address;
                         ?>
                     </p>
-                    <?php if ($center->price_day > 0) echo '<p>'.$center->price_day.' руб./день</p>'; ?>
-                    <!-- <p style="margin-top: -7px;" class="small lgray"><?= $center->alias ?></p> -->
+
+                    <div class="lgray" style="margin-top: 7px;"><?= $center->regionName ?></div>
+
                     <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
                 </div>
             </div>
