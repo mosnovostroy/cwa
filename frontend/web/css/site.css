@@ -289,7 +289,7 @@ div.required label.control-label:after {
 /* Страница коворкинга */
 
     /* Табличка с контактами */
-    .contacts {width: 100%; margin-top: 25px; border-collapse: collapse;}
+    .contacts {width: 100%; /*margin-top: 25px;*/ border-collapse: collapse;}
 
     .contacts td:first-child  {width: 37%;}
 

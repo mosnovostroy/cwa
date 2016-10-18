@@ -171,4 +171,25 @@ class CenterSearch extends Center
         return $dataProvider;
     }
 
+    public function searchClosest($center)
+    {
+        $query = Center::findBySql(
+            'SELECT *,
+            (gmap_lat-:lat)*(gmap_lat-:lat)+(gmap_lng-:lng)*(gmap_lng-:lng) AS `dist`
+            FROM center ORDER BY dist ASC LIMIT 3', 
+            [
+                ':lat' => $center->gmap_lat,
+                ':lng' => $center->gmap_lng,
+            ]
+        );
+
+        $adpParams = ['query' => $query,
+              'pagination' => ['pageSize' => 10],
+        ];
+
+        $dataProvider = new ActiveDataProvider($adpParams);
+
+        return $dataProvider;
+    }
+
 }

@@ -187,8 +187,13 @@ class CenterController extends \yii\web\Controller
     public function actionView($id)
     {
       $model = $this->findModel($id);
+
+      $searchModel = new CenterSearch();
+      $closestCenters = $searchModel->searchClosest($model);
+
       return $this->render('view', [
           'model' => $model,
+          'closestCenters' => $closestCenters,
         ]);
     }
 

@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\User;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 $this->title = $model->meta_title;
 $this->registerMetaTag(['name' => 'description', 'content' => $model->meta_description]);
@@ -192,7 +194,7 @@ $this->params['hasYandexMap'] = true;
 			$fotorama->end();
         ?>
 
-		<h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
+		<!-- <h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
 
         <div
             id="yandexmap"
@@ -203,9 +205,50 @@ $this->params['hasYandexMap'] = true;
             ymaps_scale = "16">
         </div>
 
+        <div id="closest_metro" style="margin-top: 15px; margin-bottom: 30px;"></div> -->
+
+        <!-- <h4><p>Контакты коворкинга</p></h4>
+
+        <table class="contacts">
+            <tr>
+                <td>Адрес</td>
+                <td><?= $model->address?></td>
+            </tr>
+                <td>Телефон</td>
+                <td><?= $model->phone?></td>
+            <tr>
+                <td>Email</td>
+                <td><?= $model->email?></td>
+            </tr>
+            <tr>
+                <td>Сайт</td>
+                <td><?= $model->site?></td>
+            </tr>
+        </table> -->
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+
+        <h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
+
+        <div
+            id="yandexmap"
+            class="h360-yandexmap"
+            centerid="<?= $model->id?>"
+            ymaps_lat = "<?= $model->gmap_lat?>"
+            ymaps_lng = "<?= $model->gmap_lng?>"
+            ymaps_scale = "16"
+            ymaps_hide_filter_button = "1">
+        </div>
+
         <div id="closest_metro" style="margin-top: 15px; margin-bottom: 30px;"></div>
 
-        <h4><p>Контакты коворкинга</p></h4>
+    </div>
+    <div class="col-md-5">
+        <h4 style="margin-top: 30px;"><p>Контакты коворкинга</p></h4>
 
         <table class="contacts">
             <tr>
@@ -223,10 +266,8 @@ $this->params['hasYandexMap'] = true;
                 <td><?= $model->site?></td>
             </tr>
         </table>
-
     </div>
 </div>
-
 
 <?php echo \yii2mod\comments\widgets\Comment::widget([
     'model' => $model,
@@ -235,3 +276,35 @@ $this->params['hasYandexMap'] = true;
     'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
     'showDeletedComments' => true // show deleted comments. Defaults to `false`.
 ]); ?>
+
+<h4 style="margin-top: 30px;"><p>Коворкинги рядом</p></h4>
+<div class="row row-flex1234 row-flex1234-wrap" style="margin-bottom: 50px;">
+    <?php $count = 1; ?>
+    <?php foreach ($closestCenters->getModels() as $center): ?>
+        <?php if ($count > 3) break; $url = Url::to(['center/view', 'id' => $center->id]); ?>
+        <div class="col-md-4 tgbcol" onclick="location.href='<?= $url ?>';">
+            <div class="tgb">
+                <?php if ($center->anonsImage)
+                    echo '<div class="tgbimg"><img src="'.$center->anons16x9.'"></div>';
+                    // echo '<div class="redlabel">'.$center->regionName.'</div>'
+                    if ($center->price_day > 0) echo '<div class="redlabel">'.$center->price_day.' руб./день</div>';
+                ?>
+                <h4><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h4>
+
+                <p style="margin-top: 0px;">
+                    <?php
+
+                        if ($center->metro)
+                            echo '<span style="background: url(\'/img/moscow_metro.png\') no-repeat 0px 0px; padding-left: 22px;"> '.$center->metro.'</span>';
+                        else
+                            echo $center->address;
+                    ?>
+                </p>
+
+                <div class="lgray" style="margin-top: 7px;"><?= $center->regionName ?></div>
+
+                <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
+            </div>
+        </div>
+    <?php $count++; endforeach; ?>
+</div>
