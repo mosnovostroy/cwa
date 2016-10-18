@@ -78,7 +78,7 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
         <?php $count = 1; ?>
         <?php foreach ($centers->getModels() as $center): ?>
             <?php if ($count > 3) break; $url = Url::to(['center/view', 'id' => $center->id]); ?>
-            <div class="col-lg-3 col-xs-6 tgbcol" onclick="location.href='<?= $url ?>';">
+            <div class="col-md-4 tgbcol" onclick="location.href='<?= $url ?>';">
                 <div class="tgb">
                     <?php if ($center->anonsImage)
                         echo '<div class="tgbimg"><img src="'.$center->anons16x9.'"></div>';

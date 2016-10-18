@@ -235,7 +235,7 @@ div.required label.control-label:after {
 /***********************************************************************************************/
 /* Кликабельная карточка объекта-тизера */
 
-	.tgbcol { border: solid 1px #fff; z-index:20; cursor: pointer; min-height: 270px; }
+	.tgbcol { border: solid 1px #fff; z-index:20; cursor: pointer; min-height: 270px; margin-bottom: 15px;}
 	.tgbcol:hover {
 		z-index:21;
 		border: solid 1px #66afe9 !important;

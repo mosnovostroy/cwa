@@ -37,7 +37,7 @@ use Yii;
 <?php
     $menuItems = [
         ['label' => 'Коворкинги', 'url' => ['/center/index']],
-        ['label' => 'Совместная аренда', 'url' => ['/arenda/index']],
+        ['label' => 'Объявления', 'url' => ['/arenda/index']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
