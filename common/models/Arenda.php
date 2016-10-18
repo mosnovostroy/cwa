@@ -31,6 +31,7 @@ class Arenda extends \yii\db\ActiveRecord
     public $username;
     public $date;
     public $anons_text;
+    public $anons_text_short;
 
     /**
      * @inheritdoc
@@ -125,6 +126,20 @@ class Arenda extends \yii\db\ActiveRecord
             $string .= '...';
         }
         $this->anons_text = $string;
+
+        $len = 70;
+        $string = $this->description;
+        if (mb_strlen($string) > $len)
+        {
+            $string = mb_substr($string, 0, $len);
+            $limit = mb_strrpos($string, ' ');
+            if ($limit)
+            {
+                $string = mb_substr($string, 0, $limit);
+            }
+            $string .= '...';
+        }
+        $this->anons_text_short = $string;
 
         parent::afterFind();
     }

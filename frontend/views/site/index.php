@@ -32,6 +32,7 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
     .main-center-links {margin-top: 10px;}
 </style>
 
+
 <div class="main-form-bg">
     <div class="jumbotron">
         <div class="main-form-container">
@@ -61,76 +62,43 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
     </div>
 </div>
 
-<style>
-	.tgbcol {border: solid 1px #fff; z-index:20; cursor: pointer; min-height: 270px;}
-	.tgbcol:hover
-	{
-		z-index:21;
-		border: solid 1px #66afe9 !important;
-		outline: 0;
-		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 12px rgba(102, 175, 233, 0.6);
-		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 12px rgba(102, 175, 233, 0.6);
-	}
-	.pb {display: none; position: absolute; bottom: 0; right: 0; font-size: 0.82em;}
-	.tgbcol:hover .pb, .tgbcol-bordered:hover .pb {display: block;}
-
-	.tgb 	{overflow: hidden; margin: 15px 0; position: relative; top: 0; left: 0;}
-	.tgbimg 		{position: relative; top: 0; left: 0; margin-bottom: 15px;}
-	.tgbimg img 	{width: 100%;}
-  .tgbdate {font-style: italic; font-size: 0.9em; color: #aaa;}
-
-  @media (max-width: 519px)
-  {
-  	.tgbtitle {font-size: 1.20em;}
-  	.tgbtext {font-size:0.9em;}
-  }
-  @media (min-width: 520px) and (max-width: 767px)
-  {
-    .tgbtitle {font-size: 1.2em;}
-  }
-  @media (min-width: 768px)
-  {
-    .tgbtitle {font-size: 1.3em;}
-    .row-flex1234, .row-flex1234 > div[class*='col-'] { margin-top: 15px; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; flex:1 1 auto;}
-    .row-flex1234-wrap {	-webkit-flex-flow: row wrap; align-content: flex-start; flex:0;	}
-    .row-flex1234 > div[class*='col-'] { margin:-.2px;}
-  }
-  .main-h3 {margin-right: 30px; }
-  .main-city {font-size: 1em; margin: 10px 30px 10px 0;}
-  .main-city.main-city-all{font-weight: bold;}
-</style>
-
 <div class="container" style="padding-top: 0px;">
-    <h3><?= Html::a('Коворкинги', ['center/index'], ['class' => 'main-h3']) ?></h3>
-    <div class="row">
-      <div class="col-xs-12">
-        <?= Html::a('Москва', ['centers/moscow'], ['class' => 'main-city']) ?>
-         <?= Html::a('Санкт-Петербург', ['centers/piter'], ['class' => 'main-city']) ?>
-         <?= Html::a('Новосибирск', ['centers/novosibirsk'], ['class' => 'main-city']) ?>
-         <?= Html::a('Самара', ['centers/samara'], ['class' => 'main-city']) ?>
-         <?= Html::a('Все&nbsp;регионы', ['center/index'], ['class' => 'main-city main-city-all']) ?>
-       </div>
-    </div>
-    <div class="clearfix">&nbsp;</div>
-    <div class="row row-flex1234 row-flex1234-wrap" style="margin-top: -5px;">
+
+    <h2><p><?= Html::a('Коворкинги', ['center/index']) ?></p></h2>
+
+    <ul class="list-inline">
+        <li><?= Html::a('Москва', ['centers/moscow']) ?></li>
+        <li><?= Html::a('Санкт-Петербург', ['centers/piter']) ?></li>
+        <li><?= Html::a('Новосибирск', ['centers/novosibirsk']) ?></li>
+        <li><?= Html::a('Самара', ['centers/samara']) ?></li>
+        <li><strong><?= Html::a('Все&nbsp;регионы', ['center/index'])?></strong></li>
+    </ul>
+
+    <div class="row row-flex1234 row-flex1234-wrap" style="margin-bottom: 50px;">
         <?php $count = 1; ?>
         <?php foreach ($centers->getModels() as $center): ?>
-            <?php if ($count > 4) break; $url = Url::to(['center/view', 'id' => $center->id]); ?>
+            <?php if ($count > 3) break; $url = Url::to(['center/view', 'id' => $center->id]); ?>
             <div class="col-lg-3 col-xs-6 tgbcol" onclick="location.href='<?= $url ?>';">
-                <div class="tgb" id="tgb1184" tblank="1">
+                <div class="tgb">
                     <?php if ($center->anonsImage)
-                        echo '<div class="tgbimg"><img src="'.$center->anons4x3.'"></div>';
+                        echo '<div class="tgbimg"><img src="'.$center->anons16x9.'"></div>';
                     ?>
-                    <div class="tgbtext">
-                      <div class="tgbtitle"><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></div>
-                      <div class="tgbdescr"><?= $center->address ?></div>
-                    </div>
+                    <h4><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h4>
+                    <p style="margin-top: 0px;">
+                        <?php
+                            if ($center->metro)
+                                echo '<span style="background: url(\'/img/moscow_metro.png\') no-repeat 0px 0px; padding-left: 22px;"> '.$center->metro.'</span>';
+                            else
+                                echo $center->address;
+                        ?>
+                    </p>
+                    <?php if ($center->price_day > 0) echo '<p>'.$center->price_day.' руб./день</p>'; ?>
+                    <!-- <p style="margin-top: -7px;" class="small lgray"><?= $center->alias ?></p> -->
                     <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
                 </div>
             </div>
         <?php $count++; endforeach; ?>
     </div>
-
 
 <style>
     @media (max-width: 519px)
@@ -147,46 +115,65 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
     }
 </style>
 
-    <h3 style="margin-top: 50px; margin-bottom: 0px;"><?= Html::a('Совместная аренда офиса', ['arenda/index'], ['class' => 'main-h3']) ?></h3>
+    <h2><p><?= Html::a('Совместная аренда офиса', ['arenda/index'], ['class' => 'main-h3']) ?></p></h2>
 
-    <div class="row">
-      <div class="col-xs-12">
-          <div style=" margin-bottom: 20px;">Объявления о поиске партнеров для совместной аренды офиса</div>
-       </div>
-    </div>
+    <p style=" margin-bottom: 20px;">Объявления о поиске партнеров для совместной аренды офиса</p>
 
+<style>
+    .arenda-main {
+        width: 100%;
+        min-height: 108px;
+        border-radius: 5px;
+        padding: 10px 10px;
+        background-color: #ffc;
+        border: 1px solid #aaa;
+        margin-bottom: 30px;
+        cursor: pointer;
+    }
+    .arenda-main:hover {
+        background-color: #ff7;
+    }
+    .arenda-main img {width: 25%; max-width: 90px; float: left; margin-right: 10px; }
+    .arenda-main-button {
+        background-color: #fff;
+        text-align: center;
+        padding-top: 32px;
+    }
 
+    @media (min-width: 768px)
+    {
+        .row-flex123, .row-f#lex123 > div[class*='col-'] { margin-top: 15px; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; flex:1 1 auto;}
+        .row-flex123-wrap {	-webkit-flex-flow: row wrap; align-content: flex-start; flex:0;	}
+        .row-flex123 > div[class*='col-'] { margin:-.2px;}
+    }
 
-    <div class="row">
-      <div class="col-sm-3">
-        <!-- <div class="main-arenda-control-container"> -->
-          <?= Html::a('Подать объявление', ['arenda/create'], ['class' => 'btn btn-danger btn-lg main-arenda-control-button']) ?>
-          <!-- </div> -->
-      </div>
-      <div class="col-sm-9">
+</style>
+    <div class="row row-flex1234 row-flex1234-wrap">
+
         <?php $count = 1; ?>
         <?php foreach ($arenda->getModels() as $center): ?>
-        <?php if ($count > 4) break; $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
-          <div class="row">
-              <div class="col-xs-12 card arenda" onclick="location.href='<?= $url ?>';">
-                  <div class="clearfix" >
-                    <?php if ($center->anons3x2) echo '<image class="card-image" src="'.$center->anons3x2.'">'; ?>
-                    <h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
-                    <?php
-                    ?>
-                    <?php
-                        echo '<div class="card-params">';
-                            echo '<p>'.$center->regionName.'</p>';
-                            echo '<p>'.$center->date.'</p>';
-                        echo '</div>';
-                    ?>
+        <?php if ($count > 2) break; $url = Url::to(['arenda/view', 'id' => $center->id]); ?>
+            <div class="col-sm-4" onclick="location.href='<?= $url ?>';">
+                <div class="arenda-main clearfix">
+                    <?php if ($center->anons120) echo '<img src="'.$center->anons120.'">'; ?>
+                    <div class=""><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></div>
+                    <!-- <div class="small italic" style="margin-top: -2px; margin-bottom: 7px;"><?= $center->regionName ?></div> -->
+                    <div><?= $center->anons_text_short ?></div>
+                    <div class="dgray small" style="margin-top: 7px;"><?= $center->regionName ?></div>
+                </div>
+            </div>
+        <?php $count++; endforeach; ?>
 
-                    <div><?= $center->anons_text ?></div>
-                  </div>
-              </div>
-          </div>
-          <?php $count++; endforeach; ?>
-      </div>
+        <?php $url = Url::to(['arenda/create']); ?>
+        <div class="col-sm-4 ">
+            <div class="arenda-main arenda-main-button" onclick="location.href='<?= $url ?>';">
+                <div class="arenda-button">
+                    <a href="<?=$url?>"><h4><p>Подать объявление</p></h4></a>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 
 </div>

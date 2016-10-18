@@ -8,7 +8,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $model->meta_descr
 $this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords]);
 $this->params['breadcrumbs'] =
 [
-    ['label' => 'Коворкинг-центры', 'url' => ['center/index']],
+    ['label' => 'Коворкинги', 'url' => ['center/index']],
     ['label' => $model->regionName, 'url' => ['center/index', 'CenterSearch' => ['region' => $model->region]]]
 ];
 $this->params['hasYandexMap'] = true;
@@ -16,7 +16,8 @@ $this->params['hasYandexMap'] = true;
 
 <div class="row">
     <div class="col-xs-12">
-        <h1>
+        <h1><p>
+            <!-- <div class="adapt"> -->
             <?= $model->name?>
             <?php
                 if (User::isAdmin())
@@ -34,7 +35,7 @@ $this->params['hasYandexMap'] = true;
                               ]);
                 }
             ?>
-        </h1>
+        </p></h1>
         <?php /*var_dump(unserialize($model->tariffs));*/ ?>
     </div>
 </div>
@@ -46,14 +47,14 @@ $this->params['hasYandexMap'] = true;
             <p><?= $model->address?></p>
             <p><?= $model->description?></p>
         </div>
-        <!-- <h3>Общие условия</h3> -->
+        <!-- <h3><p>Общие условия</p></h3> -->
         <div class="row">
             <div class="col-sm-6">
                 <?php
                     $features = $model->featuresModel;
                     if ($features && ( $features->issetPrices || $features->issetOptions || $features->descr))
                     {
-                        echo '<h4>Общие условия:</h4>';
+                        echo '<h4><p>Общие условия:</p></h4>';
                         echo '<p>'.$features->descr.'</p>';
                         echo '<ul>';
                             foreach ($features->prices as $v) echo '<li>'.$v.'</li>';
@@ -63,7 +64,7 @@ $this->params['hasYandexMap'] = true;
                     }
                     /*if ($features && $features->issetPrices)
                     {
-                        echo '<h4>Условия:</h4>';
+                        echo '<h4><p>Условия:</p></h4>';
                         echo '<ul>';
                             foreach ($features->prices as $v) echo '<li>'.$v.'</li>';
                         echo '</ul>';
@@ -71,7 +72,7 @@ $this->params['hasYandexMap'] = true;
 
                     if ($features && $features->issetOptions)
                     {
-                        echo '<h4>Всем посетителям:</h4>';
+                        echo '<h4><p>Всем посетителям:</p></h4>';
                         echo '<ul>';
                             foreach ($features->paramsList as $v) echo '<li>'.$v.'</li>';
                             foreach ($features->optionsList as $k => $v) echo '<li>'.$v.'</li>';
@@ -83,7 +84,7 @@ $this->params['hasYandexMap'] = true;
                 <?php
                 if ($features && $features->issetTimetable)
                 {
-                    echo '<h4>Часы работы:</h4>';
+                    echo '<h4><p>Часы работы:</p></h4>';
                     echo '<ul>';
                         foreach($features->timetable as $v) echo '<li>'.$v.'</li>';
                     echo '</ul>';
@@ -93,7 +94,7 @@ $this->params['hasYandexMap'] = true;
         </div>
 
         <?php foreach($model->tariffModels as $tariff) { ?>
-            <h3>
+            <h3><p>
                 <?php
                     echo $tariff->name;
                     if (User::isAdmin())
@@ -110,10 +111,10 @@ $this->params['hasYandexMap'] = true;
                     }
                     else
                     {
-                        echo '<span class="tariff-label"> ТАРИФ</span>';
+                        echo '<span style="font-size:0.5em;" class="lgray"> ТАРИФ</span>';
                     }
                 ?>
-            </h3>
+            </p></h3>
             <div class="row">
                 <div class="col-sm-6">
                     <p><?= $tariff->descr?></p>
@@ -128,7 +129,7 @@ $this->params['hasYandexMap'] = true;
                         }
                         /*if ($tariff->issetPrices)
                         {
-                            //echo '<h4>Условия:</h4>';
+                            //echo '<h4><p>Условия:</p></h4>';
                             echo '<ul>';
                                 foreach ($tariff->prices as $v) echo '<li>'.$v.'</li>';
                             echo '</ul>';
@@ -136,7 +137,7 @@ $this->params['hasYandexMap'] = true;
 
                         if ($tariff->issetOptions)
                         {
-                            //echo '<h4>В рамках тарифа:</h4>';
+                            //echo '<h4><p>В рамках тарифа:</p></h4>';
                             echo '<ul>';
                                 foreach ($tariff->paramsList as $v) echo '<li>'.$v.'</li>';
                                 foreach ($tariff->optionsList as $k => $v) echo '<li>'.$v.'</li>';
@@ -148,7 +149,7 @@ $this->params['hasYandexMap'] = true;
                     <?php
                     if ($tariff->issetTimetable)
                     {
-                        //echo '<h4>Доступное время работы:</h4>';
+                        //echo '<h4><p>Доступное время работы:</p></h4>';
                         echo '<h4>Доступ:</h4>';
                         echo '<ul>';
                             foreach($tariff->timetable as $v) echo '<li>'.$v.'</li>';
@@ -160,7 +161,7 @@ $this->params['hasYandexMap'] = true;
         <?php } ?>
     </div>
     <div class="col-md-5">
-        <?= $model->site ? '<div class="fotorama-colontitul">Фото: '.$model->site.'</div>' : '' ?>
+        <?= $model->site ? '<div class="dgray" style="position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; float: right;">Фото: '.$model->site.'</div>' : '' ?>
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
 			  [
@@ -191,12 +192,21 @@ $this->params['hasYandexMap'] = true;
 			$fotorama->end();
         ?>
 
-		<h4><?= $model->name?> на карте:</h4>
-        <div id="yandexmap" class="inline-yandexmap" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
-        <div id="closest_metro" style="margin-top: 15px;">
+		<h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
+
+        <div
+            id="yandexmap"
+            class="inline-yandexmap"
+            centerid="<?= $model->id?>"
+            ymaps_lat = "<?= $model->gmap_lat?>"
+            ymaps_lng = "<?= $model->gmap_lng?>"
+            ymaps_scale = "16">
         </div>
 
-        <h4>Контакты коворкинга</h4>
+        <div id="closest_metro" style="margin-top: 15px; margin-bottom: 30px;"></div>
+
+        <h4><p>Контакты коворкинга</p></h4>
+
         <table class="contacts">
             <tr>
                 <td>Адрес</td>
@@ -213,6 +223,7 @@ $this->params['hasYandexMap'] = true;
                 <td><?= $model->site?></td>
             </tr>
         </table>
+
     </div>
 </div>
 

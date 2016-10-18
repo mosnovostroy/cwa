@@ -53,6 +53,8 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'gmap_lng')->hiddenInput()->label(false) ?>
 
+            <?= $form->field($model, 'metro')->hiddenInput()->label(false) ?>
+
           </div>
       </div>
 

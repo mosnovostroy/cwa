@@ -233,108 +233,155 @@ div.required label.control-label:after {
 
 
 /***********************************************************************************************/
+/* Кликабельная карточка объекта-тизера */
+
+	.tgbcol { border: solid 1px #fff; z-index:20; cursor: pointer; min-height: 270px; }
+	.tgbcol:hover {
+		z-index:21;
+		border: solid 1px #66afe9 !important;
+		outline: 0;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 12px rgba(102, 175, 233, 0.6);
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 12px rgba(102, 175, 233, 0.6);
+	}
+	.pb {display: none; position: absolute; bottom: 15px; right: 15px; font-size: 0.85em;}
+	.tgbcol:hover .pb {display: block;}
+
+	.tgb 	{overflow: hidden; margin: 15px 0; position: relative; top: 0; left: 0;}
+	.tgbimg 		{position: relative; top: 0; left: 0; margin-bottom: 15px;}
+	.tgbimg img 	{width: 100%;}
+
+    @media (min-width: 768px)
+    {
+        .row-flex1234, .row-flex1234 > div[class*='col-'] { margin-top: 15px; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; flex:1 1 auto;}
+        .row-flex1234-wrap {	-webkit-flex-flow: row wrap; align-content: flex-start; flex:0;	}
+        .row-flex1234 > div[class*='col-'] { margin:-.2px;}
+    }
+
+
+/***********************************************************************************************/
 /* Шрифты */
+/* Заголовки h1, h2, h3 и остальные в BS неадаптивны и задаются в пикселях. Исправляем так: */
+/* Внутри любого h* текст обрамляем тегами <p></p> */
+/* и делаем адаптивный относительный размер шрифта у h*>p (см. код ниже): */
 
     @media (max-width: 389px) {
-        h1 {font-size: 1.65em;}
-        h2 {font-size: 1.50em;}
-        h3 {font-size: 1.40em; /* margin-top:12px; */}
+        h1>p {font-size: 0.75em;}
+        h2>p {font-size: 0.80em;}
+        h3>p {font-size: 0.85em;}
+        h4>p {font-size: 0.90em;}
+
         p {font-size:0.9em;}
     }
 
     @media (min-width: 390px) and (max-width: 767px) {
-        h1 {font-size: 1.80em;}
-        h2 {font-size: 1.50em;}
-        h3 {font-size: 1.20em;}
+        h1>p {font-size: 0.8em;}
+        h2>p {font-size: 0.85em;}
+        h3>p {font-size: 0.90em;}
+        h4>p {font-size: 1.00em;}
     }
+
+    .italic {font-style: italic}
+    .lgray {color: #ccc;}
+    .dgray {color: #aaa;}
 
 
 /*******************************************************************************************/
 /* Страница коворкинга */
-.tariff-label {color: #ccc; font-size: 0.5em;}
 
-.contacts {width: 100%; margin-top: 25px; border-collapse: collapse;}
-.contacts td:first-child  {width: 37%;}
-.contacts td {padding: 20px 30px; border: 1px solid #ddd;}
+    /* Табличка с контактами */
+    .contacts {width: 100%; margin-top: 25px; border-collapse: collapse;}
 
-.center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}
-.center-view-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
-@media (max-width: 389px)
-{
-  .center-view-logo {width: 60px;}
-  .center-view-logo img {width: calc(100% - 10px); margin: 5px; }
-}
+    .contacts td:first-child  {width: 37%;}
+
+    .contacts td {padding: 20px 30px; border: 1px solid #ddd; word-wrap: break-word;}
+
+
+    /* Логотип */
+    .center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}
+
+    .center-view-logo img {width: calc(100% - 20px); margin: 10px 10px 10px 10px; }
+
+    @media (max-width: 389px)
+    {
+      .center-view-logo {width: 60px;}
+      .center-view-logo img {width: calc(100% - 10px); margin: 5px; }
+    }
 
 /*******************************************************************************************/
 /* Разные специальные классы */
-.fotorama-colontitul {position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; color: #aaa;  float: right;}
 
-.comments .comment-author-avatar img {
-    width: 50px;
-}
+    .comments .comment-author-avatar img {
+        width: 50px;
+    }
 
-.main-page-center-image {width: 100%; margin-top: 30px;}
+    .main-page-center-image {width: 100%; margin-top: 30px;}
 
 
 /*******************************************************************************************/
 /* Кнопки "Войти" и "Зарегистрироваться" */
-.login-button {width: 100%;}
-.login-button-container {margin: 15px auto 30px;}
-.register-button-container {margin: -5px auto 30px;}
-@media (max-width: 389px)
-{
-    .login-button-container, .register-button-container {width: 100%;}
-}
-@media (min-width: 390px)
-{
-  .login-button-container, .register-button-container {width: 200px;}
-}
+
+    .login-button {width: 100%;}
+
+    .login-button-container {margin: 15px auto 30px;}
+
+    .register-button-container {margin: -5px auto 30px;}
+
+    @media (max-width: 389px) {
+        .login-button-container, .register-button-container {width: 100%;}
+    }
+
+    @media (min-width: 390px) {
+      .login-button-container, .register-button-container {width: 200px;}
+    }
 
 /*******************************************************************************************/
 /* Кнопка "Подать объявление" */
-.new-arenda-button {margin-top: 10px;}
-@media (max-width: 389px) {.new-arenda-button {width: 100%!important; } }
-@media (min-width: 768px) {.new-arenda-button-container {float: right !important; } }
+
+    .new-arenda-button {margin-top: 10px;}
+
+    @media (max-width: 389px) {.new-arenda-button {width: 100%!important; } }
+
+    @media (min-width: 768px) {.new-arenda-button-container {float: right !important; } }
 
 
 /*******************************************************************************************/
 /* Кнопка "Фильтр" на яндекс-картах: */
-.my-button {
-    display: inline-block;
-    padding: 4px 10px;
-    /*background: #eee;*/
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-}
-.my-button__text {
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    /*color: #333;*/
-    margin-left: 10px;
-}
+    .my-button {
+        display: inline-block;
+        padding: 4px 10px;
+        /*background: #eee;*/
+        border: 1px solid #bbb;
+        border-radius: 3px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+    .my-button__text {
+        font-family: 'Arial', sans-serif;
+        font-size: 14px;
+        /*color: #333;*/
+        margin-left: 10px;
+    }
 
-.my-button__img {
-    padding: 0;
-    margin-bottom: -3px;
-}
+    .my-button__img {
+        padding: 0;
+        margin-bottom: -3px;
+    }
 
-.my-button_small .my-button__text {
-    display: none;
-}
+    .my-button_small .my-button__text {
+        display: none;
+    }
 
-.my-button_medium .my-button__img {
-    display: none;
-}
+    .my-button_medium .my-button__img {
+        display: none;
+    }
 
-.my-button_large .my-button__text {
-    margin-left: 10px;
-}
-.my-button-selected {
-    color: #333333;
-    background-color: #e6e6e6;
-    border: 2px dashed #333;
-}
+    .my-button_large .my-button__text {
+        margin-left: 10px;
+    }
+    .my-button-selected {
+        color: #333333;
+        background-color: #e6e6e6;
+        border: 2px dashed #333;
+    }

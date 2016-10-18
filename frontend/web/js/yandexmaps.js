@@ -49,6 +49,26 @@ function init_objects ()
 
 }
 
+function get_metro (coords)
+{
+    myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '1'});
+    myGeocoder.then(
+    function (res) {
+            metr, mcoords, str = '';
+            metr = res.geoObjects.get(0);
+            str += metr.properties.get('name');
+            //mcoords = metr.geometry.getCoordinates();
+            // str += '<li>' + metr.properties.get('name') + ' - '
+            //     +
+            //     ymaps.formatter.distance(ymaps.coordSystem.geo.getDistance(mcoords, coords))
+            //     + '</li>';
+            return str;
+        },
+        function (err) {
+    }
+    );
+}
+
 function init_closest_metro (coords)
 {
     myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '3'});
@@ -208,6 +228,22 @@ MyBehavior.prototype =
             document.getElementById("arenda-gmap_lat").value = coords[0];
         if (document.getElementById("arenda-gmap_lng"))
             document.getElementById("arenda-gmap_lng").value = coords[1];
+
+        if (document.getElementById("center-metro"))
+        {
+            myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '1'});
+            myGeocoder.then(
+            function (res) {
+                var metr = res.geoObjects.get(0);
+                var str = metr.properties.get('name');
+                document.getElementById("center-metro").value = str.replace("метро ", "");
+                },
+                function (err) {
+                    // обработка ошибки
+            }
+            );
+        }
+
 
 
 

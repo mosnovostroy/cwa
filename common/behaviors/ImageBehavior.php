@@ -75,18 +75,32 @@ class ImageBehavior extends Behavior
 		return '';
     }
 
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		// Generate preview with 4:3 ratio for main page, return the relative url:
-		public function getAnons4x3()
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Generate preview with 16:9 ratio for main page, return the relative url:
+	public function getAnons16x9()
     {
-				return $this->doGetAnons(400, 300, '4x3');
+		return $this->doGetAnons(640, 360, '16x9');
     }
 
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		// Generate preview with 3:2 ratio for centers list, return the relative url:
-		public function getAnons3x2()
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Generate preview with 4:3 ratio for main page, return the relative url:
+	public function getAnons4x3()
     {
-				return $this->doGetAnons(450, 300, '3x2');
+		return $this->doGetAnons(400, 300, '4x3');
+    }
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Generate preview with 3:2 ratio for centers list, return the relative url:
+	public function getAnons3x2()
+    {
+		return $this->doGetAnons(450, 300, '3x2');
+    }
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Generate preview 120х120, return the relative url:
+	public function getAnons120()
+    {
+		return $this->doGetAnons(120, 120, '120');
     }
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

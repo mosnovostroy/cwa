@@ -16,7 +16,7 @@ if ($searchModel->regionNameTp)
 }
 else
 {
-    $this->title = 'Коворкинг-центры: поиск';
+    $this->title = 'Коворкинги: поиск';
     $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
 }
@@ -97,7 +97,7 @@ else
     				<div class="clearfix" >
             <?php if ($center->logoImage) echo '<div class="card-logo"><image src="'.$center->logoImage.'"></div>'; ?>
     					<?php if ($center->anons3x2) echo '<image class="card-image" src="'.$center->anons3x2.'">'; ?>
-    					<h3><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></h3>
+    					<h3><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h3>
             <?php
                 if ($center->paramsList || $center->is24x7())
                 {

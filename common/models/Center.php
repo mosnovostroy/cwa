@@ -45,7 +45,7 @@ class Center extends \yii\db\ActiveRecord
             [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
             [['region', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
             [['name', 'alias'], 'string', 'max' => 255],
-						[['address', 'phone'], 'string'],
+						[['address', 'phone', 'metro'], 'string'],
 						['email', 'email'],
 						['site', 'url', 'defaultScheme' => 'http', 'enableIDN' => true],
         ];
