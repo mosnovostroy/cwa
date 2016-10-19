@@ -205,6 +205,17 @@ class Center extends \yii\db\ActiveRecord
 				return $this->_featuresModel;
 		}
 
+		// Количество тарифов
+		public function getTariffsCount()
+		{
+			$tariffArrays = unserialize($this->tariffs);
+			if ($tariffArrays) {
+				return count($tariffArrays);
+			}
+
+			return 0;
+		}
+
 		// Массив моделей (классы Tariff) менованных тарифов доступен через свойство tariffModels,
 		// определяемое через геттер
 		// Кэшируем этот массив в private свойстве

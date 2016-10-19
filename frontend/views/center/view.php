@@ -130,12 +130,16 @@ $this->params['hasYandexMap'] = true;
     </div>
 </div>
 
+<?php if ($model->tariffsCount > 0) {?>
 <!-- <div class="title-block clearfix"> -->
     <h3 class="h3-body-title">
         <p>Тарифы</p>
     </h3>
     <!-- <div class="title-separator"></div> -->
 <!-- </div> -->
+<?php }?>
+
+
 <style>
     .tariff {
         width: 100%;
@@ -275,7 +279,7 @@ $this->params['hasYandexMap'] = true;
 <div class="row">
     <div class="col-md-6">
 
-        <h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
+        <h3 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h3>
 
         <div
             id="yandexmap"
@@ -291,7 +295,7 @@ $this->params['hasYandexMap'] = true;
 
     </div>
     <div class="col-md-6">
-        <h4 style="margin-top: 30px;"><p>Контакты коворкинга</p></h4>
+        <h3 style="margin-top: 30px;"><p>Контакты</p></h3>
 
         <table class="contacts">
             <tr>
