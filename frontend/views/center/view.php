@@ -43,7 +43,7 @@ $this->params['hasYandexMap'] = true;
 </div>
 
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-6">
         <div class="clearfix">
             <?php if ($model->logoImage) echo '<div class="center-view-logo"><image src="'.$model->logoImage.'"></div>'; ?>
             <p><?= $model->address?></p>
@@ -94,75 +94,8 @@ $this->params['hasYandexMap'] = true;
                 ?>
             </div>
         </div>
-
-        <?php foreach($model->tariffModels as $tariff) { ?>
-            <h3><p>
-                <?php
-                    echo $tariff->name;
-                    if (User::isAdmin())
-                    {
-                        echo '&nbsp;';
-                        echo Html::a('Редактировать', ['update-tariff', 'id' => $tariff->id, 'center_id' => $model->id, ], ['class' => 'btn btn-default']);
-                      	echo Html::a('Удалить тариф', ['delete-tariff', 'id' => $tariff->id, 'center_id' => $model->id,], [
-                      			'class' => 'btn btn-default',
-                      			  'data' => [
-                      				  'confirm' => 'Действительно хотите удалить тариф?',
-                      					'method' => 'post',
-                      					],
-                      				  ]);
-                    }
-                    else
-                    {
-                        echo '<span style="font-size:0.5em;" class="lgray"> ТАРИФ</span>';
-                    }
-                ?>
-            </p></h3>
-            <div class="row">
-                <div class="col-sm-6">
-                    <p><?= $tariff->descr?></p>
-                    <?php
-                        if ($tariff->issetPrices || $tariff->issetOptions)
-                        {
-                            echo '<ul>';
-                                foreach ($tariff->prices as $v) echo '<li>'.$v.'</li>';
-                                foreach ($tariff->paramsList as $v) echo '<li>'.$v.'</li>';
-                                foreach ($tariff->optionsList as $k => $v) echo '<li>'.$v.'</li>';
-                            echo '</ul>';
-                        }
-                        /*if ($tariff->issetPrices)
-                        {
-                            //echo '<h4><p>Условия:</p></h4>';
-                            echo '<ul>';
-                                foreach ($tariff->prices as $v) echo '<li>'.$v.'</li>';
-                            echo '</ul>';
-                        }
-
-                        if ($tariff->issetOptions)
-                        {
-                            //echo '<h4><p>В рамках тарифа:</p></h4>';
-                            echo '<ul>';
-                                foreach ($tariff->paramsList as $v) echo '<li>'.$v.'</li>';
-                                foreach ($tariff->optionsList as $k => $v) echo '<li>'.$v.'</li>';
-                            echo '</ul>';
-                        }*/
-                    ?>
-                </div>
-                <div class="col-sm-6">
-                    <?php
-                    if ($tariff->issetTimetable)
-                    {
-                        //echo '<h4><p>Доступное время работы:</p></h4>';
-                        echo '<h4>Доступ:</h4>';
-                        echo '<ul>';
-                            foreach($tariff->timetable as $v) echo '<li>'.$v.'</li>';
-                        echo '</ul>';
-                    }
-                    ?>
-                </div>
-            </div>
-        <?php } ?>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         <?= $model->site ? '<div class="dgray" style="position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; float: right;">Фото: '.$model->site.'</div>' : '' ?>
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
@@ -194,43 +127,153 @@ $this->params['hasYandexMap'] = true;
 			$fotorama->end();
         ?>
 
-		<!-- <h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
-
-        <div
-            id="yandexmap"
-            class="inline-yandexmap"
-            centerid="<?= $model->id?>"
-            ymaps_lat = "<?= $model->gmap_lat?>"
-            ymaps_lng = "<?= $model->gmap_lng?>"
-            ymaps_scale = "16">
-        </div>
-
-        <div id="closest_metro" style="margin-top: 15px; margin-bottom: 30px;"></div> -->
-
-        <!-- <h4><p>Контакты коворкинга</p></h4>
-
-        <table class="contacts">
-            <tr>
-                <td>Адрес</td>
-                <td><?= $model->address?></td>
-            </tr>
-                <td>Телефон</td>
-                <td><?= $model->phone?></td>
-            <tr>
-                <td>Email</td>
-                <td><?= $model->email?></td>
-            </tr>
-            <tr>
-                <td>Сайт</td>
-                <td><?= $model->site?></td>
-            </tr>
-        </table> -->
-
     </div>
 </div>
 
-<div class="row">
+<!-- <div class="title-block clearfix"> -->
+    <h3 class="h3-body-title">
+        <p>Тарифы</p>
+    </h3>
+    <!-- <div class="title-separator"></div> -->
+<!-- </div> -->
+<style>
+    .tariff {
+        width: 100%;
+        background-color: #fee;
+        border: 1px solid #bbb;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    .tariff .head-tariff {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .tariff .head-tariff h3{
+        margin-top: 0px;
+    }
+</style>
+
+<div class="row row-flex1234 row-flex1234-wrap">
+    <?php $count = 0; ?>
+    <?php foreach($model->tariffModels as $tariff) { ?>
+        <div class="col-md-4">
+        <div class="tariff">
+            <div class="head-tariff">
+            <h3><p>
+                <?php
+                    echo $tariff->name;
+                    if (User::isAdmin())
+                    {
+                        echo '&nbsp;';
+                        echo Html::a('Редактировать', ['update-tariff', 'id' => $tariff->id, 'center_id' => $model->id, ], ['class' => 'btn btn-default']);
+                      	echo Html::a('Удалить тариф', ['delete-tariff', 'id' => $tariff->id, 'center_id' => $model->id,], [
+                      			'class' => 'btn btn-default',
+                      			  'data' => [
+                      				  'confirm' => 'Действительно хотите удалить тариф?',
+                      					'method' => 'post',
+                      					],
+                      				  ]);
+                    }
+                    else
+                    {
+                        //echo '<span style="font-size:0.5em;" class="lgray"> ТАРИФ</span>';
+                    }
+                ?>
+            </p></h3>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <p><?= $tariff->descr?></p>
+                    <?php
+                        if ($tariff->issetPrices || $tariff->issetOptions)
+                        {
+                            echo '<ul>';
+                                foreach ($tariff->prices as $v) echo '<li>'.$v.'</li>';
+                                foreach ($tariff->paramsList as $v) echo '<li>'.$v.'</li>';
+                                foreach ($tariff->optionsList as $k => $v) echo '<li>'.$v.'</li>';
+                            echo '</ul>';
+                        }
+                    ?>
+                </div>
+                <div class="col-sm-12">
+                    <?php
+                    if ($tariff->issetTimetable)
+                    {
+                        echo '<h4>Доступ:</h4>';
+                        echo '<ul>';
+                            foreach($tariff->timetable as $v) echo '<li>'.$v.'</li>';
+                        echo '</ul>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+        </div>
+    <?php $count++; ?>
+    <?php if ($count % 3 == 0) echo '</div><div class="row row-flex1234 row-flex1234-wrap">' ?>
+    <?php } ?>
+
+    <?php if ($count % 3 == 2) echo '<div class="col-md-4"></div>' ?>
+    <?php if ($count % 3 == 1) echo '<div class="col-md-4"></div><div class="col-md-4"></div>' ?>
+</div>
+
+<!-- <div class="row">
     <div class="col-md-7">
+        <?php foreach($model->tariffModels as $tariff) { ?>
+            <h4><p>
+                <?php
+                    echo $tariff->name;
+                    if (User::isAdmin())
+                    {
+                        echo '&nbsp;';
+                        echo Html::a('Редактировать', ['update-tariff', 'id' => $tariff->id, 'center_id' => $model->id, ], ['class' => 'btn btn-default']);
+                      	echo Html::a('Удалить тариф', ['delete-tariff', 'id' => $tariff->id, 'center_id' => $model->id,], [
+                      			'class' => 'btn btn-default',
+                      			  'data' => [
+                      				  'confirm' => 'Действительно хотите удалить тариф?',
+                      					'method' => 'post',
+                      					],
+                      				  ]);
+                    }
+                    else
+                    {
+                        echo '<span style="font-size:0.5em;" class="lgray"> ТАРИФ</span>';
+                    }
+                ?>
+            </p></h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><?= $tariff->descr?></p>
+                    <?php
+                        if ($tariff->issetPrices || $tariff->issetOptions)
+                        {
+                            echo '<ul>';
+                                foreach ($tariff->prices as $v) echo '<li>'.$v.'</li>';
+                                foreach ($tariff->paramsList as $v) echo '<li>'.$v.'</li>';
+                                foreach ($tariff->optionsList as $k => $v) echo '<li>'.$v.'</li>';
+                            echo '</ul>';
+                        }
+                    ?>
+                </div>
+                <div class="col-sm-6">
+                    <?php
+                    if ($tariff->issetTimetable)
+                    {
+                        echo '<h4>Доступ:</h4>';
+                        echo '<ul>';
+                            foreach($tariff->timetable as $v) echo '<li>'.$v.'</li>';
+                        echo '</ul>';
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+</div> -->
+
+<div class="row">
+    <div class="col-md-6">
 
         <h4 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h4>
 
@@ -247,7 +290,7 @@ $this->params['hasYandexMap'] = true;
         <div id="closest_metro" style="margin-top: 15px; margin-bottom: 30px;"></div>
 
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         <h4 style="margin-top: 30px;"><p>Контакты коворкинга</p></h4>
 
         <table class="contacts">
@@ -277,7 +320,13 @@ $this->params['hasYandexMap'] = true;
     'showDeletedComments' => true // show deleted comments. Defaults to `false`.
 ]); ?>
 
-<h4 style="margin-top: 30px;"><p>Коворкинги рядом</p></h4>
+<!-- <div class="title-block clearfix"> -->
+    <h3 class="h3-body-title">
+        <p>Коворкинги рядом</p>
+    </h3>
+    <!-- <div class="title-separator"></div> -->
+<!-- </div> -->
+
 <div class="row row-flex1234 row-flex1234-wrap" style="margin-bottom: 50px;">
     <?php $count = 1; ?>
     <?php foreach ($closestCenters->getModels() as $center): ?>
