@@ -176,10 +176,16 @@ class CenterSearch extends Center
         $query = Center::findBySql(
             'SELECT *,
             (gmap_lat-:lat)*(gmap_lat-:lat)+(gmap_lng-:lng)*(gmap_lng-:lng) AS `dist`
-            FROM center ORDER BY dist ASC LIMIT 3', 
+            FROM center
+            WHERE gmap_lat IS NOT NULL
+                AND gmap_lng IS NOT NULL
+                AND id <> :id
+            ORDER BY dist ASC
+            LIMIT 3',
             [
                 ':lat' => $center->gmap_lat,
                 ':lng' => $center->gmap_lng,
+                ':id' => $center->id,
             ]
         );
 
