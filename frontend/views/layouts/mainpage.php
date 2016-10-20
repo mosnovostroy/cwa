@@ -21,6 +21,7 @@ BootstrapSelectAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="yandex-verification" content="74914594b8342c21" />
+    <meta name="google-site-verification" content="0nMysBjx94fqc-B3As1GzpbfVWZCasepczBhoAJOYpM" />
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -66,7 +67,7 @@ BootstrapSelectAsset::register($this);
       ga('send', 'pageview');
 
     </script>
-        
+
 </head>
 <body>
 <?php $this->beginBody() ?>
