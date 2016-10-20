@@ -50,7 +50,7 @@ $this->params['hasYandexMap'] = true;
             <p style="" class="special-interval"><?= $model->description?></p>
         </div>
         <!-- <h3><p>Общие условия</p></h3> -->
-        <div class="row">
+        <div class="row special-interval">
             <div class="col-sm-6">
                 <?php
                     $features = $model->featuresModel;
