@@ -25,6 +25,28 @@ body {
     padding-top: 20px;
 }
 
+/*@media (min-width: 768px) {*/
+    .footer-links {
+        /*float: left;*/
+        width: calc(100% - 108px);
+        margin-right: 20px;
+    }
+    .footer-counters {
+        float: right;
+        width: 88px;
+        margin-top: -13px;
+    }
+/*}*/
+
+@media (max-width: 767px) {
+    .footer {
+        padding-top: 5px;
+    }
+    .footer-counters {
+        margin-top: 5px;
+    }
+}
+
 .wrap-map {
     height: 100%;
     margin: 0 auto;

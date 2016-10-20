@@ -105,27 +105,30 @@ BootstrapSelectAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <p class="pull-left">
-                    &copy; Коворкинг-ревю <?= date('Y') ?>
-                    &nbsp;&nbsp;&nbsp;
-                    <?= Html::a('О проекте', ['site/about']) ?>
-                    &nbsp;&nbsp;&nbsp;
-                    <?= Html::a('Контакты', ['site/contacts']) ?>
-                    &nbsp;&nbsp;&nbsp;
-                    <?= Html::a('Реклама', ['site/adv']) ?>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p class="pull-right">
-                    <!-- Rating@Mail.ru logo -->
-                    <a href="http://top.mail.ru/jump?from=2827040">
-                    <img src="//top-fwz1.mail.ru/counter?id=2827040;t=602;l=1"
-                    style="border:0;" height="40" width="88" alt="Рейтинг@Mail.ru" /></a>
-                    <!-- //Rating@Mail.ru logo -->
-                </p>
-            </div>
+        <!-- <p class="pull-left">
+            &copy; Коворкинг-ревю <?= date('Y') ?>
+            &nbsp;&nbsp;&nbsp;
+            <?= Html::a('О проекте', ['site/about']) ?>
+            &nbsp;&nbsp;&nbsp;
+            <?= Html::a('Контакты', ['site/contacts']) ?>
+            &nbsp;&nbsp;&nbsp;
+            <?= Html::a('Реклама', ['site/adv']) ?>
+        </p> -->
+        <div class="footer-counters">
+            <!-- Rating@Mail.ru logo -->
+            <a href="http://top.mail.ru/jump?from=2827040">
+            <img src="//top-fwz1.mail.ru/counter?id=2827040;t=602;l=1"
+            style="border:0;" height="40" width="88" alt="Рейтинг@Mail.ru" /></a>
+            <!-- //Rating@Mail.ru logo -->
+        </div>
+        <div class="footer-links">
+            &copy; Коворкинг-ревю <?= date('Y') ?>
+            &nbsp;&nbsp;
+            <?= Html::a('О&nbsp;проекте', ['site/about']) ?>
+            &nbsp;&nbsp;
+            <?= Html::a('Контакты', ['site/contacts']) ?>
+            &nbsp;&nbsp;
+            <?= Html::a('Реклама', ['site/adv']) ?>
         </div>
     </div>
 </footer>
