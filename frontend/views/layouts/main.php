@@ -109,7 +109,7 @@ BootstrapSelectAsset::register($this);
             <a href="http://top.mail.ru/jump?from=2827040">
             <img src="//top-fwz1.mail.ru/counter?id=2827040;t=602;l=1"
             style="border:0;" height="40" width="88" alt="Рейтинг@Mail.ru" /></a>
-            <!-- //Rating@Mail.ru logo -->
+            <!-- //Rating@Mail.ru logo --> 
         </div>
         <div class="footer-links">
             &copy; Коворкинг-ревю <?= date('Y') ?>
