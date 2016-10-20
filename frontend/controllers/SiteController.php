@@ -261,7 +261,7 @@ class SiteController extends Controller
         {
             if ($user = $model->signup())
             {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', 'На указанный адрес электронный почты выслано сообщение с дальнейшими инструкциями.');
                 return $this->goHome();
             }
         }
