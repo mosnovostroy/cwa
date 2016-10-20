@@ -170,9 +170,10 @@ $this->params['hasYandexMap'] = true;
                     if (User::isAdmin())
                     {
                         echo '&nbsp;';
-                        echo Html::a('Редактировать', ['update-tariff', 'id' => $tariff->id, 'center_id' => $model->id, ], ['class' => 'btn btn-default']);
+                        echo Html::a('Редактировать', ['update-tariff', 'id' => $tariff->id, 'center_id' => $model->id, ], ['class' => 'btn btn-default', 'style' => 'margin-bottom: 15px;']);
                       	echo Html::a('Удалить тариф', ['delete-tariff', 'id' => $tariff->id, 'center_id' => $model->id,], [
                       			'class' => 'btn btn-default',
+                                'style' => 'margin-bottom: 15px;',
                       			  'data' => [
                       				  'confirm' => 'Действительно хотите удалить тариф?',
                       					'method' => 'post',
