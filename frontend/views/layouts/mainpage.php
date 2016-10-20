@@ -20,6 +20,7 @@ BootstrapSelectAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="yandex-verification" content="74914594b8342c21" />
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -54,7 +55,7 @@ BootstrapSelectAsset::register($this);
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/40340380" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
-        
+
 </head>
 <body>
 <?php $this->beginBody() ?>
