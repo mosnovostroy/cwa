@@ -82,10 +82,10 @@ function init_closest_metro (coords)
                 {
                     metr = res.geoObjects.get(i);
                     mcoords = metr.geometry.getCoordinates();
-                    str += '<li>' + metr.properties.get('name') + ' - '
+                    str += '<li><span class="metro-icon">' + metr.properties.get('name').replace("метро ", "") + ' - '
                         +
                         ymaps.formatter.distance(ymaps.coordSystem.geo.getDistance(mcoords, coords))
-                        + '</li>';
+                        + '</span></li>';
                     //console.log(metr.properties.get('metaDataProperty.GeocoderMetaData.formerName'));
                     //console.log(metr.properties.get('description'));
                     //console.log(metr.geometry.getCoordinates());

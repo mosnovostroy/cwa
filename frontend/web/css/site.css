@@ -288,14 +288,6 @@ div.required label.control-label:after {
 /*******************************************************************************************/
 /* Страница коворкинга */
 
-    /* Табличка с контактами */
-    .contacts {width: 100%; /*margin-top: 25px;*/ border-collapse: collapse;}
-
-    .contacts td:first-child  {width: 37%;}
-
-    .contacts td {padding: 20px 30px; border: 1px solid #ddd; word-wrap: break-word;}
-
-
     /* Логотип */
     .center-view-logo {display: block; margin: 0px 15px 5px 0; width: 90px; float: left; border: 1px solid #aaa;}
 
@@ -307,14 +299,44 @@ div.required label.control-label:after {
       .center-view-logo img {width: calc(100% - 10px); margin: 5px; }
     }
 
+
+    /* Нужен отступ после описания центра (иначе на него наезжает надпись над фото), но не всегда.  */
+    .special-interval {
+        /*@media (max-width: 767px) {*/
+            margin-bottom: 30px;
+        /*}*/
+    }
+
+
+    /* Список из трех ближайших станций метро */
+    .closest-metro {
+        margin-top: 15px;
+        margin-bottom: 30px;
+    }
+    .closest-metro ul {
+        margin-left: 0; /* Отступ слева в браузере IE и Opera */
+        padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+    }
+    .closest-metro li {
+        list-style-type: none; /* Убираем маркеры */
+    }
+
+
 /*******************************************************************************************/
 /* Разные специальные классы */
+
+    /* Иконка метро, используется в span */
+    .metro-icon {
+        background: url('/img/moscow_metro.png') no-repeat 0px 0px; padding-left: 24px;
+    }
+
 
     .comments .comment-author-avatar img {
         width: 50px;
     }
 
     .main-page-center-image {width: 100%; margin-top: 30px;}
+
 
 
 /*******************************************************************************************/
@@ -333,6 +355,7 @@ div.required label.control-label:after {
     @media (min-width: 390px) {
       .login-button-container, .register-button-container {width: 200px;}
     }
+
 
 /*******************************************************************************************/
 /* Кнопка "Подать объявление" */

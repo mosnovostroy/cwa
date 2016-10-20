@@ -47,7 +47,7 @@ $this->params['hasYandexMap'] = true;
         <div class="clearfix">
             <?php if ($model->logoImage) echo '<div class="center-view-logo"><image src="'.$model->logoImage.'"></div>'; ?>
             <p><?= $model->address?></p>
-            <p><?= $model->description?></p>
+            <p style="" class="special-interval"><?= $model->description?></p>
         </div>
         <!-- <h3><p>Общие условия</p></h3> -->
         <div class="row">
@@ -291,29 +291,33 @@ $this->params['hasYandexMap'] = true;
             ymaps_scale = "16"
             ymaps_hide_filter_button = "1">
         </div>
-
-        <div id="closest_metro" style="margin-top: 15px; margin-bottom: 30px;"></div>
-
     </div>
     <div class="col-md-6">
+
         <h3 style="margin-top: 30px;"><p>Контакты</p></h3>
 
-        <table class="contacts">
-            <tr>
-                <td>Адрес</td>
-                <td><?= $model->address?></td>
-            </tr>
-                <td>Телефон</td>
-                <td><?= $model->phone?></td>
-            <tr>
-                <td>Email</td>
-                <td><?= $model->email?></td>
-            </tr>
-            <tr>
-                <td>Сайт</td>
-                <td><?= $model->site?></td>
-            </tr>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tr>
+                    <td>Адрес</td>
+                    <td><?= $model->address?></td>
+                </tr>
+                    <td>Телефон</td>
+                    <td><?= $model->phone?></td>
+                <tr>
+                    <td>Email</td>
+                    <td><?= $model->email?></td>
+                </tr>
+                <tr>
+                    <td>Сайт</td>
+                    <td><?= $model->site?></td>
+                </tr>
+                <!-- <tr><td></td><td></td></tr> -->
+            </table>
+        </div>
+
+        <div id="closest_metro" class="closest-metro"></div>
+
     </div>
 </div>
 
@@ -345,17 +349,15 @@ $this->params['hasYandexMap'] = true;
                 ?>
                 <h4><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h4>
 
-                <p style="margin-top: 0px;">
+                <p style="margin-top: -6px;">
                     <?php
 
                         if ($center->metro)
-                            echo '<span style="background: url(\'/img/moscow_metro.png\') no-repeat 0px 0px; padding-left: 22px;"> '.$center->metro.'</span>';
+                            echo '<span class="metro-icon"> '.$center->metro.'</span>';
                         else
                             echo $center->address;
                     ?>
                 </p>
-
-                <div class="lgray" style="margin-top: 7px;"><?= $center->regionName ?></div>
 
                 <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
             </div>

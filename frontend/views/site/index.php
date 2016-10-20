@@ -87,11 +87,11 @@ $this->title = 'Коворкинг-ревю: коворкинги и совме�
                     ?>
                     <h4><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h4>
 
-                    <p style="margin-top: 0px;">
+                    <p style="margin-top: -6px;">
                         <?php
 
                             if ($center->metro)
-                                echo '<span style="background: url(\'/img/moscow_metro.png\') no-repeat 0px 0px; padding-left: 22px;"> '.$center->metro.'</span>';
+                                echo '<span class="metro-icon"> '.$center->metro.'</span>';
                             else
                                 echo $center->address;
                         ?>
