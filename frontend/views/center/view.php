@@ -331,7 +331,7 @@ $this->params['hasYandexMap'] = true;
     ]);
 
     if (Yii::$app->user->isGuest) {
-        echo '<div class="row"><div class="col-xs-12"><div style="margin-top: -60px;">Для комментирования нужно '.(Html::a('авторизоваться', ['site/login'])).'</div></div></div>';
+        echo '<div class="row"><div class="col-xs-12"><div style="margin-top: -50px;">Для комментирования нужно '.(Html::a('авторизоваться', ['site/login'])).'</div></div></div>';
     }
 ?>
 
