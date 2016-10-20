@@ -105,15 +105,6 @@ BootstrapSelectAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <!-- <p class="pull-left">
-            &copy; Коворкинг-ревю <?= date('Y') ?>
-            &nbsp;&nbsp;&nbsp;
-            <?= Html::a('О проекте', ['site/about']) ?>
-            &nbsp;&nbsp;&nbsp;
-            <?= Html::a('Контакты', ['site/contacts']) ?>
-            &nbsp;&nbsp;&nbsp;
-            <?= Html::a('Реклама', ['site/adv']) ?>
-        </p> -->
         <div class="footer-counters">
             <!-- Rating@Mail.ru logo -->
             <a href="http://top.mail.ru/jump?from=2827040">
