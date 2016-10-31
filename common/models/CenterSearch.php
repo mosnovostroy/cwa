@@ -155,15 +155,32 @@ class CenterSearch extends Center
 
     public function searchFour()
     {
-        $query = Center::find();
+        $min = 1;
+        $max = 150;
+
+        $ids = [];
+        while (count($ids) < 3) {
+            $candidate_id = mt_rand($min, $max);
+            $id = Yii::$app->db->createCommand('SELECT id FROM center WHERE id = :candidate_id', [':candidate_id' => $candidate_id])
+    			->queryScalar();
+            if ($id) {
+                $ids[] = $id;
+            }
+        }
+
+        $query = Center::findBySql(
+            'SELECT *
+            FROM center
+            WHERE id IN (:idone, :idtwo, :idthree)',
+            [
+                ':idone' => $ids[0],
+                ':idtwo' => $ids[1],
+                ':idthree' => $ids[2],
+            ]
+        );
 
         $adpParams = ['query' => $query,
               'pagination' => ['pageSize' => 10],
-              'sort' => [
-                  'defaultOrder' => [
-                      'name' => SORT_ASC,
-                  ]
-              ],
         ];
 
         $dataProvider = new ActiveDataProvider($adpParams);
