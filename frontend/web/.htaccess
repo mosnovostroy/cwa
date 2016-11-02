@@ -1,17 +1,4 @@
-                                                                        
-
-RewriteEngine   on
-Options +FollowSymlinks -Indexes
-RewriteBase     /
-
-RewriteRule     (.*)/(/.*)      $1$2    [N]
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule !^.*(\/|\..+)$ %{REQUEST_URI}/ [QSA,R=301,L] # Добавляем слеш в конце (если нужно)
-
-RewriteCond %{HTTP_HOST} ^(.*)coworking-review.ru:81$
-RewriteRule ^(.*)$ http://coworking-review.ru/$1    [L,R=301]
-
-RewriteCond %{HTTP_HOST} !^coworking-review.ru$ [NC]
-RewriteRule ^(.*)$ http://coworking-review.ru/$1 [L,R=301]
+Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^www\.coworking-review\.ru$ [NC]
+RewriteRule ^(.*)$ http://coworking-review.ru/$1 [R=301,L]

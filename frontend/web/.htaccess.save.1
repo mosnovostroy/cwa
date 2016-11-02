@@ -1,0 +1,12 @@
+RewriteRule     ^[\/]?forum\/(.*)$ http://forum.mosnovostroy.ru/$1      [NC,L,R=301]
+
+RewriteRule     ^siteindex[\/]?$        http://mosnovostroy.ru/%{QUERY_STRING}  [L,R=301]
+RewriteRule   ^$        /PWE2/index.php?%{QUERY_STRING} [L]
+
+RewriteCond    %{REQUEST_FILENAME}    !-f
+RewriteCond    %{REQUEST_FILENAME}    !-d
+RewriteRule     ^(.*)$  /PWE2/index.php?uri=$1&%{QUERY_STRING}  [L]
+
+
+
+
