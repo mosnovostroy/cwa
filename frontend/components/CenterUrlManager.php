@@ -39,6 +39,12 @@ class CenterUrlManager extends UrlManager
 			      return '/adv/';
         }
 
+        // Страница "Регионы":
+		    if ($route === 'region/index')
+        {
+			      return '/regions/';
+        }
+
         // Страница центра:
 		    if ($route === 'center/view')
         {
@@ -168,6 +174,12 @@ class CenterUrlManager extends UrlManager
     		if (preg_match('%^adv/$%', $pathInfo, $matches))
     		{
     			return ['site/adv', $params];
+    		}
+
+        // Страница "Регионы":
+    		if (preg_match('%^regions/$%', $pathInfo, $matches))
+    		{
+    			return ['region/index', $params];
     		}
 
 		    //Центр или список или карта:
