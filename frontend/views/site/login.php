@@ -9,6 +9,7 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = 'Вход на сайт';
 //$this->params['breadcrumbs'][] = $this->title;
+$this->params['showCounters'] = true;
 ?>
 <div class="site-login">
 

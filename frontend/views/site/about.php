@@ -8,6 +8,7 @@ use yii\helpers\Url;
 
 $this->title = 'О проекте';
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['showCounters'] = true;
 ?>
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>

@@ -11,6 +11,7 @@ use yii\helpers\VarDumper;
 $this->title = 'Профиль пользователя: | Коворкинг-ревю';
 $this->registerMetaTag(['name' => 'description', 'content' => 'Профиль пользователя: контактная информация, смена пароля, настройки']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => '']);
+$this->params['showCounters'] = true;
 ?>
 
 <div class="row">

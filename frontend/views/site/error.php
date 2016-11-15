@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 
 $this->title = $name;
+$this->params['showCounters'] = true;
 ?>
 <div class="site-error">
 

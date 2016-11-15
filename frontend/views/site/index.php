@@ -8,6 +8,7 @@ use common\models\User;
 /* @var $this yii\web\View */
 
 $this->title = 'Коворкинг-ревю: коворкинги и совместная аренда офиса';
+$this->params['showCounters'] = true;
 ?>
 
 <style>

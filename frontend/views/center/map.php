@@ -22,6 +22,7 @@ else
 }
 
 $this->params['hasYandexMap'] = true;
+$this->params['showCounters'] = true;
 ?>
 
 <div id="mainform-large" class="container-fluid main-form-position hidden">

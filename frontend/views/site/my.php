@@ -11,6 +11,7 @@ use common\models\User;
 $this->title = 'Страница пользователя: | Коворкинг-ревю';
 $this->registerMetaTag(['name' => 'description', 'content' => 'База объявлений о совместной аренде офиса в Москве и регионах РФ. Условия, фото, цены']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса']);
+$this->params['showCounters'] = true;
 ?>
 
 <div class="row">

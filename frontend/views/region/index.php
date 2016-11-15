@@ -11,6 +11,8 @@ use common\models\User;
     $this->title = 'Коворкинги: поиск';
     $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
+
+    $this->params['showCounters'] = true;
 ?>
 
 

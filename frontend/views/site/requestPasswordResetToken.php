@@ -17,6 +17,7 @@ $this->title = 'Восстановление доступа';
 //     ->setTextBody('Текст сообщения')
 //     ->setHtmlBody('<b>текст сообщения в формате HTML</b>')
 //     ->send();
+$this->params['showCounters'] = true;
 
 ?>
 <div class="site-request-password-reset">

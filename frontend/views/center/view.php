@@ -20,6 +20,7 @@ $this->params['breadcrumbs'] =
     ['label' => $model->regionName, 'url' => ['center/index', 'CenterSearch' => ['region' => $model->region]]]
 ];
 $this->params['hasYandexMap'] = true;
+$this->params['showCounters'] = true;
 ?>
 
 <div class="row">

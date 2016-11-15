@@ -1,25 +1,26 @@
 <?php
+    use yii\helpers\Html;
+    use yii\helpers\Url;
+    use yii\widgets\LinkPager;
+    use yii\widgets\LinkSorter;
+    use yii\widgets\ActiveForm;
+    use yii\grid\GridView;
+    use common\models\User;
 
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\widgets\LinkPager;
-use yii\widgets\LinkSorter;
-use yii\widgets\ActiveForm;
-use yii\grid\GridView;
-use common\models\User;
-/* @var $this yii\web\View */
-if ($searchModel->regionNameTp)
-{
-    $this->title = 'Коворкинги в '.$searchModel->regionNameTp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
-}
-else
-{
-    $this->title = 'Коворкинги: поиск';
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
-}
+    if ($searchModel->regionNameTp)
+    {
+        $this->title = 'Коворкинги в '.$searchModel->regionNameTp;
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
+    }
+    else
+    {
+        $this->title = 'Коворкинги: поиск';
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
+    }
+
+    $this->params['showCounters'] = true;
 ?>
 
 <div id="mainform-small" class="row visible-xs">

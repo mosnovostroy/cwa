@@ -12,6 +12,7 @@ $this->params['breadcrumbs'] =
     ['label' => $model->regionName, 'url' => ['arenda/index', 'ArendaSearch' => ['region' => $model->region]]],
 ];
 $this->params['hasYandexMap'] = true;
+$this->params['showCounters'] = true;
 ?>
 
 

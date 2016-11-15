@@ -20,6 +20,7 @@ else
     $this->registerMetaTag(['name' => 'description', 'content' => 'База объявлений о совместной аренде офиса в Москве и регионах РФ. Условия, фото, цены. Бесплатная подача объявлений']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса, разместить объявление бесплатно, поиск партнера для аренды']);
 }
+$this->params['showCounters'] = true;
 ?>
 
 <div id="mainform-small" class="row visible-xs">
@@ -62,7 +63,7 @@ else
         <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
         <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
         <br/>
-        
+
     </div>
 </div>
 

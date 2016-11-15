@@ -8,6 +8,7 @@ use yii\helpers\Url;
 
 $this->title = 'Контакты';
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['showCounters'] = true;
 ?>
 <div class="site-about">
 
