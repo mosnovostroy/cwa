@@ -89,40 +89,23 @@ BootstrapSelectAsset::register($this);
 
 <?php $this->beginBody() ?>
 
+<!-- Горизонтальное меню в шапке -->
 <?php $this->beginContent('@app/views/layouts/_nav.php'); ?>
 <?php $this->endContent(); ?>
 
+<!-- Контент страницы -->
 <div class="wrap">
-    <!-- <div class="container"> -->
-        <?= Breadcrumbs::widget([
-            'homeLink' => false,
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <div class="alert-widget"><?= Alert::widget() ?></div>
-        <?=  $content ?>
-    <!-- </div> -->
+    <?= Breadcrumbs::widget([
+        'homeLink' => false,
+        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+    ]) ?>
+    <div class="alert-widget"><?= Alert::widget() ?></div>
+    <?=  $content ?>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <div class="footer-counters">
-            <!-- Rating@Mail.ru logo -->
-            <a href="http://top.mail.ru/jump?from=2827040">
-            <img src="//top-fwz1.mail.ru/counter?id=2827040;t=602;l=1"
-            style="border:0;" height="40" width="88" alt="Рейтинг@Mail.ru" /></a>
-            <!-- //Rating@Mail.ru logo -->
-        </div>
-        <div class="footer-links">
-            &copy; Коворкинг-ревю <?= date('Y') ?>
-            &nbsp;&nbsp;
-            <?= Html::a('О&nbsp;проекте', ['site/about']) ?>
-            &nbsp;&nbsp;
-            <?= Html::a('Контакты', ['site/contacts']) ?>
-            &nbsp;&nbsp;
-            <?= Html::a('Реклама', ['site/adv']) ?>
-        </div>
-    </div>
-</footer>
+<!-- Футер -->
+<?php $this->beginContent('@app/views/layouts/_footer2.php'); ?>
+<?php $this->endContent(); ?>
 
 <?php $this->endBody() ?>
 </body>

@@ -61,6 +61,13 @@ else
 <div class="row">
     <div class="col-xs-12 serp-text">
         Найдено коворкингов <?= $searchModel->regionNameTp ? 'в '.$searchModel->regionNameTp.' ' : ''?>с учетом фильтра: <?= $dataProvider->getTotalCount() ?>
+
+        <br/><br/>
+        <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
+        <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
+        <br/>
+
     </div>
 </div>
 

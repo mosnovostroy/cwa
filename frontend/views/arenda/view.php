@@ -38,6 +38,12 @@ $this->params['hasYandexMap'] = true;
             Размещено <?= $model->date ?>
           </div>
 
+          <br>
+          <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+          <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
+          <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
+          <br>
+
         <div style="margin-top: 5px;"><?= $model->description?></div>
 
         <div style="margin-top: 5px;">Контактное лицо: <?= $model->username?></div>

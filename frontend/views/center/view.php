@@ -54,6 +54,11 @@ $this->params['hasYandexMap'] = true;
             <?php if ($model->logoImage) echo '<div class="center-view-logo"><image src="'.$model->logoImage.'"></div>'; ?>
             <p><?= $model->address?></p>
             <p style="" class="special-interval"><?= $model->description?></p>
+
+            <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+            <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
+            <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
+
         </div>
         <!-- <h3><p>Общие условия</p></h3> -->
         <div class="row special-interval">

@@ -85,7 +85,7 @@ BootstrapSelectAsset::register($this);
     <img src="//top-fwz1.mail.ru/counter?id=2827040;js=na" style="border:0;" height="1" width="1" alt="Рейтинг@Mail.ru" />
     </div></noscript>
     <!-- //Rating@Mail.ru counter -->
-    
+
 <?php $this->beginBody() ?>
 
 
@@ -97,8 +97,6 @@ BootstrapSelectAsset::register($this);
         <?=  $content ?>
 	</div>
 </div>
-
-
 
 
 <?php $this->endBody() ?>

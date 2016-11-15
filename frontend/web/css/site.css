@@ -25,28 +25,6 @@ body {
     padding-top: 20px;
 }
 
-/*@media (min-width: 768px) {*/
-    .footer-links {
-        /*float: left;*/
-        width: calc(100% - 108px);
-        margin-right: 20px;
-    }
-    .footer-counters {
-        float: right;
-        width: 88px;
-        margin-top: -13px;
-    }
-/*}*/
-
-@media (max-width: 767px) {
-    .footer {
-        padding-top: 5px;
-    }
-    .footer-counters {
-        margin-top: 5px;
-    }
-}
-
 .wrap-map {
     height: 100%;
     margin: 0 auto;
@@ -434,3 +412,39 @@ div.required label.control-label:after {
     .redlabel {display: block !important; position: absolute; top: 7px; right: 0px; padding: 0 7px; color: #fff; background-color: #f00; font-size: 0.9em; font-weight: bold;}
     /*.redlabel {display: block !important; position: absolute; top: 7px; left: 0px; padding: 0 7px; color: #fff; background-color: #f00; font-size: 0.9em; font-weight: bold;}*/
     /*@media (max-width: 519px) { .redlabel {display: none;}}    */
+
+
+/***********************************************************************************************/
+/* Блоки контента в футере: */
+
+        .footer-links {
+            width: calc(100% - 58px);
+            margin-right: 20px;
+        }
+        .footer-social {
+            display: inline-block;
+            position: relative;
+            top: 6px;
+            left: 0;
+            margin-top: -6px;
+        }
+        .footer-counters {
+            float: right;
+            width: 38px;
+            margin-top: -5px;
+        }
+
+        @media (max-width: 767px) {
+            .footer {
+                padding-top: 5px;
+            }
+            .footer-counters {
+                margin-top: 5px;
+            }
+        }
+
+        .social-svg {
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+        }
