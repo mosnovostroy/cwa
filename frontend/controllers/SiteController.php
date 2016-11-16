@@ -17,8 +17,10 @@ use frontend\models\ContactForm;
 use frontend\models\Index;
 use common\models\CenterSearch;
 use common\models\ArendaSearch;
+use common\models\NewsSearch;
 use common\models\Region;
 use common\models\Center;
+use common\models\News;
 
 /**
  * Site controller
@@ -103,10 +105,16 @@ class SiteController extends Controller
         $searchModel2 = new ArendaSearch();
         $arenda = $searchModel2->searchFour();
 
+        $searchModel3 = new NewsSearch();
+        $lead = $searchModel3->searchLead();
+        $other = $searchModel3->searchOther();
+
         return $this->render('index', [
             'model' => $model,
             'centers' => $centers,
             'arenda' => $arenda,
+            'lead' => $lead,
+            'other' => $other,
         ]);
     }
 

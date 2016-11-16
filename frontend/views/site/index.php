@@ -106,6 +106,40 @@ $this->params['showCounters'] = true;
         <?php $count++; endforeach; ?>
     </div>
 
+    <h2><p><?= Html::a('Новости рынка', ['news/index']) ?></p></h2>
+
+    <div class="row" style="margin-bottom: 50px;">
+
+        <div class="col-sm-6" onclick="location.href='<?= $url ?>';">
+            <?php foreach ($lead->getModels() as $news): ?>
+            <?php if (!$center->anonsImage) break; ?>
+            <?php $url = Url::to(['news/view', 'id' => $news->id]); ?>
+            <div class="news-lead">
+                <img src="<?= $news->anons16x9 ?>" width=100%>
+                <div class="news-lead-gradient"></div>
+                <div class="news-lead-text">
+                    <h4><p><a href="<?=$url?>"><?= $news->title ?></a></p></h4>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+
+        <div class="col-sm-6">
+            <?php $count = 1; ?>
+            <?php foreach ($other->getModels() as $news): ?>
+            <?php if ($count > 5) break; $url = Url::to(['news/view', 'id' => $news->id]); ?>
+
+            <div class="">
+                <p>
+                    <a href="<?=$url?>"><?=$news->title?></a>
+                    <span class="news-date"><?=$news->date?></span>
+                </p>
+            </div>
+            <?php $count++; endforeach; ?>
+        </div>
+    </div>
+
 <style>
     @media (max-width: 519px)
     {

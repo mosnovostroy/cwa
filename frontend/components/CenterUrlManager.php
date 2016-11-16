@@ -46,7 +46,7 @@ class CenterUrlManager extends UrlManager
         }
 
         // Страница центра:
-		    if ($route === 'center/view')
+		if ($route === 'center/view')
         {
             if (isset($params['id']))
             {
@@ -80,6 +80,17 @@ class CenterUrlManager extends UrlManager
                 return '/arenda/' . $alias['region_alias'] . '/' . $alias['arenda_alias'] . '/';
             }
         }
+
+        // Страница новости:
+		if ($route === 'news/view')
+        {
+            if (isset($params['id']))
+            {
+                //Возвращаем урл вида news/104/
+                return '/news/' . $params['id'] . '/';
+            }
+        }
+
 
   		if (isset($params['CenterSearch']))
   		{
@@ -282,6 +293,7 @@ class CenterUrlManager extends UrlManager
                 return ['arenda/index', $params];
             }
         }
+
 
         //Если "наш" код не сработал (и мы сюда таки дошли) - ладно, просто вызовем родительский метод:
         return parent::parseRequest($request);

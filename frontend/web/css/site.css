@@ -448,3 +448,52 @@ div.required label.control-label:after {
             stroke: currentColor;
             fill: currentColor;
         }
+
+
+/***********************************************************************************************/
+/* Новости: */
+
+    /* Главная новость на главной странице */
+    .news-lead {
+        position: relative;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+        cursor: hand;
+    }
+
+    /* Градиент на главной новости */
+    .news-lead-gradient {
+        position: absolute;
+        overflow: hidden;
+        width: 100%;
+        height: 45%;
+        bottom: 0%;
+        left: 0;
+        background: url("/img/gradient_box_bg.png") repeat-x bottom left;
+        -webkit-background: linear-gradient(to top, rgba(0, 0, 0, 1.0), rgba(255, 255, 255, 0));
+        -moz-background: linear-gradient(to top, rgba(0, 0, 0, 1.0), rgba(255, 255, 255, 0));
+        -ms-background: linear-gradient(to top, rgba(0, 0, 0, 1.0), rgba(255, 255, 255, 0));
+        background: linear-gradient(to top, rgba(0, 0, 0, 1.0), rgba(255, 255, 255, 0));
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$start_color', endColorstr='#ffbd362f', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    }
+
+    /* Текст главной новости */
+    .news-lead-text {
+        position: absolute;
+        overflow: hidden;
+        max-height: 45%;
+        max-height: calc(45% - 20px);
+        bottom: 20px;
+        padding: 0 10px 0px 20px;
+        z-index: 20;
+        color: #fff;
+    }
+
+    /* Оформление ссылки с главной новости */
+    .news-lead a { color: #fff; }
+
+    /* Дата у строчной новости на главной: */
+    .news-date { color: #ccc; }
