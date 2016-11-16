@@ -101,7 +101,7 @@ class NewsSearch extends News
 
     public function searchOther()
     {
-        $lead = Yii::$app->db->createCommand('SELECT id FROM news WHERE is_lead=1 DESC LIMIT 1')
+        $lead = Yii::$app->db->createCommand('SELECT id FROM news WHERE is_lead=1 ORDER BY createdAt DESC LIMIT 1')
 			->queryScalar();
 
         $query = News::findBySql(
