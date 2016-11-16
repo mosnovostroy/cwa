@@ -101,7 +101,15 @@ class NewsSearch extends News
 
     public function searchOther()
     {
-        $query = News::findBySql('SELECT * FROM news WHERE is_lead=0 ORDER BY createdAt DESC LIMIT 5');
+        $lead = Yii::$app->db->createCommand('SELECT id FROM news WHERE is_lead=1 DESC LIMIT')
+			->queryScalar();
+
+        $query = News::findBySql(
+            'SELECT * FROM news WHERE id!=:lead ORDER BY createdAt DESC LIMIT 5',
+            [
+                ':lead' => $lead,
+            ]
+        );
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
         $dataProvider = new ActiveDataProvider($adpParams);
         return $dataProvider;

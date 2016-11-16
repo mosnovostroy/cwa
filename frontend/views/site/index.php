@@ -110,19 +110,19 @@ $this->params['showCounters'] = true;
 
     <div class="row" style="margin-bottom: 50px;">
 
-        <div class="col-sm-6" onclick="location.href='<?= $url ?>';">
-            <?php foreach ($lead->getModels() as $news): ?>
-            <?php if (!$center->anonsImage) break; ?>
-            <?php $url = Url::to(['news/view', 'id' => $news->id]); ?>
-            <div class="news-lead">
-                <img src="<?= $news->anons16x9 ?>" width=100%>
-                <div class="news-lead-gradient"></div>
-                <div class="news-lead-text">
-                    <h4><p><a href="<?=$url?>"><?= $news->title ?></a></p></h4>
+        <?php foreach ($lead->getModels() as $news): ?>
+        <?php if (!$news->anonsImage) break; ?>
+        <?php $url = Url::to(['news/view', 'id' => $news->id]); ?>
+            <div class="col-sm-6" onclick="location.href='<?= $url ?>';">
+                <div class="news-lead">
+                    <img src="<?= $news->anons16x9 ?>" width=100%>
+                    <div class="news-lead-gradient"></div>
+                    <div class="news-lead-text">
+                        <h4><p><a href="<?=$url?>"><?= $news->title ?></a></p></h4>
+                    </div>
                 </div>
             </div>
-            <?php endforeach; ?>
-        </div>
+        <?php endforeach; ?>
 
 
         <div class="col-sm-6">

@@ -17,7 +17,6 @@ $this->registerMetaTag(['name' => 'og:image', 'content' => ($model->images && co
 $this->params['breadcrumbs'] =
 [
     ['label' => 'Новости', 'url' => ['news/index']],
-    ['label' => $model->regionName, 'url' => ['news/index', 'NewsSearch' => ['region' => $model->region]]]
 ];
 $this->params['showCounters'] = true;
 ?>
