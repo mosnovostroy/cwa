@@ -102,7 +102,8 @@ $regions = $searchModel->search(Yii::$app->request->queryParams, true);
 <?php
     $menuItems = [
         ['label' => 'Коворкинги', 'url' => ['/center/index']],
-        ['label' => 'Блоги', 'url' => ['/blog/index']],
+        //['label' => 'Блоги', 'url' => ['/blog/index']],
+        ['label' => 'Новости', 'url' => ['/news/index']],
         ['label' => 'Объявления', 'url' => ['/arenda/index']],
         ['label' => '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>',
             'url' => null,
