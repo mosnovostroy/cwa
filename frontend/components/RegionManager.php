@@ -51,6 +51,10 @@ class RegionManager extends Component
     {
         $regionId = Yii::$app->getRequest()->getCookies()->getValue('cwrRegion1');
 
+        if (!$regionId) {
+            $regionId = 1; // Москва по умолчанию
+        }
+
         if ($regionId) {
             $this->_regionData = Yii::$app->db->createCommand('SELECT id, name, alias FROM region
                                                         WHERE id=:rid' , [':rid' => $regionId])
@@ -65,7 +69,7 @@ class RegionManager extends Component
     public function setRegion($id)
     {
         if (!$id) return;
-
+ 
         //if (!isset(Yii::$app->request->cookies['cwrRegionId']))
         {
             Yii::$app->response->cookies->add(new \yii\web\Cookie([
