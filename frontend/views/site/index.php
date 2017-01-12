@@ -9,71 +9,13 @@ use common\models\User;
 
 $this->title = 'Коворкинг-ревю: коворкинги и совместная аренда офиса';
 $this->params['showCounters'] = true;
+
 ?>
-
-<style>
-    .main-form-bg {background-color:#bbd;}
-    .main-form-title {color: #fff; }
-    @media (max-width: 767px)
-    {
-      .main-form-container {width: 85%; margin: 30px auto 15px; text-align: left;}
-      .main-form-list {width: 100%; float: left; margin-bottom:30px;}
-      .main-form-button {width: 100%!important; float: left;}
-      /*.main-arenda-control-container {width: 85%; margin: 0 auto;}
-      .main-arenda-control-button {width: 100%;}*/
-    }
-    @media (min-width: 768px)
-    {
-      .main-form-container {width: calc(70% + 150px); margin: 40px auto 45px; text-align: left;}
-      .main-form-list {width: calc(50% - 75px); float: left; border-radius: 0!important;}
-      .main-form-button {width: 150px!important; float: left;}
-      /*.main-arenda-control-container {width: 100%;}
-      .main-arenda-control-button {width: 100%;}*/
-    }
-    .main-center-links {margin-top: 10px;}
-</style>
-
-
-<div class="main-form-bg">
-    <div class="jumbotron">
-        <div class="main-form-container">
-            <p class="main-form-title">Быстрый поиск вариантов</p>
-            <?= Html::beginForm(
-                ['site/index-submit'],
-                'post',
-                ['enctype' => 'multipart/form-data', 'class' => 'input-group']) ?>
-                <div class="input-group-btn" id="mainGroup">
-                    <div class="main-form-list">
-                        <?= Html::dropDownList('type', 1,
-                            [1 => 'Коворкинги', 2 => 'Совместная аренда'],
-                            ['class' => 'selectpicker', 'data-width' => '100%']) ?>
-                    </div>
-                    <div class="main-form-list">
-                        <?= Html::dropDownList('region', 1,
-                                $model->regionsArray,
-                                ['class' => 'selectpicker', 'data-width' => '100%']) ?>
-                    </div>
-                    <div class="main-form-button">
-                        <?= Html::submitButton('Поиск',
-                            ['class' => 'btn btn-warning main-form-button']) ?>
-                    </div>
-                </div>
-            <?= Html::endForm() ?>
-        </div>
-    </div>
-</div>
 
 <div class="container" style="padding-top: 0px;">
 
-    <h2><p><?= Html::a('Коворкинги', ['center/index']) ?></p></h2>
-
-    <ul class="list-inline">
-        <li><?= Html::a('Москва', ['centers/moscow']) ?></li>
-        <li><?= Html::a('Санкт-Петербург', ['centers/piter']) ?></li>
-        <li><?= Html::a('Новосибирск', ['centers/novosibirsk']) ?></li>
-        <li><?= Html::a('Самара', ['centers/samara']) ?></li>
-        <li><strong><?= Html::a('Все&nbsp;регионы', ['center/index'])?></strong></li>
-    </ul>
+    <?php $section_title = 'Коворкинги'.($model->region ? ' в '.$model->regionNameTp : ''); ?>
+    <h2><p><?= Html::a($section_title, ['center/index']) ?></p></h2>
 
     <div class="row row-flex1234 row-flex1234-wrap" style="margin-bottom: 50px;">
         <?php $count = 1; ?>
@@ -104,7 +46,63 @@ $this->params['showCounters'] = true;
                 </div>
             </div>
         <?php $count++; endforeach; ?>
+        <?php if ($count == 3)  echo '<div class="col-md-4"></div>';?>
+        <?php if ($count == 2)  echo '<div class="col-md-4"></div><div class="col-md-4"></div>';?>
     </div>
+
+    <div class="row">
+        <?php $url = Url::to(['center/index']); ?>
+        <div class="col-sm-4" onclick="location.href='<?= $url ?>';">
+            <div class="button-main clearfix">
+                <a href="<?=$url?>"><h4><p>Поиск коворкингов</p></h4></a>
+            </div>
+        </div>
+        <?php $url = Url::to(['center/map']); ?>
+        <div class="col-sm-4" onclick="location.href='<?= $url ?>';">
+            <div class="button-main clearfix">
+                <a href="<?=$url?>"><h4><p>Коворкинги на карте</p></h4></a>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- <div class="button-main clearfix" data-toggle="modal" data-target=".bs-example-modal-lg">
+                <a href="" >
+                    <h4><p>Выбрать регион <span class="caret"></span></p></h4>
+                </a>
+            </div> -->
+        </div>
+    </div>
+
+
+    <?php if ($events && $events->getCount()): ?>
+        <h2><p><?= Html::a('Мероприятия', ['event/index']) ?></p></h2>
+
+        <div class="row row-flex1234 row-flex1234-wrap" style="margin-bottom: 50px;">
+            <?php $count = 1; ?>
+            <?php foreach ($events->getModels() as $event): ?>
+                <?php if ($count > 3) break; $url = Url::to(['event/view', 'id' => $event->id]); ?>
+                <div class="col-md-4 tgbcol" onclick="location.href='<?= $url ?>';">
+                    <div class="tgb">
+                        <?php if ($event->anonsImage)
+                            echo '<div class="tgbimg"><img src="'.$event->anons16x9.'"></div>';
+                            // echo '<div class="redlabel">'.$event->regionName.'</div>'
+                        ?>
+                        <h4><p><a href="<?=$url?>"><?=Html::encode("{$event->title}")?></a></p></h4>
+
+                        <p style="margin-top: -6px;">
+                            <?=Html::encode("{$event->anons_text}")?>
+                        </p>
+
+                        <div class="lgray" style="margin-top: 7px;"><?= $event->regionName ?></div>
+
+                        <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
+                    </div>
+                </div>
+            <?php $count++; endforeach; ?>
+            <?php if ($count == 3)  echo '<div class="col-md-4"></div>';?>
+            <?php if ($count == 2)  echo '<div class="col-md-4"></div><div class="col-md-4"></div>';?>
+        </div>
+    <?php endif; ?>
+
 
     <h2><p><?= Html::a('Новости рынка', ['news/index']) ?></p></h2>
 
@@ -126,9 +124,8 @@ $this->params['showCounters'] = true;
 
 
         <div class="col-sm-6">
-            <?php $count = 1; ?>
             <?php foreach ($other->getModels() as $news): ?>
-            <?php if ($count > 5) break; $url = Url::to(['news/view', 'id' => $news->id]); ?>
+            <?php $url = Url::to(['news/view', 'id' => $news->id]); ?>
 
             <div class="">
                 <p>
@@ -136,58 +133,16 @@ $this->params['showCounters'] = true;
                     <span class="news-date"><?=$news->date?></span>
                 </p>
             </div>
-            <?php $count++; endforeach; ?>
+            <?php endforeach; ?>
         </div>
     </div>
 
-<style>
-    @media (max-width: 519px)
-    {
-        .main-arenda-control-button {width: 100%; margin-bottom: 30px;}
-    }
-    @media (min-width: 520px) and (max-width: 767px)
-    {
-        .main-arenda-control-button {width: 45%; margin-bottom: 30px;}
-    }
-    @media (min-width: 767px)
-    {
-        .main-arenda-control-button {width: 100%; margin-bottom: 30px;}
-    }
-</style>
 
-    <h2><p><?= Html::a('Совместная аренда офиса', ['arenda/index'], ['class' => 'main-h3']) ?></p></h2>
+    <h2><p><?= Html::a('Объявления', ['arenda/index'], ['class' => 'main-h3']) ?></p></h2>
 
-    <p style=" margin-bottom: 20px;">Объявления о поиске партнеров для совместной аренды офиса</p>
+    <?php $section_descr = 'Поиск партнеров для совместной аренды офиса'.($model->region ? ' в '.$model->regionNameTp : ''); ?>
+    <p style=" margin-bottom: 20px;"><?=$section_descr?></p>
 
-<style>
-    .arenda-main {
-        width: 100%;
-        min-height: 108px;
-        border-radius: 5px;
-        padding: 10px 10px;
-        background-color: #ffc;
-        border: 1px solid #aaa;
-        margin-bottom: 30px;
-        cursor: pointer;
-    }
-    .arenda-main:hover {
-        background-color: #ff7;
-    }
-    .arenda-main img {width: 25%; max-width: 90px; float: left; margin-right: 10px; }
-    .arenda-main-button {
-        background-color: #fff;
-        text-align: center;
-        padding-top: 32px;
-    }
-
-    @media (min-width: 768px)
-    {
-        .row-flex123, .row-f#lex123 > div[class*='col-'] { margin-top: 15px; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; flex:1 1 auto;}
-        .row-flex123-wrap {	-webkit-flex-flow: row wrap; align-content: flex-start; flex:0;	}
-        .row-flex123 > div[class*='col-'] { margin:-.2px;}
-    }
-
-</style>
     <div class="row row-flex1234 row-flex1234-wrap">
 
         <?php $count = 1; ?>
@@ -212,6 +167,9 @@ $this->params['showCounters'] = true;
                 </div>
             </div>
         </div>
+
+        <?php if ($count == 2)  echo '<div class="col-md-4"></div>';?>
+        <?php if ($count == 1)  echo '<div class="col-md-4"></div><div class="col-md-4"></div>';?>
 
     </div>
 

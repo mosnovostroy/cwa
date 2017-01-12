@@ -6,6 +6,10 @@
     use yii\widgets\ActiveForm;
     use yii\grid\GridView;
     use common\models\User;
+    use common\models\Station;
+    use yii\web\JsExpression;
+    use kartik\typeahead\Typeahead;
+    use kartik\select2\Select2;
 
     if ($searchModel->regionNameTp)
     {
@@ -22,81 +26,113 @@
 
     $this->params['showCounters'] = true;
 ?>
+<h1><p>
+    Коворкинги в <?=$searchModel->regionNameTp?>
 
-<div id="mainform-small" class="row visible-xs">
-    <div class="col-xs-12 center-index-form">
-        <span class="serp-title">Коворкинги</span>
-		<span class="pull-right">
-			<a class="btn btn-default" onclick="
-				document.getElementById('mainform-small').className = 'hidden';
-				document.getElementById('mainform-large').className = 'row';
-				">Фильтр</a>
-		</span>
-    </div>
+    <?php
+        //echo Html::a('Метро или район <span class="caret"></span>', ['site/location'], ['class' => 'btn btn-link']);
+        if (User::isAdmin())
+            echo Html::a('Создать новый', ['create'], ['class' => 'btn btn-default']);
+    ?>
+    <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
+    <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter" ></div>
+
+</p></h1>
+<!-- <p>
+    <span style="margin-right: 20px">Метро Академическая</span>
+</p> -->
+<!-- <p>
+    <span style="margin-right: 20px">География поиска: метро Академическая</span>
+    <?=Html::a('Указать метро или район', ['site/location'], ['class' => ''])?>
+</p> -->
+
+<div style="margin-bottom: 15px;">
+    Найдено: <?= $dataProvider->getTotalCount() ?>
+
+    <span class="visible-xs-inline">
+        <span id="filter-link-show" >
+            &nbsp;
+    		<a href="#" onclick='
+                            $( "#filter-link-show" ).toggle();
+                            $( "#filter-link-hide" ).toggle();
+                            $( "#centers-filter" ).toggleClass("hidden-xs");
+                            '>
+                Показать фильтр ...
+            </a>
+    	</span>
+        <span id="filter-link-hide" style="display: none!important;">
+            &nbsp;
+            <a href="#" onclick='
+                            $( "#filter-link-show" ).toggle();
+                            $( "#filter-link-hide" ).toggle();
+                            $( "#centers-filter" ).toggleClass("hidden-xs");
+                            '>
+                Скрыть фильтр
+            </a>
+    	</span>
+    </span>
 </div>
 
-<div id="mainform-large" class="row hidden-xs">
-    <div class="col-xs-12">
-		<span class="pull-right visible-xs">
-			<a class="btn btn-default" onclick="
-				document.getElementById('mainform-small').className = 'row visible-xs';
-				document.getElementById('mainform-large').className = 'row hidden-xs';
-				">Скрыть</a>
-		</span>
-        <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
-                                        'options' => ['class' => 'form-inline']]); ?>
-                <span class="serp-title">Коворкинги</span>
-                <?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за месяц, от'])->label(false) ?>
-                <?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за месяц, до'])->label(false) ?>
-
-                <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
-
-                <?= $form->field($searchModel, 'text')->hiddenInput()->label(false) ?>
-
-                <?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
-        <?php ActiveForm::end(); ?>
-    </div>
-</div>
 
 <div class="row">
-    <div class="col-xs-12 serp-text">
-        Найдено коворкингов <?= $searchModel->regionNameTp ? 'в '.$searchModel->regionNameTp.' ' : ''?>с учетом фильтра: <?= $dataProvider->getTotalCount() ?>
+    <div class="col-sm-9">
+        <div id="centers-filter" class="row hidden-xs" style="background-color:#eee; padding-top: 10px; margin-bottom: 15px; min-height: 50px;">
+            <div class="col-xs-12">
 
-        <br/><br/>
-        <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
-        <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
-        <br/>
+                <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
+                                                'options' => ['class' => 'form-inline']]); ?>
+                        <?php
+                        $url = \yii\helpers\Url::to(['site/stations-list']);
+                        $initMetro = empty($searchModel->metro) ? 'Метро или район' : Station::findOne($searchModel->metro)->name;
 
-    </div>
-</div>
+                        //echo Select2::widget([
+                        echo $form->field($searchModel, 'metro')->label(false)->widget(Select2::classname(), [
+                                  'id' => 'www111',
+                                  //'name' => 'state_10',
+                                  'initValueText' => $initMetro,
+                                  'options' => [
+                                      'placeholder' => 'Метро или район',
+                                  ],
+                                  'pluginEvents' => [
+                                      "select2:select" => 'function() { $.pjax({url: "/news/add-center-link/?news_id='.$searchModel->id.'&center_id=" + $("#www111").val(), type: "GET", container: "#w0", push: false}); }',
+                                  ],
+                                  'pluginOptions' => [
+                                      'ajax' => [
+                                          'url' => $url,
+                                          'dataType' => 'json',
+                                          'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                                      ],
+                                      'width' => '200px',
+                                      'allowClear' => true,
+                                  ],
+                              ]);
+                        ?>
 
-<div class="row">
-    <div class="col-xs-12">
-        <?php
-            if (User::isAdmin())
-                echo Html::a('Создать новый', ['create'], ['class' => 'btn btn-default']);
-        ?>
-    </div>
-</div>
+                        <?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за месяц, от'])->label(false) ?>
+                        <?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за месяц, до'])->label(false) ?>
 
-<div class="row">
-    <div class="col-xs-12 serp-links">
-        <div class="pull-left">
-            список
-            | <?= Html::a('карта', ['center/map', 'CenterSearch' => $searchModel->toArray()]) ?>
+                        <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
+
+                        <?= Html::submitButton('Найти', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
+                <?php ActiveForm::end(); ?>
+            </div>
         </div>
-
-        <div class="pull-right">
-          <?php
-              $sort = $dataProvider->getSort();
-              if ($sort)
-                  echo $sort->link('price_month') . ' | ' . $sort->link('name');
-          ?>
+    </div>
+    <?php
+        $target = $searchModel->toArray();
+        $target[0] = 'center/map';
+        $url = Url::to($target);
+        // $url = Url::to(['center/map', 'CenterSearch' => $searchModel->toArray(), 'region' => $searchModel->region]);
+    ?>
+    <div class="col-sm-3" onclick="location.href='<?= $url ?>';">
+        <div class="button-main clearfix">
+            <a href="<?=$url?>"><h4><p><span class="glyphicon glyphicon-map-marker"> </span> На карте</p></h4></a>
         </div>
     </div>
 </div>
+
+
 
 <?php foreach ($dataProvider->getModels() as $center): ?>
     <?php $url = Url::to(['view', 'id' => $center->id]); ?>

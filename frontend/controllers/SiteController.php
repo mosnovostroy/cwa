@@ -17,10 +17,13 @@ use frontend\models\ContactForm;
 use frontend\models\Index;
 use common\models\CenterSearch;
 use common\models\ArendaSearch;
+use common\models\EventSearch;
 use common\models\NewsSearch;
 use common\models\Region;
 use common\models\Center;
 use common\models\News;
+use common\models\Station;
+use frontend\components\RegionManager;
 
 /**
  * Site controller
@@ -94,25 +97,38 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($region = null)
     {
+        if ($region) {
+            Yii::$app->regionManager->setRegion($region);
+        }
+        else {
+            $region = Yii::$app->regionManager->id;
+        }
+
         $this->layout = 'mainpage';
 
         $model = new Index();
-        $searchModel = new CenterSearch();
-        $centers = $searchModel->searchFour();
+        $model->region = $region;
+
+        $searchModel1 = new CenterSearch();
+        $centers = $searchModel1->searchForMainPage();
 
         $searchModel2 = new ArendaSearch();
-        $arenda = $searchModel2->searchFour();
+        $arenda = $searchModel2->searchForMainPage();
 
         $searchModel3 = new NewsSearch();
         $lead = $searchModel3->searchLead();
         $other = $searchModel3->searchOther();
 
+        $searchModel4 = new EventSearch();
+        $events = $searchModel4->searchForMainPage();
+
         return $this->render('index', [
             'model' => $model,
             'centers' => $centers,
             'arenda' => $arenda,
+            'events' => $events,
             'lead' => $lead,
             'other' => $other,
         ]);
@@ -257,6 +273,11 @@ class SiteController extends Controller
         return $this->render('adv');
     }
 
+    public function actionUpdatemetro()
+    {
+        return $this->render('updatemetro');
+    }
+
     /**
      * Signs user up.
      *
@@ -377,4 +398,33 @@ class SiteController extends Controller
             echo $model->getMapParams();
         }
      }
+
+     public function actionStationsList($q = null, $id = null)
+     {
+         // Настройки формата:
+         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+         $out = ['results' => ['id' => '', 'text' => '']];
+
+         // Результаты будут разные для разных регионов, поэтому смотрим на регион:
+         $regionId = Yii::$app->regionManager->id ? Yii::$app->regionManager->id : 0;
+
+         // Если есть подстрока для поиска:
+         if (!is_null($q)) {
+             $query = new \yii\db\Query;
+             $query->select("id, name AS text")
+                 ->from('station')
+                 ->where(['like', 'name', $q])
+                 ->andWhere(['region' => $regionId])
+                 ->limit(10);
+             $command = $query->createCommand();
+             $data = $command->queryAll();
+             $out['results'] = array_values($data);
+         }
+         elseif ($id > 0) {
+             $out['results'] = ['id' => $id, 'text' => Station::find($id)->name];
+         }
+         //return json_encode($out);
+         return $out;
+     }
+
 }

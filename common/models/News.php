@@ -23,6 +23,13 @@ class News extends \yii\db\ActiveRecord
 	public $anons_text;
     public $anons_text_short;
 
+	public function fields()
+    {
+        $fields = parent::fields();
+
+        return $fields;
+    }
+
 	 /**
      * @inheritdoc
      */
@@ -37,7 +44,7 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'text'], 'required'],
+            //[['title', 'text'], 'required'],
 			[['title'], 'string', 'max' => 255],
             [['text', 'meta_title', 'meta_description', 'meta_keywords'], 'string'],
             [['region', 'is_lead'], 'integer'],
@@ -82,6 +89,7 @@ class News extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Заголовок',
             'text' => 'Текст',
+			//	'content' => 'Текст',
             'meta_title' => 'Meta Title',
             'meta_description' => 'Meta Description',
             'meta_keywords' => 'Meta Keywords',
@@ -89,7 +97,6 @@ class News extends \yii\db\ActiveRecord
 			'is_lead' => 'Тема дня',
         ];
     }
-
 
 	public function beforeSave($insert)
 	{
@@ -102,6 +109,12 @@ class News extends \yii\db\ActiveRecord
 	    } else {
 			return false;
 		}
+	}
+
+
+	public function afterSave ($insert, $changedAttributes)
+	{
+		parent::afterSave ($insert, $changedAttributes);
 	}
 
 	public function afterFind()
@@ -138,6 +151,18 @@ class News extends \yii\db\ActiveRecord
         $this->anons_text_short = $string;
 
         parent::afterFind();
+    }
+
+	public function getCenters()
+    {
+        return $this->hasMany(Center::className(), ['id' => 'center_id'])
+             ->viaTable('news_center', ['news_id' => 'id']);
+    }
+
+	public function getRegions()
+    {
+        return $this->hasMany(Region::className(), ['id' => 'region_id'])
+             ->viaTable('news_region', ['news_id' => 'id']);
     }
 
 	//////////////////////////////////////////////////////////////////////////////////////////

@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Region;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use ReflectionClass;
 
 /**
@@ -23,9 +24,35 @@ class RegionSearch extends Region
         return Model::scenarios();
     }
 
+    public function getArray()
+	{
+        return RegionSearch::doGetRegionsArray(true);
+	}
+
+    public static function getArrayWithoutNullItem()
+	{
+        return RegionSearch::doGetRegionsArray(false);
+	}
+
+    public static function getArrayForProfile()
+	{
+        return RegionSearch::doGetRegionsArray(true, true);
+	}
+
+    public static function doGetRegionsArray($all = true, $none = false)
+	{
+        $regions = array();
+        if ($all)
+          $regions[0] = $none ? 'Не установлен' : 'Все регионы';
+        $result = Region::find()->where(['parent' => 0])->all();
+        $subregions = ArrayHelper::map($result,'id','name');
+        $regions = $regions + $subregions;
+        return $regions;
+	}
+
     public function search($params, $all = false)
     {
-        $query = Region::find();
+        $query = Region::find()->where(['parent' => 0]);
 
         if ($all)
             $adpParams = [

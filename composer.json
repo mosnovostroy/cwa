@@ -24,7 +24,11 @@
         "yiisoft/yii2-imagine": "^2.0",
 		"nodge/yii2-eauth": "^2.4",
         "yii2mod/yii2-comments": "*",
-        "himiklab/yii2-recaptcha-widget": "*"
+        "himiklab/yii2-recaptcha-widget": "*",
+        "kartik-v/yii2-widget-typeahead": "*",
+        "kartik-v/yii2-widget-select2": "@dev",
+        "vova07/yii2-imperavi-widget": "*",
+        "zelenin/yii2-slug-behavior": "~1.5.1"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

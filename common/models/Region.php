@@ -47,31 +47,6 @@ class Region extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getName ($region_id)
-    {
-        if (!$region_id)
-            return false;
-        $region_name = Region::find()->where(['id' => $region_id])->one()->getAttribute('name');
-        return $region_name;
-    }
-
-    public static function getNameTp ($region_id)
-    {
-        if (!$region_id)
-            return false;
-        $region_name_tp = Region::find()->where(['id' => $region_id])->one()->getAttribute('name_tp');
-        return $region_name_tp;
-    }
-
-    public static function getNamesArray ()
-    {
-        $regions[0] = 'Все регионы';
-        $result = Region::find()->where(['parent' => 0])->all();
-        $subregions = ArrayHelper::map($result,'id','name');
-        $regions = $regions + $subregions;
-        return $regions;
-    }
-
     public function getMapParams()
     {
         $data= array();

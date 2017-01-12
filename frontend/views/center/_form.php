@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use common\models\RegionSearch;
+use yii\widgets\Pjax;
+
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Center */
@@ -9,6 +12,12 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="center-form">
+
+    <?php
+        Pjax::begin(['enablePushState' => false]);
+            echo $this->render('_news', ['model' => $model]);
+        Pjax::end();
+    ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -41,13 +50,13 @@ use yii\widgets\ActiveForm;
 
             <?php if ($model->anonsImage) echo '<div style="margin-bottom: 30px;"><image src="'.$model->anonsImage.'" width=100%></div>'; ?>
 
-            <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem,
+            <?= $form->field($model, 'region')->dropDownList(RegionSearch::getArrayWithoutNullItem(),
               [
                 'onchange' => "locate_yandex_maps(this.options[this.selectedIndex].value)"
               ])->hint('Укажите точку на карте:')
             ?>
 
-            <div id="yandexmap" class="h600-yandexmap" style="margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ></div>
+            <div id="yandexmap" class="h600-yandexmap" style="margin-bottom: 30px;" centerid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "9" ymaps_show_search = "1" ymaps_clickable = "1"></div>
 
             <?= $form->field($model, 'gmap_lat')->hiddenInput()->label(false) ?>
 

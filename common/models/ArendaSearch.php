@@ -47,6 +47,11 @@ class ArendaSearch extends Arenda
         return $fields;
     }
 
+    public function formName ()
+    {
+        return '';
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -145,17 +150,31 @@ class ArendaSearch extends Arenda
         return $this->search([], false, true);
     }
 
-    public function searchFour()
+    public function searchForMainPage()
     {
-        $query = Arenda::find();
+        $regionId = Yii::$app->regionManager->id;
+
+        if ($regionId) {
+            $query = Arenda::findBySql(
+                'SELECT *
+                FROM arenda
+                WHERE region = :region
+                ORDER BY createdAt DESC',
+                [
+                    ':region' => $regionId,
+                ]
+            );
+        }
+        else {
+            $query = Arenda::findBySql(
+                'SELECT *
+                FROM arenda
+                ORDER BY createdAt DESC'
+            );
+        }
 
         $adpParams = ['query' => $query,
               'pagination' => ['pageSize' => 10],
-              'sort' => [
-                  'defaultOrder' => [
-                      'createdAt' => SORT_DESC,
-                  ]
-              ],
         ];
 
         $dataProvider = new ActiveDataProvider($adpParams);

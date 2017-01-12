@@ -6,10 +6,13 @@ use Yii;
 use common\models\News;
 use yii\web\Controller;
 use common\models\NewsSearch;
+use common\models\Center;
+use common\models\Region;
 use common\models\User;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 class NewsController extends \yii\web\Controller
 {
@@ -198,13 +201,116 @@ class NewsController extends \yii\web\Controller
         if (!User::isAdminOrOwner($model->createdBy))
             throw new ForbiddenHttpException;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save() && $model->upload() )
+        if ($model->load(Yii::$app->request->post()) && $model->save() && $model->upload() ) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }
         else
             return $this->render('update', [ 'model' => $model ]);
     }
 
 
+    public function actionCentersList($q = null, $id = null)
+    {
+        // Настройки формата:
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+
+        // Если есть подстрока для поиска:
+        if (!is_null($q)) {
+            $query = new \yii\db\Query;
+            $query->select("id, name AS text")
+                ->from('center')
+                ->where(['like', 'name', $q])
+                ->limit(10);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Center::find($id)->name];
+        }
+        return $out;
+    }
+
+
+    public function actionAddCenterLink($news_id, $center_id)
+    {
+        // Получаем AR новости и центра:
+        $news = $this->findModel($news_id);
+        $center = Center::findOne($center_id);
+
+        // Добавляем запись в промежуточную таблицу:
+        $news->link('centers', $center);
+
+        // Возвращаем обновленный фрагмент html:
+        return $this->renderAjax('_centers', ['model' => $news]);
+    }
+
+
+    public function actionDeleteCenterLink($news_id, $center_id)
+    {
+        // Получаем AR новости и центра:
+        $news = $this->findModel($news_id);
+        $center = Center::findOne($center_id);
+
+        // Удаляем запись из промежуточной таблицы:
+        $news->unlink('centers', $center, true);
+
+        // Возвращаем обновленный фрагмент html:
+        return $this->renderAjax('_centers', ['model' => $news]);
+    }
+
+
+    public function actionRegionsList($q = null, $id = null)
+    {
+        // Настройки формата:
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+
+        // Если есть подстрока для поиска:
+        if (!is_null($q)) {
+            $query = new \yii\db\Query;
+            $query->select("id, name AS text")
+                ->from('region')
+                ->where(['like', 'name', $q])
+                ->limit(10);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Center::find($id)->name];
+        }
+        return $out;
+    }
+
+
+    public function actionAddRegionLink($news_id, $region_id)
+    {
+        // Получаем AR новости и региона:
+        $news = $this->findModel($news_id);
+        $region = Region::findOne($region_id);
+
+        // Добавляем запись в промежуточную таблицу:
+        $news->link('regions', $region);
+
+        // Возвращаем обновленный фрагмент html:
+        return $this->renderAjax('_regions', ['model' => $news]);
+    }
+
+
+    public function actionDeleteRegionLink($news_id, $region_id)
+    {
+        // Получаем AR новости и региона:
+        $news = $this->findModel($news_id);
+        $region = Region::findOne($region_id);
+
+        // Добавляем запись в промежуточную таблицу:
+        $news->unlink('regions', $region, true);
+
+        // Возвращаем обновленный фрагмент html:
+        return $this->renderAjax('_regions', ['model' => $news]);
+    }
 
 
     /**

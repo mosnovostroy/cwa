@@ -164,24 +164,4 @@ class Arenda extends \yii\db\ActiveRecord
 
  				return true;
      }
-
-     //////////////////////////////////////////////////////////////////////////////////////////
-  	 // Нужно для правильного позиционирования карты при создании нового объявления
-     public function initMapParams()
-     {
-         if (Yii::$app->user && Yii::$app->user->identity && Yii::$app->user->identity->id)
-         {
-             $user = User::findOne( Yii::$app->user->identity->id );
-             if ($user && $user->region)
-             {
-                 $this->region = $user->region;
-                 if (($model = Region::findOne($this->region)) !== null)
-                 {
-                     $this->gmap_lat = $model->map_lat;
-                     $this->gmap_lng = $model->map_lng;
-                 }
-             }
-         }
-     }
-
 }

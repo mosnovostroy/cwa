@@ -6,6 +6,7 @@ use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use common\models\User;
+use common\models\RegionSearch;
 
 /* @var $this yii\web\View */
 if ($searchModel->regionNameTp)
@@ -25,46 +26,6 @@ $this->params['hasYandexMap'] = true;
 $this->params['showCounters'] = true;
 ?>
 
-<div id="mainform-large" class="container-fluid main-form-position hidden">
-	<div class="row">
-		<div class="col-xs-12" style="">
-			<span class="pull-right">
-				<a class="btn btn-default" onclick="
-					document.getElementById('mainform-large').classList.add('hidden');
-					">Скрыть</a>
-			</span>
-			<?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/map-submit'],
-											'options' => ['class' => 'form-inline']]); ?>
-					<span style="font-size: 1.6em; padding-right: 10px;">Коворкинг-центры</span>
-					<?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
-					<?= $form->field($searchModel, 'price_month_min')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-					<?= $form->field($searchModel, 'price_month_max')->textInput(['placeholder' => 'Цена за день'])->label(false) ?>
-          <?= $form->field($searchModel, 'is24x7')->checkbox() ?>
-					<?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
-			<?php ActiveForm::end(); ?>
-			<?php
-				if (User::isAdmin())
-					echo Html::a('Создать новый', ['create'], ['class' => 'btn btn-default']);
-			?>
-		</div>
-	</div>
-  <div class="row">
-      <div class="col-xs-12 serp-text">
-          Найдено коворкингов <?= $searchModel->regionNameTp ? 'в '.$searchModel->regionNameTp.' ' : ''?>с учетом фильтра: <?= $dataProvider->getTotalCount() ?>
-      </div>
-  </div>
-  <div class="row">
-      <div class="col-xs-12 serp-links">
-          <div class="pull-left">
-            <?= Html::a('список', ['center/index', 'CenterSearch' => $searchModel->toArray()]) ?>
-            | карта
-          </div>
-      </div>
-  </div>
-</div>
-
-
-
 <div id="yandexmap" class="wide-yandex-map"
 
   <?php
@@ -76,4 +37,5 @@ $this->params['showCounters'] = true;
   ymaps_lat = "<?= $searchModel->regionMapLat ?>"
   ymaps_lng = "<?= $searchModel->regionMapLng ?>"
   ymaps_scale = "<?= $searchModel->regionMapZoom ?>"
+  ymaps_show_tolist_button = "1"
 ></div>

@@ -61,7 +61,7 @@ BootstrapSelectAsset::register($this);
                 'homeLink' => false,
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
-            <div class="alert-widget"><?= Alert::widget() ?></div>
+            <!-- <div class="alert-widget"><?= Alert::widget() ?></div> -->
             <?=  $content ?>
         </div>
     </div>

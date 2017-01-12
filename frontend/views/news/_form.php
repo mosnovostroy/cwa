@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use common\models\RegionSearch;
+use yii\widgets\Pjax;
+use vova07\imperavi\Widget;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Center */
@@ -10,6 +13,16 @@ use yii\widgets\ActiveForm;
 
 <div class="news-form">
 
+    <?php
+        Pjax::begin(['enablePushState' => false]);
+            echo $this->render('_centers', ['model' => $model]);
+        Pjax::end();
+
+        Pjax::begin(['enablePushState' => false]);
+            echo $this->render('_regions', ['model' => $model]);
+        Pjax::end();
+    ?>
+
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="row">
@@ -17,23 +30,31 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+            <?= $form->field($model, 'text')->widget(Widget::className(), [
+                'settings' => [
+                    'lang' => 'ru',
+                    'minHeight' => 200,
+                    'plugins' => [
+                        'clips',
+                        'fullscreen'
+                    ]
+                ]
+            ]) ?>            
 
             <?= $form->field($model, 'is_lead')->checkbox(); ?>
 
         </div>
 
         <div class="col-md-5">
-
             <?php if ($model->anonsImage) echo '<div style="margin-bottom: 30px;"><image src="'.$model->anonsImage.'" width=100%></div>'; ?>
 
-            <?= $form->field($model, 'region')->dropDownList($model->regionsArrayWithoutNullItem,
+            <?= $form->field($model, 'region')->dropDownList(RegionSearch::getArrayWithoutNullItem(),
               [
                 'onchange' => ""
               ])
             ?>
-
-      </div>
+        </div>
+     </div>
 
       <?= $form->field($model->imageUploadModel, 'uploadFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 

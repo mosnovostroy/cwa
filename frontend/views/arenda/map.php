@@ -6,6 +6,7 @@ use yii\widgets\LinkPager;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
 use common\models\User;
+use common\models\RegionSearch;
 
 /* @var $this yii\web\View */
 if ($searchModel->regionNameTp)
@@ -36,7 +37,7 @@ $this->params['showCounters'] = true;
 			<?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['arenda/map-submit'],
 											'options' => ['class' => 'form-inline']]); ?>
 					<span style="font-size: 1.6em; padding-right: 10px;">Объявления</span>
-					<?= $form->field($searchModel, 'region')->dropDownList($searchModel->regionsArray, ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
+					<?= $form->field($searchModel, 'region')->dropDownList(RegionSearch::getArray(), ['class' => 'selectpicker', 'data-width' => 'auto'])->label(false) ?>
 					<?= Html::submitButton('Применить фильтр', ['class' => 'btn btn-primary', 'style' => 'margin-top: -10px;']) ?>
 			<?php ActiveForm::end(); ?>
 		</div>
@@ -67,4 +68,5 @@ $this->params['showCounters'] = true;
   ymaps_lat = "<?= $searchModel->regionMapLat ?>"
   ymaps_lng = "<?= $searchModel->regionMapLng ?>"
   ymaps_scale = "<?= $searchModel->regionMapZoom ?>"
+  ymaps_show_tolist_button = "1"
 ></div>

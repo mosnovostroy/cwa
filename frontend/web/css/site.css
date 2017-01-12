@@ -1,17 +1,17 @@
 html,
 body {
-    height: 100%;
+    height: calc(100% - 41px);
 }
 
 .wrap {
-    min-height: 100%;
+    min-height: calc(100% - 41px);
     height: auto;
-    margin: 0 auto -60px;
+    margin: 0px auto -60px;
     padding: 0 0 60px;
 }
 
 .wrap > .container,  .wrap > .container-fluid {
-    padding: 70px 15px 20px;
+    padding: 20px 15px 20px;
 }
 
 .alert-widget {
@@ -32,9 +32,9 @@ body {
 }
 
 .container-map {
-    height: calc(100% - 50px);
+    height: calc(100% - 41px);
 	position: relative;
-	top: 50px;
+	top: 0px;
 	left: 0;
     padding: 0;
 }
@@ -150,10 +150,6 @@ div.required label.control-label:after {
     content: " *";
     color: red;
 }
-
-
-
-
 
 /***********************************************************************************************/
 /* Список объектов, карта, Мои объявления */
@@ -497,3 +493,91 @@ div.required label.control-label:after {
 
     /* Дата у строчной новости на главной: */
     .news-date { color: #ccc; }
+
+/***********************************************************************************************/
+/* Аренда на главной: */
+
+    @media (max-width: 519px)
+    {
+        .main-arenda-control-button {width: 100%; margin-bottom: 30px;}
+    }
+    @media (min-width: 520px) and (max-width: 767px)
+    {
+        .main-arenda-control-button {width: 45%; margin-bottom: 30px;}
+    }
+    @media (min-width: 767px)
+    {
+        .main-arenda-control-button {width: 100%; margin-bottom: 30px;}
+    }
+
+    .arenda-main {
+        width: 100%;
+        min-height: 108px;
+        border-radius: 5px;
+        padding: 10px 10px;
+        background-color: #ffc;
+        border: 1px solid #aaa;
+        margin-bottom: 30px;
+        cursor: pointer;
+    }
+    .arenda-main:hover {
+        background-color: #ff7;
+    }
+    .arenda-main img {width: 25%; max-width: 90px; float: left; margin-right: 10px; }
+    .arenda-main-button {
+        background-color: #fff;
+        text-align: center;
+        padding-top: 32px;
+    }
+
+    @media (min-width: 768px)
+    {
+        .row-flex123, .row-f#lex123 > div[class*='col-'] { margin-top: 15px; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; flex:1 1 auto;}
+        .row-flex123-wrap {	-webkit-flex-flow: row wrap; align-content: flex-start; flex:0;	}
+        .row-flex123 > div[class*='col-'] { margin:-.2px;}
+    }
+
+    .button-main {
+        width: 100%;
+        min-height: 50px;
+        /*border-radius: 5px;*/
+        padding: 4px 5px;
+        text-align: center;
+        background-color: #fff;
+        border: 2px solid #bbd;
+        margin-bottom: 30px;
+        cursor: pointer;
+    }
+    .button-main:hover {
+        background-color: #bbd;
+    }
+
+/***********************************************************************************************/
+/* Верхняя полоса (выбор региона и авторизация): */
+    .top-bar {
+        /*background-color: #373737;*/
+        background-color: #2D1152;
+        border: 0;
+        width: 100%;
+        min-height: 20px;
+        padding: 10px;
+    }
+
+    .top-bar a {
+        /*color: #aaa;*/
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .top-bar a:hover {
+        color: #aaa;
+        text-decoration: none;
+    }
+
+    .top-item {
+        margin: 0 15px;
+    }
+
+    .top-item:hover {
+        /*background-color: #f00;*/
+    }

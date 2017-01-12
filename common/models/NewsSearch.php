@@ -14,6 +14,8 @@ use ReflectionClass;
  */
 class NewsSearch extends News
 {
+    protected $lead_id;
+
     /**
      * @inheritdoc
      */
@@ -24,60 +26,85 @@ class NewsSearch extends News
     }
 
     /**
+    * Формирует нужное SQL-выражение. Вызывается тремя способами.
+    * 1) getSql() - "стандартный" SQL для дата-провайдера (списоки новостей с поиском по строке и пр.)
+    * 2) getSql(false) - SQL для поиска id "главных" новостей (в исходной версии главных новостей - не более одной)
+    * 3) getSql(false, [id главных новостей]) - SQL для поиска остальных новостей для анонсной страницы.
+    */
+    protected function getSql($ordinar = true, $excludedIds = [])
+    {
+        if ($ordinar) {
+            $specCond = '';
+        } else if (!$ordinar && count($excludedIds) > 0) {
+            $specCond = ' AND n.id NOT IN ('.(implode(",", $excludedIds)).') ';
+        } else {
+            $specCond = ' AND n.is_lead = 1 ';
+        }
+
+        return
+            '(SELECT n.*
+            FROM 	news AS n,
+                    news_center AS nc,
+                    center AS c
+            WHERE 	n.id = nc.news_id
+                    AND nc.center_id = c.id
+                    AND c.region = :region_id
+                    '.$specCond.')
+
+            UNION
+
+            (SELECT  n.*
+            FROM 	news AS n,
+                    news_region AS nr
+            WHERE 	n.id = nr.news_id
+                    AND nr.region_id = :region_id
+                    '.$specCond.')
+
+            UNION
+
+            (SELECT  n.*
+            FROM 	news AS n
+            WHERE 	n.id NOT IN (SELECT DISTINCT news_id FROM news_region)
+                    AND n.id NOT IN (SELECT DISTINCT news_id FROM news_center)
+                    '.$specCond.')
+
+            ORDER BY createdAt DESC';
+    }
+
+    /**
      * Creates data provider instance with search query applied
      *
      * @param array $params
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $all = false)
+    public function search($params, $onlyIds = false, $onlyLead = false)
     {
-        $query = News::find();
-
-        if ($all)
-            $adpParams = [
-              'query' => $query,
-              'totalCount' => 1000,
-              'pagination' => ['pageSize' => 1000],
-            ];
-        else
-            $adpParams = ['query' => $query,
-                  'pagination' => ['pageSize' => 10],
-                  'sort' => [
-                      'defaultOrder' => [
-                          'createdAt' => SORT_DESC,
-                      ]
-                  ],
-            ];
-
-
-        $dataProvider = new ActiveDataProvider($adpParams);
-
-        //Yii::info($params,'myd');
-        // //Загружаем данные из GET, пришедшие из текстового поля поиска (параметр CenterSearch[text])
-        // if (isset($params['CenterSearch']['text']))
-        //     $this->text = $params['CenterSearch']['text'];
-
-        // Yii::info('параметры, пришедшие в search: ', 'myd');
-        // Yii::info($params, 'myd');
-        // Yii::info('this->is24x7: '.$this->is24x7, 'myd');
-        // Yii::info('this->price_month_max: '.$this->price_month_max, 'myd');
-
-        //Загружаем данные из GET, пришедшие из формы поиска (остальные параметры вида CenterSearch[region])
+        //Yii::info($params, 'myd');
         $this->load($params);
 
-        // Yii::info('this->is24x7: '.$this->is24x7, 'myd');
-        // Yii::info('this->price_month_max: '.$this->price_month_max, 'myd');
-
-
         if (!$this->validate())
-            return $dataProvider;
+            return new ActiveDataProvider(['query' => News::find()]);
+
+        $regionId = isset($params['region']) ? $params['region'] : 1; // Москва до умолчанию
+
+        $sql = $this->getSql();
+        $query = News::findBySql($sql, [ ':region_id' => $regionId ] );
+
+        $adpParams = ['query' => $query,
+              'pagination' => ['pageSize' => 10],
+              'sort' => [
+                  'defaultOrder' => [
+                      'createdAt' => SORT_DESC,
+                  ]
+              ],
+        ];
+
+        $dataProvider = new ActiveDataProvider($adpParams);
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            // 'gmap_lat' => $this->gmap_lat,
-            // 'gmap_lng' => $this->gmap_lng,
             'region' => $this->region,
             'is_lead' => $this->is_lead,
         ]);
@@ -93,7 +120,16 @@ class NewsSearch extends News
 
     public function searchLead()
     {
-        $query = News::findBySql('SELECT * FROM news WHERE is_lead=1 ORDER BY createdAt DESC LIMIT 1');
+        $regionId = Yii::$app->regionManager->id;
+        if (!$regionId) $regionId = 1;
+
+        $sql = $this->getSql(false);
+        $ids = Yii::$app->db->createCommand($sql, [ ':region_id' => $regionId ] )
+            ->queryAll();
+        //Yii::info($ids, 'myd');
+        $this->lead_id = $ids[0]['id'];
+
+        $query = News::find()->where(['id' => $this->lead_id]);
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
         $dataProvider = new ActiveDataProvider($adpParams);
         return $dataProvider;
@@ -101,15 +137,13 @@ class NewsSearch extends News
 
     public function searchOther()
     {
-        $lead = Yii::$app->db->createCommand('SELECT id FROM news WHERE is_lead=1 ORDER BY createdAt DESC LIMIT 1')
-			->queryScalar();
+        $regionId = Yii::$app->regionManager->id;
+        if (!$regionId) $regionId = 1;
 
-        $query = News::findBySql(
-            'SELECT * FROM news WHERE id!=:lead ORDER BY createdAt DESC LIMIT 5',
-            [
-                ':lead' => $lead,
-            ]
-        );
+        if (!$this->lead_id) $this->lead_id = 0;
+
+        $sql = $this->getSql(false, [$this->lead_id]);
+        $query = News::findBySql($sql, [ ':region_id' => $regionId ] );
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
         $dataProvider = new ActiveDataProvider($adpParams);
         return $dataProvider;

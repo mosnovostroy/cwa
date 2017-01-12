@@ -8,8 +8,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $model->name.' (о
 $this->registerMetaTag(['name' => 'keywords', 'content' => 'совместная аренда офиса, бесплатные объявления, поиск партнера для аренды, сдаю часть офиса, сниму часть офиса']);
 $this->params['breadcrumbs'] =
 [
-    ['label' => 'Совместная аренда офиса', 'url' => ['arenda/index']],
-    ['label' => $model->regionName, 'url' => ['arenda/index', 'ArendaSearch' => ['region' => $model->region]]],
+    ['label' => $model->regionName, 'url' => ['site/index', 'region' => $model->region]],
+    ['label' => 'Совместная аренда офиса', 'url' => ['arenda/index', 'region' => $model->region]],
 ];
 $this->params['hasYandexMap'] = true;
 $this->params['showCounters'] = true;
@@ -89,7 +89,7 @@ $this->params['showCounters'] = true;
 <div class="row">
     <div class="col-md-12">
         <h4>Расположение объекта:</h4>
-        <div id="yandexmap" class="h360-yandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16" ymaps_hide_filter_button = "1"></div>
+        <div id="yandexmap" class="h360-yandexmap" arendaid="<?= $model->id?>" ymaps_lat = "<?= $model->gmap_lat?>" ymaps_lng = "<?= $model->gmap_lng?>"  ymaps_scale = "16"></div>
     </div>
 </div>
 

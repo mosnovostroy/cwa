@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Center;
+use common\models\News;
 use common\models\Tariff;
 use yii\web\Controller;
 use common\models\CenterSearch;
@@ -11,6 +12,8 @@ use common\models\User;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
+use common\models\Region;
 
 class CenterController extends \yii\web\Controller
 {
@@ -140,12 +143,16 @@ class CenterController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $searchModel = new CenterSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $params = Yii::$app->request->queryParams;
 
+        $searchModel = new CenterSearch();
+
+        $dataProvider = $searchModel->search($params);
+        //Yii::info(Yii::$app->request->queryParams, 'myd');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'metro' => isset($params['metro']) ? $params['metro'] : null,
         ]);
     }
 
@@ -165,7 +172,6 @@ class CenterController extends \yii\web\Controller
     public function actionCoordinates()
     {
         $searchModel = new CenterSearch();
-
         header("Content-Type: application/json; charset=UTF-8");
         echo $searchModel->searchCoords(Yii::$app->request->queryParams);
     }
@@ -209,9 +215,8 @@ class CenterController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            $model->initMapParams();
+            return $this->render('create', [ 'model' => $model ]);
         }
     }
     /**
@@ -223,10 +228,11 @@ class CenterController extends \yii\web\Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save())
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        else
+        } else {
             return $this->render('update', [ 'model' => $model ]);
+        }
     }
 
     public function actionUpdateFeatures($id)
@@ -306,4 +312,65 @@ class CenterController extends \yii\web\Controller
 		    $this->findModel($id)->setLogoImage($filename);
 		    return $this->redirect(['pictures', 'id' => $id]);
     }
+
+    // public function beforeAction($action)
+    // {
+    //     $toRedir = [
+    //         'index' => 'index1',
+    //     ];
+    //
+    //     if (isset($toRedir[$action->id])) {
+    //         Yii::$app->response->redirect(Url::to(['centers/index2']), 301);
+    //         Yii::$app->end();
+    //     }
+    //     return parent::beforeAction($action);
+    // }
+
+    public function actionDeleteNewsLink($center_id, $news_id)
+    {
+        // Получаем AR новости и центра:
+        $center = $this->findModel($center_id);
+        $news = News::findOne($news_id);
+
+        // Удаляем запись из промежуточной таблицы:
+        $center->unlink('news', $news, true);
+
+        // Возвращаем обновленный фрагмент html:
+        return $this->renderAjax('_news', ['model' => $center]);
+    }
+
+
+    public function actionNewsList($q = null, $id = null)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new \yii\db\Query;
+            $query->select('id, title AS text')
+                ->from('news')
+                ->where(['like', 'title', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => News::find($id)->name];
+        }
+        return $out;
+    }
+
+    public function actionAddNewsLink($center_id, $news_id)
+    {
+        // Получаем AR новости и центра:
+        $center = $this->findModel($center_id);
+        $news = News::findOne($news_id);
+
+        // Удаляем запись из промежуточной таблицы:
+        $center->link('news', $news);
+
+        // Возвращаем обновленный фрагмент html:
+        return $this->renderAjax('_news', ['model' => $center]);
+    }
+
 }

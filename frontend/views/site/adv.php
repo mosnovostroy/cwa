@@ -18,7 +18,7 @@ $this->params['showCounters'] = true;
       <div class="col-md-7">
         <p>Прайс-лист и технические требования к рекламным материалам предоставляются по запросу: coworking.review@gmail.com</p>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-5">          
       </div>
   </div>
 </div>

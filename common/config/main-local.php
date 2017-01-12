@@ -25,6 +25,22 @@ return [
                 // ...
             ],
         ],
+
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => '@webroot/bootstrap/',
+                    'css' => [
+                        'css/bootstrap.min.css',
+                        'css/bootstrap-theme.min.css'
+                    ],
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'sourcePath' => '@webroot/bootstrap/',
+                    'js' => ['js/bootstrap.min.js']
+                ],
+            ],
+        ],
     ],
 	'modules' => [
 		'comment' => [

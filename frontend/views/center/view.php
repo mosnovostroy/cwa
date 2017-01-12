@@ -16,8 +16,8 @@ $this->registerMetaTag(['name' => 'og:image', 'content' => ($model->images && co
 
 $this->params['breadcrumbs'] =
 [
-    ['label' => 'Коворкинги', 'url' => ['center/index']],
-    ['label' => $model->regionName, 'url' => ['center/index', 'CenterSearch' => ['region' => $model->region]]]
+    ['label' => $model->regionName, 'url' => ['site/index', 'region' => $model->region]],
+    ['label' => 'Коворкинги', 'url' => ['center/index', 'region' => $model->region]],
 ];
 $this->params['hasYandexMap'] = true;
 $this->params['showCounters'] = true;
@@ -300,8 +300,7 @@ $this->params['showCounters'] = true;
             centerid="<?= $model->id?>"
             ymaps_lat = "<?= $model->gmap_lat?>"
             ymaps_lng = "<?= $model->gmap_lng?>"
-            ymaps_scale = "16"
-            ymaps_hide_filter_button = "1">
+            ymaps_scale = "16">
         </div>
     </div>
     <div class="col-md-6">

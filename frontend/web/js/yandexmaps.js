@@ -3,6 +3,19 @@ var objectManager;
 var currentObject;
 var myGeocoder;
 
+var ymaps_scale = yandexmap.getAttribute('ymaps_scale');
+if(!ymaps_scale) ymaps_scale = 8;
+var ymaps_lat = yandexmap.getAttribute('ymaps_lat');
+if(!ymaps_lat) ymaps_lat = 55.75396;
+var ymaps_lng = yandexmap.getAttribute('ymaps_lng');
+if(!ymaps_lng) ymaps_lng = 37.620393;
+var ymaps_show_tolist_button = yandexmap.getAttribute('ymaps_show_tolist_button');
+if(!ymaps_show_tolist_button) ymaps_show_tolist_button = 0;
+var ymaps_show_search = yandexmap.getAttribute('ymaps_show_search');
+if(!ymaps_show_search) ymaps_show_search = 0;
+var ymaps_clickable = yandexmap.getAttribute('ymaps_clickable');
+if(!ymaps_clickable) ymaps_clickable = 0;
+
 ymaps.ready(init_yandex_maps);
 
 function locate_yandex_maps (region_id)
@@ -29,16 +42,17 @@ function init_objects ()
     var arendaid = yandexmap.getAttribute('arendaid');
     if(centerid) {
         datapath = "/centers/coordinates/"
-        dataparams = "&CenterSearch[id]=" + centerid;
+        dataparams = "&id=" + centerid;
     }
     else if(arendaid) {
         datapath = "/arenda/coordinates/"
-        dataparams = "&ArendaSearch[id]=" + arendaid;
+        dataparams = "&id=" + arendaid;
     }
     else {
         datapath = window.location.toString().replace('/map/','/coordinates/');
         dataparams = "";
     }
+
     $.ajax({
         url: datapath,
         type: "GET",
@@ -103,15 +117,6 @@ function init_closest_metro (coords)
 
 function init_yandex_maps ()
 {
-    var ymaps_scale = yandexmap.getAttribute('ymaps_scale');
-    if(!ymaps_scale) ymaps_scale = 8;
-    var ymaps_lat = yandexmap.getAttribute('ymaps_lat');
-    if(!ymaps_lat) ymaps_lat = 55.75396;
-    var ymaps_lng = yandexmap.getAttribute('ymaps_lng');
-    if(!ymaps_lng) ymaps_lng = 37.620393;
-    var ymaps_hide_filter_button = yandexmap.getAttribute('ymaps_hide_filter_button');
-    if(!ymaps_hide_filter_button) ymaps_hide_filter_button = 0;
-
     init_closest_metro ([ymaps_lat, ymaps_lng]);
 
     //alert(window.location.toString().replace('/map/','/coords/'));
@@ -128,12 +133,17 @@ function init_yandex_maps ()
             gridSize: 32
         });
 
-  	if (yandexmap.className == 'inline-yandexmap')
-  	{
+    myMap.controls.remove('trafficControl');
+
+    if (!ymaps_show_search) {
+        myMap.controls.remove('searchControl');
+    }
+
+  	if (yandexmap.className == 'inline-yandexmap') {
   		myMap.behaviors.disable('scrollZoom');
   	}
 
-    if (!ymaps_hide_filter_button)
+    if (ymaps_show_tolist_button)
     {
         var ButtonLayout = ymaps.templateLayoutFactory.createClass([
                 '<div alt="{{ data.title }}" class="bg-primary my-button ',
@@ -142,7 +152,7 @@ function init_yandex_maps ()
                 '{% if state.size == "large" %}my-button_large{% endif %}',
                 '{% if state.selected %} my-button-selected{% endif %}">',
                 // '<img class="my-button__img" src="{{ data.image }}" alt="{{ data.title }}">',
-                '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>',
+                '<span class="glyphicon glyphicon-list" aria-hidden="true"></span>',
                 '<span class="my-button__text">{{ data.content }}</span>',
                 '</div>'
             ].join(''));
@@ -150,8 +160,8 @@ function init_yandex_maps ()
       	var myButton = new ymaps.control.Button({
                data:
                {
-                   content: 'Фильтр',
-                   title: 'Показать фильтр'
+                   content: 'Список объектов',
+                   title: 'Закрыть карту и перейти к списку объектов'
                },
                options:
                {
@@ -161,10 +171,13 @@ function init_yandex_maps ()
                }
           });
       	myMap.controls.add(myButton, {
-      		float: "right"
+      		float: "left"
       		//,		floatIndex: 500
       	});
-      	myButton.events.add('press', function () { document.getElementById('mainform-large').classList.remove('hidden'); })
+      	myButton.events.add('press', function () {
+            window.location.href = window.location.toString().replace('/map/','/');;
+            // document.getElementById('mainform-large').classList.remove('hidden');
+        })
     }
 
     objectManager.objects.options.set('preset', 'islands#greenDotIcon');
@@ -208,54 +221,46 @@ MyBehavior.prototype =
 
     _onClick: function (e)
     {
-        var coords = e.get('coords');
+        if (ymaps_clickable) {
+            var coords = e.get('coords');
 
-        if (!currentObject)
-        {
-            currentObject = new ymaps.Placemark(coords);
-            myMap.geoObjects.add(currentObject);
-        }
-        else
-        {
-            currentObject.geometry.setCoordinates(coords);
-        }
-
-     	if (document.getElementById("center-gmap_lat"))
-            document.getElementById("center-gmap_lat").value = coords[0];
-        if (document.getElementById("center-gmap_lng"))
-            document.getElementById("center-gmap_lng").value = coords[1];
-    		if (document.getElementById("arenda-gmap_lat"))
-            document.getElementById("arenda-gmap_lat").value = coords[0];
-        if (document.getElementById("arenda-gmap_lng"))
-            document.getElementById("arenda-gmap_lng").value = coords[1];
-
-        if (document.getElementById("center-metro"))
-        {
-            myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '1'});
-            myGeocoder.then(
-            function (res) {
-                var metr = res.geoObjects.get(0);
-                var str = metr.properties.get('name');
-                document.getElementById("center-metro").value = str.replace("метро ", "");
-                },
-                function (err) {
-                    // обработка ошибки
+            if (!currentObject)
+            {
+                currentObject = new ymaps.Placemark(coords);
+                myMap.geoObjects.add(currentObject);
             }
-            );
+            else
+            {
+                currentObject.geometry.setCoordinates(coords);
+            }
+
+         	if (document.getElementById("center-gmap_lat"))
+                document.getElementById("center-gmap_lat").value = coords[0];
+            if (document.getElementById("center-gmap_lng"))
+                document.getElementById("center-gmap_lng").value = coords[1];
+        		if (document.getElementById("arenda-gmap_lat"))
+                document.getElementById("arenda-gmap_lat").value = coords[0];
+            if (document.getElementById("arenda-gmap_lng"))
+                document.getElementById("arenda-gmap_lng").value = coords[1];
+
+            if (document.getElementById("center-metro"))
+            {
+                myGeocoder = ymaps.geocode(coords, {kind: 'metro', results: '1'});
+                myGeocoder.then(
+                function (res) {
+                    var metr = res.geoObjects.get(0);
+                    var str = metr.properties.get('name');
+                    document.getElementById("center-metro").value = str.replace("метро ", "");
+                    },
+                    function (err) {
+                        // обработка ошибки
+                }
+                );
+            }
         }
-
-
-
-
     }
-    // ,
-    // _onContextMenu:
-    // function (e)
-    // {
-    //     var coords = e.get('coords');
-	  //     alert('Центр карты: ' + coords[0] + ', ' + coords[1]);
-	  // }
 };
+
 
 $(function () {
     $('.button-checkbox').each(function () {

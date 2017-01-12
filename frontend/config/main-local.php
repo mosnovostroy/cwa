@@ -67,6 +67,8 @@ $config = [
             'secret' => '6Le3JyoTAAAAAClPSsqK9Fw5adC4UC5xXcc6EJpg',
         ],
 
+        'regionManager' => 'frontend\components\RegionManager',
+
         'i18n' => [
             'translations' => [
                 'eauth' => [
@@ -96,6 +98,7 @@ $config = [
                     'enableStrictParsing' => false,
                     'suffix' => '/',
                     'rules' => [
+                        'search' => 'search/index',
                         'centers' => 'center/index',
                         'centers/map' => 'center/map',
                         'centers/coordinates' => 'center/coordinates',
@@ -104,6 +107,8 @@ $config = [
                         'arenda/coordinates' => 'arenda/coordinates',
                         'news' => 'news/index',
                         'news/<id:\d+>' => 'news/view',
+                        'events' => 'event/index',
+                        'events/<id:\d+>' => 'event/view',
                         'signup' => 'site/signup',
                         'request-password-reset' => 'site/request-password-reset',
                         'reset-password' => 'site/reset-password',

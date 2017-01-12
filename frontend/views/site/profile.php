@@ -6,7 +6,7 @@ use common\models\User;
 use yii\widgets\DetailView;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\VarDumper;
-
+use common\models\RegionSearch;
 
 $this->title = 'Профиль пользователя: | Коворкинг-ревю';
 $this->registerMetaTag(['name' => 'description', 'content' => 'Профиль пользователя: контактная информация, смена пароля, настройки']);
@@ -52,7 +52,7 @@ $this->params['showCounters'] = true;
 
     <?php $form = ActiveForm::begin(['id' => 'profile-form', 'action' => ['site/update-user', 'id' => $model->id]]); ?>
 
-      <?= $form->field($model, 'region')->dropDownList($model->regionsArrayForProfile)->label(false) ?>
+      <?= $form->field($model, 'region')->dropDownList(RegionSearch::getArrayForProfile())->label(false) ?>
 
       <div class="login-button-container">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary login-button', 'name' => 'login-button']) ?>
