@@ -127,7 +127,7 @@ class NewsSearch extends News
         $ids = Yii::$app->db->createCommand($sql, [ ':region_id' => $regionId ] )
             ->queryAll();
         //Yii::info($ids, 'myd');
-        $this->lead_id = count($ids) > 0 ? $ids[0]['id'] : 0;
+        $this->lead_id =  count($ids) > 0 ? $ids[0]['id'] : 0;
 
         $query = News::find()->where(['id' => $this->lead_id]);
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
