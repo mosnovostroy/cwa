@@ -123,7 +123,7 @@ class News extends \yii\db\ActiveRecord
         $this->date = Yii::$app->formatter->asDate($this->createdAt, 'long');
 
         $len = 500;
-        $string = $this->text;
+        $string = strip_tags($this->text);
         if (mb_strlen($string) > $len)
         {
             $string = mb_substr($string, 0, $len);
@@ -137,7 +137,7 @@ class News extends \yii\db\ActiveRecord
         $this->anons_text = $string;
 
         $len = 70;
-        $string = $this->text;
+        $string = strip_tags($this->text);
         if (mb_strlen($string) > $len)
         {
             $string = mb_substr($string, 0, $len);

@@ -103,6 +103,13 @@ class ImageBehavior extends Behavior
 		return $this->doGetAnons(120, 120, '120');
     }
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// Generate preview 150х100, return the relative url:
+	public function getAnons150100()
+    {
+		return $this->doGetAnons(150, 100, '150100');
+    }
+
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		// Generate preview with specified sizes, saves to file with $prefix, return the relative url:
 		public function doGetAnons($width, $height, $prefix)

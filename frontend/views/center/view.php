@@ -290,6 +290,31 @@ $this->params['showCounters'] = true;
 </div> -->
 
 <div class="row">
+    <div class="col-sm-8">
+        <h3 style="margin-top: 30px;"><p>Новости</p></h3>
+        <?php $count = 0; ?>
+        <?php foreach ($news->getModels() as $news): ?>
+        <?php if ($count > 3) break; ?>
+        <?php $url = Url::to(['news/view', 'id' => $news->id]); ?>
+        <div class="clearfix">
+            <a href="<?=$url?>">
+                <img style="float:left; margin: 0 15px 15px 0;" src="<?=$news->anons150100?>">
+            </a>
+            <p>
+                <a href="<?=$url?>"><?=$news->title?></a>
+                <span class="news-date"><?=$news->date?></span>
+            </p>
+            <p>
+                <?=$news->anons_text?>
+            </p>
+        </div>
+        <?php $count++; ?>
+        <?php endforeach; ?>
+        <a href="">Все новости коворкинга >> </a>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-6">
 
         <h3 style="margin-top: 30px;"><p><?= $model->name?> на карте:</p></h3>

@@ -27,8 +27,8 @@ class NewsSearch extends News
 
     /**
     * Формирует нужное SQL-выражение. Вызывается тремя способами.
-    * 1) getSql() - "стандартный" SQL для дата-провайдера (списоки новостей с поиском по строке и пр.)
-    * 2) getSql(false) - SQL для поиска id "главных" новостей (в исходной версии главных новостей - не более одной)
+    * 1) getSql() - "стандартный" SQL для дата-провайдера (список новостей с поиском по строке и пр.)
+    * 2) getSql(false) - SQL для поиска id "главных" новостей (в исходной версии всего одна главная новость)
     * 3) getSql(false, [id главных новостей]) - SQL для поиска остальных новостей для анонсной страницы.
     */
     protected function getSql($ordinar = true, $excludedIds = [])
@@ -144,6 +144,21 @@ class NewsSearch extends News
 
         $sql = $this->getSql(false, [$this->lead_id]);
         $query = News::findBySql($sql, [ ':region_id' => $regionId ] );
+        $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
+        $dataProvider = new ActiveDataProvider($adpParams);
+        return $dataProvider;
+    }
+
+    public function searchForCenter($id)
+    {
+        $sql = 'SELECT n.*
+        FROM 	news AS n,
+                news_center AS nc
+        WHERE 	n.id = nc.news_id
+                AND nc.center_id = :center_id
+        ORDER BY createdAt DESC
+        LIMIT 3';
+        $query = News::findBySql($sql, [ ':center_id' => $id ] );
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
         $dataProvider = new ActiveDataProvider($adpParams);
         return $dataProvider;

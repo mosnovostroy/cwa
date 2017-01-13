@@ -8,6 +8,7 @@ use common\models\News;
 use common\models\Tariff;
 use yii\web\Controller;
 use common\models\CenterSearch;
+use common\models\NewsSearch;
 use common\models\User;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -197,9 +198,13 @@ class CenterController extends \yii\web\Controller
       $searchModel = new CenterSearch();
       $closestCenters = $searchModel->searchClosest($model);
 
+      $newsModel = new NewsSearch();
+      $news = $newsModel->searchForCenter($id);
+
       return $this->render('view', [
           'model' => $model,
           'closestCenters' => $closestCenters,
+          'news' => $news,
         ]);
     }
 
