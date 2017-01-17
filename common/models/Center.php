@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\FileHelper;
 use common\behaviors\ImageBehavior;
 use common\behaviors\RegionInfoBehavior;
+use common\models\Region;
 
 /**
  * This is the model class for table "center".
@@ -380,6 +381,11 @@ class Center extends \yii\db\ActiveRecord
     {
         return $this->hasMany(News::className(), ['id' => 'news_id'])
              ->viaTable('news_center', ['center_id' => 'id']);
+    }
+
+	public function getRegionData()
+    {
+        return $this->hasOne(Region::className(), ['id' => 'region']);
     }
 
 }

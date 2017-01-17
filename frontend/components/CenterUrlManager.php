@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use common\models\Station;
 use common\models\Center;
+use common\models\Arenda;
 
 class CenterUrlManager extends UrlManager
 {
@@ -57,36 +58,24 @@ class CenterUrlManager extends UrlManager
         // Страница центра:
 		if ($route === 'center/view')
         {
-            if (isset($params['id']))
+            if (isset($params['id']) && $params['id'] > 0)
             {
-                //По id объекта определяем алиасы центра и региона верхнего уровня:
-                $alias = Yii::$app->db
-                                  ->createCommand('SELECT c.alias AS `center`, r.alias AS `region`
-                                      FROM center AS `c`, region AS `r`
-                                      WHERE c.region = r.id
-                                      AND c.id=:cid', [':cid' => $params['id']])
-                                  ->queryOne();
-
-                //Возвращаем урл вида /moscow/centers/romashka/
-                return '/' . $alias['region'] . '/centers/' . $alias['center'] . '/';
+                $center = Center::findOne($params['id']);
+                if ($center) {
+                    return '/' . $center->regionData->alias. '/centers/' . $center->alias . '/';
+                }
             }
         }
 
         // Страница объявления:
 		if ($route === 'arenda/view')
         {
-            if (isset($params['id']))
+            if (isset($params['id']) && $params['id'] > 0)
             {
-                //По id объекта определяем алиасы объявления и региона верхнего уровня:
-                $alias = Yii::$app->db
-                                  ->createCommand('SELECT c.alias AS `arenda_alias`, r.alias AS `region_alias`
-                                      FROM arenda AS `c`, region AS `r`
-                                      WHERE c.region = r.id
-                                      AND c.id=:cid', [':cid' => $params['id']])
-                                  ->queryOne();
-
-                //Возвращаем урл вида /moscow/arenda/romashka/
-                return '/' .$alias['region_alias'] . '/arenda/' . $alias['arenda_alias'] . '/';
+                $center = Arenda::findOne($params['id']);
+                if ($center) {
+                    return '/' . $center->regionData->alias. '/arenda/' . $center->alias . '/';
+                }
             }
         }
 
@@ -141,6 +130,14 @@ class CenterUrlManager extends UrlManager
             // Если регион пришел в параметрах, у него приоритет над сессионным:
             if (isset($params['region'])) {
                 $regionId = $params['region'];
+            }
+
+            // Если это список новостей коворкинга, регион этого коворкинга также в приоритете:
+            if ($route == 'news/index' && isset($params['centerid'])) {
+                $center = Center::findOne($params['centerid']);
+                if ($center) {
+                    $regionId = $center->region;
+                }                
             }
 
             if ($regionId)

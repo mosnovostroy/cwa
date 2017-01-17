@@ -164,4 +164,10 @@ class Arenda extends \yii\db\ActiveRecord
 
  				return true;
      }
+
+     public function getRegionData()
+     {
+         return $this->hasOne(Region::className(), ['id' => 'region']);
+     }
+
 }
