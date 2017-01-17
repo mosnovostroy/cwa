@@ -310,7 +310,10 @@ $this->params['showCounters'] = true;
         </div>
         <?php $count++; ?>
         <?php endforeach; ?>
-        <a href="">Все новости коворкинга >> </a>
+        <?php if ($count > 0) {
+            echo Html::a('Все новости коворкинга >> ', ['news/index', 'centerid' => $model->id ]);
+            }
+        ?>
     </div>
 </div>
 

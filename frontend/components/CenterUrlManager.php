@@ -5,6 +5,7 @@ use yii\web\UrlManager;
 use Yii;
 use yii\helpers\Url;
 use common\models\Station;
+use common\models\Center;
 
 class CenterUrlManager extends UrlManager
 {
@@ -135,23 +136,12 @@ class CenterUrlManager extends UrlManager
             $route == 'arenda/map'
             )
         {
-            // if (isset($params['sort'])) {
-            //     Yii::info('Строим урл для: '.$route, 'myd');
-            //     Yii::info($params, 'myd');
-            // }
-
             $regionId = Yii::$app->regionManager->id;
 
             // Если регион пришел в параметрах, у него приоритет над сессионным:
             if (isset($params['region'])) {
                 $regionId = $params['region'];
             }
-            // if (isset($params['CenterSearch']['region'])) {
-            //     $regionId = $params['CenterSearch']['region'];
-            // }
-            // if (isset($params['ArendaSearch']['region'])) {
-            //     $regionId = $params['ArendaSearch']['region'];
-            // }
 
             if ($regionId)
             {
@@ -166,12 +156,6 @@ class CenterUrlManager extends UrlManager
                     if (isset($params['region'])) {
                         unset($params['region']);
                     }
-                    // if (isset($params['CenterSearch']['region'])) {
-                    //     unset($params['CenterSearch']['region']);
-                    // }
-                    // if (isset($params['ArendaSearch']['region'])) {
-                    //     unset($params['ArendaSearch']['region']);
-                    // }
 
                     // Не подставляем в УРЛ пустые поля из формы:
             		foreach($params as $k => $v) {
@@ -187,23 +171,6 @@ class CenterUrlManager extends UrlManager
         					unset($params[$k]);
                         }
                     }
-                    // if (isset($params['CenterSearch'])) {
-                	// 	foreach($params['CenterSearch'] as $k => $v) {
-                	// 	    if (isset($params['CenterSearch'][$k]) && $params['CenterSearch'][$k] == '') {
-                	// 		    unset($params['CenterSearch'][$k]);
-                    //         }
-                    //     }
-                    //     if (isset($params['CenterSearch']['is24x7']) && $params['CenterSearch']['is24x7'] == '0') {
-                    //         unset($params['CenterSearch']['is24x7']);
-                    //     }
-              // 		}
-              // 		else if (isset($params['ArendaSearch'])) {
-            		// 	foreach($params['ArendaSearch'] as $k => $v) {
-            		// 		if (isset($params['ArendaSearch'][$k]) && $params['ArendaSearch'][$k] == '') {
-            		// 			unset($params['ArendaSearch'][$k]);
-                    //         }
-                    //     }
-              // 		}
 
                     $station_slug = '';
                     if (isset($params['metro'])) {
@@ -212,6 +179,16 @@ class CenterUrlManager extends UrlManager
                             $station_slug = $station->slug;
                         }
                         unset($params['metro']);
+                    }
+
+                    // Этот параметр может придти только для списка новостей ("новости коворкинга"):
+                    $center_alias = '';
+                    if (isset($params['centerid'])) {
+                        $center = Center::findOne($params['centerid']);
+                        if ($center && $center->alias) {
+                            $center_alias = $center->alias;
+                        }
+                        unset($params['centerid']);
                     }
 
                     $url = parent::createUrl($params);
@@ -234,6 +211,10 @@ class CenterUrlManager extends UrlManager
                             $url = str_replace('/events/', '/events/'.$station_slug.'/', $url);
                             $url = str_replace('/arenda/', '/arenda/'.$station_slug.'/', $url);
                         }
+                    }
+
+                    if ($center_alias) {
+                        $url = str_replace('/news/', '/news/'.$center_alias.'/', $url);
                     }
                 }
             }
@@ -331,44 +312,54 @@ class CenterUrlManager extends UrlManager
                         // Это так, когда в кармане $detailed_matches[1]:
 
                         // - либо алиас сущности (для center и arenda):
-                        $item_id = Yii::$app->db
-                            ->createCommand('SELECT c.id AS `cid`
-                                              FROM '.$itemName.' AS `c`, region AS `r`
-                                              WHERE c.region = r.id
-                                              AND c.alias=:itemAlias
-                                              AND r.alias=:region' , [':itemAlias' => $detailed_matches[1], ':region' => $matches[1]])
-                            ->queryScalar();
+                        if ($itemName == 'center' || $itemName == 'arenda') {
+                            $item_id = Yii::$app->db
+                                ->createCommand('SELECT c.id AS `cid`
+                                                  FROM '.$itemName.' AS `c`, region AS `r`
+                                                  WHERE c.region = r.id
+                                                  AND c.alias=:itemAlias
+                                                  AND r.alias=:region' , [':itemAlias' => $detailed_matches[1], ':region' => $matches[1]])
+                                ->queryScalar();
 
-                        if ($item_id)
-                        {
-                            $params['id'] = $item_id;
-                            return [$itemName.'/view', $params];
+                            if ($item_id)
+                            {
+                                $params['id'] = $item_id;
+                                return [$itemName.'/view', $params];
+                            }
                         }
 
                         // - либо id сущности (для news и events):
-                        $item_id = Yii::$app->db
-                            ->createCommand('SELECT c.id AS `cid`
-                                              FROM '.$itemName.' AS `c`
-                                              WHERE c.id=:itemId',
-                                              [':itemId' => $detailed_matches[1]])
-                            ->queryScalar();
+                        if ($itemName == 'news' || $itemName = 'event') {
+                            $item_id = Yii::$app->db
+                                ->createCommand('SELECT c.id AS `cid`
+                                                  FROM '.$itemName.' AS `c`
+                                                  WHERE c.id=:itemId',
+                                                  [':itemId' => $detailed_matches[1]])
+                                ->queryScalar();
 
-                        if ($item_id)
-                        {
-                            $params['id'] = $item_id;
-                            return [$itemName.'/view', $params];
+                            if ($item_id)
+                            {
+                                $params['id'] = $item_id;
+                                return [$itemName.'/view', $params];
+                            }
                         }
 
                         // Если мы сюда дошли, уже ясно, что это не сущность.
                         // Но текущим регулярным разбором еще стоит попользоваться:
-                        // В $detailed_matches[1] может сидеть станция метро или точная локация:
+                        // В $detailed_matches[1] может сидеть:
+                        // - станция метро;
+                        // - точная локация;
+                        // - алиас коворкинга (для списка новостей коворкинга);
                         $st = Station::findOne(['slug' => $detailed_matches[1], 'region' => $region_id]);
                         if ($st) {
                             $params['metro'] = $st->id;
                         }
-                        // if ($st) {
-                        //     $params[ucfirst($itemName).'Search']['metro'] = $st->id;
-                        // }
+
+                        $center = Center::findOne([ 'alias' => $detailed_matches[1] ]);
+                        if ($center) {
+                            $params['centerid'] = $center->id;
+                        }
+
                     }
 
                     // Итак, это не сущность. Значит, это страница index или map или coordinates:

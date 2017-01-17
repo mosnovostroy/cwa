@@ -199,7 +199,7 @@ class CenterController extends \yii\web\Controller
       $closestCenters = $searchModel->searchClosest($model);
 
       $newsModel = new NewsSearch();
-      $news = $newsModel->searchForCenter($id);
+      $news = $newsModel->searchForCenter($id, 3);
 
       return $this->render('view', [
           'model' => $model,

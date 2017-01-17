@@ -7,17 +7,18 @@
     use yii\grid\GridView;
     use common\models\User;
 
-    if ($searchModel->regionNameTp)
-    {
-        $this->title = 'Коворкинги в '.$searchModel->regionNameTp;
-        $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
-        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
-    }
-    else
-    {
-        $this->title = 'Коворкинги: поиск';
-        $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
-        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
+    if ($searchModel->centerName) {
+        $this->title = 'Новости коворкинга: '.$searchModel->centerName;
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкинга: '.$searchModel->centerName.'.']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центр, '.$searchModel->centerName]);
+    } else if ($searchModel->regionNameTp) {
+        $this->title = 'Новости';
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкингов в '.$searchModel->regionNameTp.'.']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центр, '.$searchModel->regionName]);
+    } else {
+        $this->title = 'Новости';
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкингов в Москве и регионах РФ.']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центры']);
     }
 
     $this->params['showCounters'] = true;
@@ -26,7 +27,7 @@
 <div class="row">
     <div class="col-xs-12">
         <h1><p>
-            Новости
+            <?=$this->title?>
         </p></h1>
     </div>
 </div>

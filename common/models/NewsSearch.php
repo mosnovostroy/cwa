@@ -14,6 +14,11 @@ use ReflectionClass;
  */
 class NewsSearch extends News
 {
+    // Когда отображается список новостей конкретного коворкинга, в этой переменной сохраняется его имя
+    public $centerName;
+
+    // Переменная для "промежуточного" хранения id главной новости между двумя вызовами разных search
+    // Без нее бы пришлось ресурсоемкие запросы повторять два раза.
     protected $lead_id;
 
     /**
@@ -81,6 +86,11 @@ class NewsSearch extends News
     public function search($params, $onlyIds = false, $onlyLead = false)
     {
         //Yii::info($params, 'myd');
+
+        if ( isset($params['centerid']) && $params['centerid'] > 0 ) {
+            return $this->searchForCenter ($params['centerid']);
+        }
+
         $this->load($params);
 
         if (!$this->validate())
@@ -149,15 +159,21 @@ class NewsSearch extends News
         return $dataProvider;
     }
 
-    public function searchForCenter($id)
+    public function searchForCenter($id, $limit = null)
     {
+        $this->centerName = Center::findOne($id)->name;
+
         $sql = 'SELECT n.*
         FROM 	news AS n,
                 news_center AS nc
         WHERE 	n.id = nc.news_id
                 AND nc.center_id = :center_id
-        ORDER BY createdAt DESC
-        LIMIT 3';
+        ORDER BY createdAt DESC';
+
+        if ($limit) {
+            $sql .= ' LIMIT '.$limit;
+        }
+
         $query = News::findBySql($sql, [ ':center_id' => $id ] );
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
         $dataProvider = new ActiveDataProvider($adpParams);
