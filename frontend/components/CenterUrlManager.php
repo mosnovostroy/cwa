@@ -137,7 +137,7 @@ class CenterUrlManager extends UrlManager
                 $center = Center::findOne($params['centerid']);
                 if ($center) {
                     $regionId = $center->region;
-                }                
+                }
             }
 
             if ($regionId)
@@ -326,7 +326,7 @@ class CenterUrlManager extends UrlManager
                         }
 
                         // - либо id сущности (для news и events):
-                        if ($itemName == 'news' || $itemName = 'event') {
+                        if ($itemName == 'news' || $itemName == 'event') {
                             $item_id = Yii::$app->db
                                 ->createCommand('SELECT c.id AS `cid`
                                                   FROM '.$itemName.' AS `c`
@@ -371,6 +371,8 @@ class CenterUrlManager extends UrlManager
 
                     // Карта
                     if(preg_match('%^map/\S*$%', $matches[2])) {
+                        //Yii::info($params, 'myd');
+                        //Yii::info($itemName.'/map', 'myd');
                         return [$itemName.'/map', $params];
                     }
 
