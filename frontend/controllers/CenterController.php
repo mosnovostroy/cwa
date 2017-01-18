@@ -15,6 +15,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use common\models\Region;
+use yii\web\ForbiddenHttpException;
 
 class CenterController extends \yii\web\Controller
 {

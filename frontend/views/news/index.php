@@ -9,14 +9,17 @@
 
     if ($searchModel->centerName) {
         $this->title = 'Новости коворкинга: '.$searchModel->centerName;
+        $h1 = $searchModel->centerName.': новости коворкинга';
         $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкинга: '.$searchModel->centerName.'.']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центр, '.$searchModel->centerName]);
     } else if ($searchModel->regionNameTp) {
         $this->title = 'Новости';
+        $h1 = $this->title;
         $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкингов в '.$searchModel->regionNameTp.'.']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центр, '.$searchModel->regionName]);
     } else {
         $this->title = 'Новости';
+        $h1 = $this->title;
         $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкингов в Москве и регионах РФ.']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центры']);
     }
@@ -27,7 +30,7 @@
 <div class="row">
     <div class="col-xs-12">
         <h1><p>
-            <?=$this->title?>
+            <?=$h1?>
         </p></h1>
     </div>
 </div>

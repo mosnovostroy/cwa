@@ -24,6 +24,7 @@ use common\models\Center;
 use common\models\News;
 use common\models\Station;
 use frontend\components\RegionManager;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Site controller

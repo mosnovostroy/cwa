@@ -59,6 +59,11 @@ class RegionSearch extends Region
               'query' => $query,
               'totalCount' => 1000,
               'pagination' => ['pageSize' => 1000],
+              'sort' => [
+                  'defaultOrder' => [
+                      'name' => SORT_ASC,
+                  ]
+              ],
             ];
         else
             $adpParams = ['query' => $query,

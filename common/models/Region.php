@@ -28,10 +28,12 @@ class Region extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['parent'], 'integer'],
-            [['name'], 'string', 'max' => 255],
-            [['map_lat', 'map_lng', 'map_zoom'], 'number'],
+            [['name', 'name_tp', 'alias'], 'string', 'max' => 255],
+            [['parent', 'hh_api_region', 'map_zoom'], 'integer'],
+            [['map_lat', 'map_lng'], 'number'],
+
+            [['name', 'name_tp', 'alias'], 'required'],
+            [['parent', 'hh_api_region'], 'default', 'value' => 0],
         ];
     }
 
@@ -42,8 +44,14 @@ class Region extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'parent' => 'Parent',
+            'name' => 'Название',
+            'name_tp' => 'Название в творительном падеже ("Коворкинги в ... ")',
+            'alias' => 'Алиас',
+            'parent' => 'ID родительского региона',
+            'map_lat' => 'Широта',
+            'map_lng' => 'Долгота',
+            'map_zoom' => 'Масштаб',
+            'hh_api_region' => 'Номер этого региона в hh.ru',
         ];
     }
 

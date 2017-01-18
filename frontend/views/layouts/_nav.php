@@ -12,6 +12,7 @@ use common\models\RegionSearch;
 use yii\web\JsExpression;
 use kartik\select2\Select2;
 use kartik\typeahead\Typeahead;
+use common\models\User;
 
 $searchModel = new RegionSearch();
 $regions = $searchModel->search(Yii::$app->request->queryParams, true);
@@ -72,6 +73,10 @@ $regions = $searchModel->search(Yii::$app->request->queryParams, true);
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
+                    <?php if (User::isAdmin())
+                        echo "<li>".(Html::a('Редактор регионов', ['region/index']))."</li>";
+                        echo "<li>".(Html::a('Создать новость', ['news/create']))."</li>";
+                    ?>
                     <li><?=Html::a('Мои объявления', ['/site/my'])?></li>
                     <li><?=Html::a('Подать объявление', ['/arenda/create'])?></li>
                     <li><?=Html::a('Настройки', ['/site/profile'])?></li>

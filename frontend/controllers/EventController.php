@@ -10,6 +10,7 @@ use common\models\User;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 
 class EventController extends \yii\web\Controller
 {

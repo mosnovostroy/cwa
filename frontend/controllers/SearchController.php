@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\db\Query;
+use yii\web\ForbiddenHttpException;
 
 class SearchController extends \yii\web\Controller
 {
