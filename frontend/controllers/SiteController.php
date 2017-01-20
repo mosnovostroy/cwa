@@ -23,8 +23,11 @@ use common\models\Region;
 use common\models\Center;
 use common\models\News;
 use common\models\Station;
+use common\models\Admin;
+use frontend\models\UpdateFastsearch;
 use frontend\components\RegionManager;
 use yii\web\ForbiddenHttpException;
+use yii\bootstrap\Alert;
 
 /**
  * Site controller
@@ -134,6 +137,7 @@ class SiteController extends Controller
             'other' => $other,
         ]);
     }
+
 
     public function actionIndexSubmit()
     {
@@ -426,6 +430,35 @@ class SiteController extends Controller
          }
          //return json_encode($out);
          return $out;
+     }
+
+
+     public function actionAdmin()
+     {
+         $this->layout = 'adminlayout';
+
+         $model = new Admin();
+
+         return $this->render('admin', [
+             'model' => $model,
+         ]);
+     }
+
+
+     public function actionUpdateFastsearch ()
+     {
+        if (!User::isAdmin()) {
+            throw new ForbiddenHttpException;
+        }
+
+        $updateFastsearchModel = new UpdateFastsearch();
+        if ( $updateFastsearchModel && $updateFastsearchModel->doUpdate() ) {
+            Yii::$app->session->setFlash('success', 'Поля fastsearch успешно обновлены');
+        } else {
+            Yii::$app->session->setFlash('danger', 'При обновлении полей fastsearch произошла ошибка!');
+        }
+
+         $this->redirect(['admin']);
      }
 
 }

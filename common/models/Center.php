@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\FileHelper;
 use common\behaviors\ImageBehavior;
 use common\behaviors\RegionInfoBehavior;
+use common\behaviors\SearchableBehavior;
 use common\models\Region;
 
 /**
@@ -64,6 +65,14 @@ class Center extends \yii\db\ActiveRecord
             ],
             'regionInfo' => [
                 'class' => RegionInfoBehavior::className(),
+            ],
+			'searchable' => [
+                'class' => SearchableBehavior::className(),
+                'dataForFastSearch' => [
+					'name',
+					'address',
+				],
+				'fastsearchAttribute' => 'fastsearch',
             ],
         ];
     }
@@ -340,6 +349,7 @@ class Center extends \yii\db\ActiveRecord
 
 	public function beforeSave($insert)
 	{
+		//Yii::info($this->address, 'myd');
 	    if (parent::beforeSave($insert)) {
 
 			// Вычисляем цены-поля на базе цен в полях features и tariffs

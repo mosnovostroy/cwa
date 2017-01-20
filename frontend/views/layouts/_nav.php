@@ -76,6 +76,7 @@ $regions = $searchModel->search(Yii::$app->request->queryParams, true);
                     <?php if (User::isAdmin())
                         echo "<li>".(Html::a('Редактор регионов', ['region/index']))."</li>";
                         echo "<li>".(Html::a('Создать новость', ['news/create']))."</li>";
+                        echo "<li>".(Html::a('Администрирование', ['site/admin']))."</li>";
                     ?>
                     <li><?=Html::a('Мои объявления', ['/site/my'])?></li>
                     <li><?=Html::a('Подать объявление', ['/arenda/create'])?></li>

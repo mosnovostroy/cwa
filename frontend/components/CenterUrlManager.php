@@ -55,6 +55,12 @@ class CenterUrlManager extends UrlManager
 			return '/regions/';
         }
 
+        // Страница "Администирование":
+		if ($route === 'site/admin')
+        {
+			return '/admin/';
+        }
+
         // Страница центра:
 		if ($route === 'center/view')
         {
@@ -266,6 +272,12 @@ class CenterUrlManager extends UrlManager
     	if (preg_match('%^regions/$%', $pathInfo, $matches))
     	{
     		return ['region/index', $params];
+    	}
+
+        // Страница "Администрирование":
+    	if (preg_match('%^admin/$%', $pathInfo, $matches))
+    	{
+    		return ['site/admin', $params];
     	}
 
         //Главная страница с заданным регионом:

@@ -6,6 +6,7 @@ use Yii;
 use common\models\Item;
 use yii\web\Controller;
 use common\models\ItemSearch;
+use common\models\Fastsearch;
 use common\models\User;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -36,31 +37,10 @@ class SearchController extends \yii\web\Controller
         return $this->redirect($params);
     }
 
-    public function actionItemsList($q = null) {
-
-        $query = new Query;
-
-        $query->select('id, name')
-            ->from('center')
-            ->where(['like', 'name', $q])
-            //->where(['name' => 'Чемодан'])
-            ->limit(10);
-        $command = $query->createCommand();
-        $data = $command->queryAll();
-
-        $out = [];
-        foreach ($data as $d) {
-            $out[] = [
-                'value' => $d['name'],
-                'url' => Url::to(['center/view', 'id' => $d['id']])
-            ];
-        }
-
-        Yii::info("Запрос: ".$q, 'myd');
-        Yii::info($data, 'myd');
-        Yii::info($out, 'myd');
-
-        echo Json::encode($out);
+    public function actionItemsList($q = null)
+    {
+        $model = new Fastsearch();
+        echo $model->search($q);
     }
 
 }
