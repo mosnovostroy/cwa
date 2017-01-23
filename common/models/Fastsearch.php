@@ -5,6 +5,7 @@ use yii\base\Model;
 use yii\base\InvalidParamException;
 use common\models\User;
 use common\models\Center;
+use common\models\Metro;
 use Yii;
 use yii\helpers\Json;
 use yii\db\Query;
@@ -15,11 +16,11 @@ use yii\helpers\Url;
  */
 class Fastsearch extends Model
 {
-    public function search($q)
+    public function searchCenters($q)
     {
         $arr = $this->getWords($q);
 
-        $centers = Center::find();
+        $items = Center::find();
 
         if (is_array($arr)){
             foreach ($arr as $key => $val){
@@ -27,10 +28,10 @@ class Fastsearch extends Model
                     continue;
                 }
                 if (preg_match("/^-(.*)/ui", $val, $reg)){
-                    $centers->andFilterWhere(['not like', 'fastsearch', $tmp]);
+                    $items->andFilterWhere(['not like', 'fastsearch', $tmp]);
                 } else {
                     if ( $tmp = preg_replace("/[^_\-а-яёА-ЯЁ\w\d\.,]/ui", "", $val) ){
-                        $centers->andFilterWhere(['like', 'fastsearch', $tmp]);
+                        $items->andFilterWhere(['like', 'fastsearch', $tmp]);
                     }
                 }
                 unset($reg, $tmp);
@@ -38,20 +39,57 @@ class Fastsearch extends Model
         }
 
         $out = [];
-        foreach($centers->all() as $center) {
-            $output = $center->name;
-            $location = implode(', ', [$center->regionName, $center->address]);
+        foreach($items->all() as $item) {
+            $output = $item->name;
+            $location = implode(', ', [$item->regionName, $item->address]);
             if ($location) {
                 $output .= ' ('.$location.')';
             }
             $out[] = [
                 'value' => $output,
-                'url' => Url::to(['center/view', 'id' => $center->id]),
+                'url' => Url::to(['center/view', 'id' => $item->id]),
             ];
         }
 
         return Json::encode($out);
     }
+
+
+    public function searchStations($q)
+    {
+        $arr = $this->getWords($q);
+
+        $items = Station::find();
+
+        if (is_array($arr)){
+            foreach ($arr as $key => $val){
+                if (strlen($val) < 2){
+                    continue;
+                }
+                if (preg_match("/^-(.*)/ui", $val, $reg)){
+                    $items->andFilterWhere(['not like', 'fastsearch', $tmp]);
+                } else {
+                    if ( $tmp = preg_replace("/[^_\-а-яёА-ЯЁ\w\d\.,]/ui", "", $val) ){
+                        $items->andFilterWhere(['like', 'fastsearch', $tmp]);
+                    }
+                }
+                unset($reg, $tmp);
+            }
+        }
+
+        $out = [];
+        foreach($items->all() as $item) {
+            //$output = 'Метро '.$item->name.' ('.$item->regionName.')';
+            $output = $item->name.' ('.$item->regionName.')';
+            $out[] = [
+                'value' => $output,
+                'url' => Url::to(['center/index', 'region' => $item->regionId, 'metro' => $item->id]),
+            ];
+        }
+
+        return Json::encode($out);
+    }
+
 
     protected function getWords ($q)
     {

@@ -95,6 +95,10 @@ $regions = $searchModel->search(Yii::$app->request->queryParams, true);
     NavBar::begin([
         'brandLabel' => 'Коворкинг-ревю',
         'brandUrl' => Yii::$app->homeUrl,
+        'brandOptions' => [
+            'class' => '',
+            'style' => 'font-family: Times New Roman, serif; font-size: 32px; font-weight: normal;',
+        ],
         'options' => [
             'class' => 'navbar navbar-default',
             'style' => 'box-shadow: none;',

@@ -37,10 +37,22 @@ class SearchController extends \yii\web\Controller
         return $this->redirect($params);
     }
 
-    public function actionItemsList($q = null)
+    // public function actionItemsList($q = null)
+    // {
+    //     $model = new Fastsearch();
+    //     echo $model->search($q);
+    // }
+
+    public function actionCentersList($q = null)
     {
         $model = new Fastsearch();
-        echo $model->search($q);
+        echo $model->searchCenters($q);
+    }
+
+    public function actionStationsList($q = null)
+    {
+        $model = new Fastsearch();
+        echo $model->searchStations($q);
     }
 
 }

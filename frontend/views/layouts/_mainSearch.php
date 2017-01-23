@@ -12,13 +12,14 @@
         <?php
 
         $template_centers = "<div><a href=\"{{url}}\">{{value}}</a></div>";
+        $template_stations = "<div><a href=\"{{url}}\">{{value}}</a></div>";
 
         echo Typeahead::widget([
             'id' => 'msf-input',
             'name' => 'text',
             'options' => ['placeholder' => 'Метро, район, название', 'style' => 'width: 100%; margin-bottom: 15px;' ],
             'container' => ['class' => 'search-field'],
-            'scrollable' => true,
+            //'scrollable' => true,
             'pluginOptions' => ['highlight'=>true],
             'pluginEvents' => [
                 "typeahead:select" => 'function() { window.location = "/search/?text=" + $("#msf-input").val() }',
@@ -28,14 +29,28 @@
                     //'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
                     'display' => 'value',
                     'remote' => [
-                        'url' => Url::to(['search/items-list']) . '?q=%QUERY',
+                        'url' => Url::to(['search/centers-list']) . '?q=%QUERY',
                         'wildcard' => '%QUERY'
                     ],
                     'templates' => [
-                        'notFound' => '<div class="text-danger" style="padding:0 8px">Ничего не найдено</div>',
+                        'header' => '<span style="margin: 10px;">Коворкинги</span>',
+                        //'notFound' => '<div class="text-danger" style="padding:0 8px">Ничего не найдено</div>',
                         'suggestion' => new JsExpression("Handlebars.compile('{$template_centers}')")
                     ]
-                ]
+                ],
+                [
+                    //'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['search/stations-list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'templates' => [
+                        'header' => '<span style="margin: 10px;">Станции метро</span>',
+                        //'notFound' => '<div class="text-danger" style="padding:0 8px">Ничего не найдено</div>',
+                        'suggestion' => new JsExpression("Handlebars.compile('{$template_stations}')")
+                    ]
+                ],
 
             ]
         ]);

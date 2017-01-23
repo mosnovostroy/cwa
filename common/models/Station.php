@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use common\behaviors\RegionInfoBehavior;
 
 /**
  * This is the model class for table "region".
@@ -46,8 +47,12 @@ class Station extends \yii\db\ActiveRecord
                 'immutable' => false,
                 // If intl extension is enabled, see http://userguide.icu-project.org/transforms/general.
                 //'transliterateOptions' => 'Russian-Latin/BGN; Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFC; [\'] Remove; [:Punctuation:] Remove;'
-                'transliterateOptions' => 'Russian-Latin/BGN; Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFKC; [ʹ, ʺ] Remove; [:Punctuation:] Remove;' 
-            ]
+                'transliterateOptions' => 'Russian-Latin/BGN; Any-Latin; Latin-ASCII; NFD; [:Nonspacing Mark:] Remove; NFKC; [ʹ, ʺ] Remove; [:Punctuation:] Remove;'
+            ],
+            'regionInfo' => [
+                'class' => RegionInfoBehavior::className(),
+            ],
         ];
     }
+
 }
