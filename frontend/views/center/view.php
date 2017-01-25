@@ -5,21 +5,47 @@ use common\models\User;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-$this->title = $model->meta_title;
-$this->registerMetaTag(['name' => 'description', 'content' => $model->meta_description]);
-$this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords]);
 
-$this->registerMetaTag(['name' => 'og:title', 'content' => $model->meta_title]);
-$this->registerMetaTag(['name' => 'og:description', 'content' => $model->meta_description]);
-$this->registerMetaTag(['name' => 'og:url', 'content' => Url::to('', true)]);
-$this->registerMetaTag(['name' => 'og:image', 'content' => ($model->images && count($model->images) > 0) ? Url::to($model->images[0]['file'], true) : '']);
+$this->title = $model->meta_title;
+
+$this->registerMetaTag([
+    'name' => 'description',
+    'content' => $model->meta_description,
+]);
+
+$this->registerMetaTag([
+    'name' => 'keywords',
+    'content' => $model->meta_keywords,
+]);
+
+$this->registerMetaTag([
+    'name' => 'og:title',
+    'content' => $model->meta_title,
+]);
+
+$this->registerMetaTag([
+    'name' => 'og:description',
+    'content' => $model->meta_description,
+]);
+
+$this->registerMetaTag([
+    'name' => 'og:url',
+    'content' => Url::to('', true),
+]);
+
+$this->registerMetaTag([
+    'name' => 'og:image',
+    'content' => ($model->images && count($model->images) > 0) ? Url::to($model->images[0]['file'], true) : '',
+]);
 
 $this->params['breadcrumbs'] =
 [
     ['label' => $model->regionName, 'url' => ['site/index', 'region' => $model->region]],
     ['label' => 'Коворкинги', 'url' => ['center/index', 'region' => $model->region]],
 ];
+
 $this->params['hasYandexMap'] = true;
+
 $this->params['showCounters'] = true;
 ?>
 
