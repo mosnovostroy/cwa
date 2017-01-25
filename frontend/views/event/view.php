@@ -96,7 +96,7 @@ $this->params['showCounters'] = true;
         //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
     	'relatedTo' => '', // for example
         'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
-        'showDeletedComments' => true // show deleted comments. Defaults to `false`.
+        // 'showDeletedComments' => true // show deleted comments. Defaults to `false`.
     ]);
 
     if (Yii::$app->user->isGuest) {

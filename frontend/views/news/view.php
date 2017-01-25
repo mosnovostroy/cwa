@@ -91,15 +91,15 @@ $this->params['showCounters'] = true;
 
 
 <?php
-    echo \yii2mod\comments\widgets\Comment::widget([
-        'model' => $model,
-        //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
-    	'relatedTo' => '', // for example
-        'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
-        'showDeletedComments' => true // show deleted comments. Defaults to `false`.
-    ]);
-
-    if (Yii::$app->user->isGuest) {
-        echo '<div class="row"><div class="col-xs-12"><div style="margin-top: -50px;">Для комментирования нужно '.(Html::a('авторизоваться', ['site/login'])).'</div></div></div>';
-    }
+    // echo \yii2mod\comments\widgets\Comment::widget([
+    //     'model' => $model,
+    //     //'relatedTo' => 'User ' . \Yii::$app->user->identity->username . ' commented on the page ' . \yii\helpers\Url::current(), // for example
+    // 	'relatedTo' => '', // for example
+    //     'maxLevel' => 3, // maximum comments level, level starts from 1, null - unlimited level. Defaults to `7`
+    //     // 'showDeletedComments' => true // show deleted comments. Defaults to `false`.
+    // ]);
+    //
+    // if (Yii::$app->user->isGuest) {
+    //     echo '<div class="row"><div class="col-xs-12"><div style="margin-top: -50px;">Для комментирования нужно '.(Html::a('авторизоваться', ['site/login'])).'</div></div></div>';
+    // }
 ?>
