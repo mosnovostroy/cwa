@@ -193,7 +193,7 @@ class News extends \yii\db\ActiveRecord
 		if (!$entity || !$entityId)
 			return false;
 
-		Yii::$app->db->createCommand('DELETE FROM Comment WHERE entity = :entity AND entityId = :entityId', [':entity' => $entity, ':entityId' => $entityId])
+		Yii::$app->db->createCommand('DELETE FROM comment WHERE entity = :entity AND entityId = :entityId', [':entity' => $entity, ':entityId' => $entityId])
 			->execute();
 
 		return true;
