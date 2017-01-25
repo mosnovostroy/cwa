@@ -9,15 +9,15 @@
 
     if ($searchModel->regionNameTp)
     {
-        $this->title = 'Коворкинги в '.$searchModel->regionNameTp;
-        $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
+        $this->title = 'Мероприятия коворкингов в '.$searchModel->regionNameTp;
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': мастер-классы, лекции, конференции, семинары']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
     }
     else
     {
-        $this->title = 'Коворкинги: поиск';
-        $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
-        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
+        $this->title = 'Мероприятия в коворкингах';
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Мероприятия в коворкингах: мастер-классы, лекции, конференции, семинары']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии, мероприятия']);
     }
 
     $this->params['showCounters'] = true;
@@ -49,7 +49,7 @@
     <div class="col-xs-12">
         <?php
             if (User::isAdmin())
-                echo Html::a('Создать новость', ['create'], ['class' => 'btn btn-default']);
+                echo Html::a('Создать мероприятие', ['create'], ['class' => 'btn btn-default']);
         ?>
     </div>
 </div>

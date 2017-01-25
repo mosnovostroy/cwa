@@ -33,7 +33,7 @@ class NewsSearch extends News
     /**
     * Формирует нужное SQL-выражение. Вызывается тремя способами.
     * 1) getSql() - "стандартный" SQL для дата-провайдера (список новостей с поиском по строке и пр.)
-    * 2) getSql(false) - SQL для поиска id "главных" новостей (в исходной версии всего одна главная новость)
+    * 2) getSql(false) - SQL для поиска id "главных" новостей (в текцщей версии всего одна главная новость)
     * 3) getSql(false, [id главных новостей]) - SQL для поиска остальных новостей для анонсной страницы.
     */
     protected function getSql($ordinar = true, $excludedIds = [])
@@ -97,6 +97,7 @@ class NewsSearch extends News
             return new ActiveDataProvider(['query' => News::find()]);
 
         $regionId = isset($params['region']) ? $params['region'] : 1; // Москва до умолчанию
+        $this->region = $regionId;
 
         $sql = $this->getSql();
         $query = News::findBySql($sql, [ ':region_id' => $regionId ] );
@@ -115,7 +116,6 @@ class NewsSearch extends News
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'region' => $this->region,
             'is_lead' => $this->is_lead,
         ]);
 
@@ -132,6 +132,7 @@ class NewsSearch extends News
     {
         $regionId = Yii::$app->regionManager->id;
         if (!$regionId) $regionId = 1;
+        $this->region = $regionId;
 
         $sql = $this->getSql(false);
         $ids = Yii::$app->db->createCommand($sql, [ ':region_id' => $regionId ] )
@@ -149,6 +150,7 @@ class NewsSearch extends News
     {
         $regionId = Yii::$app->regionManager->id;
         if (!$regionId) $regionId = 1;
+        $this->region = $regionId;
 
         if (!$this->lead_id) $this->lead_id = 0;
 

@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use common\models\RegionSearch;
 use yii\widgets\Pjax;
 use vova07\imperavi\Widget;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Center */
@@ -39,7 +40,7 @@ use vova07\imperavi\Widget;
                         'fullscreen'
                     ]
                 ]
-            ]) ?>            
+            ]) ?>
 
             <?= $form->field($model, 'is_lead')->checkbox(); ?>
 
@@ -48,10 +49,15 @@ use vova07\imperavi\Widget;
         <div class="col-md-5">
             <?php if ($model->anonsImage) echo '<div style="margin-bottom: 30px;"><image src="'.$model->anonsImage.'" width=100%></div>'; ?>
 
-            <?= $form->field($model, 'region')->dropDownList(RegionSearch::getArrayWithoutNullItem(),
-              [
-                'onchange' => ""
-              ])
+            <?= $form->field($model, 'eventDate')
+                ->widget(DatePicker::classname(), [
+                    'options' => ['placeholder' => 'Дата в формате дд.мм.гггг'],
+                    'pluginOptions' => [
+                        'format' => 'dd.mm.yyyy',
+                        'autoclose'=>true,
+                    ]
+                ])
+                ->hint('Для мероприятия указать дату, для новости оставить поле пустым');
             ?>
         </div>
      </div>

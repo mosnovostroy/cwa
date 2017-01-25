@@ -23,6 +23,10 @@ class News extends \yii\db\ActiveRecord
 	public $anons_text;
     public $anons_text_short;
 
+	// Убрали это поле из таблицы news. Но чтобы работало поведение RegionInfoBehavior, добавляем здесь
+	// Понадобится, например, при отображении списка новостей данного региона через NewsSearch
+	public $region = 1;
+
 	public function fields()
     {
         $fields = parent::fields();
@@ -47,8 +51,22 @@ class News extends \yii\db\ActiveRecord
             //[['title', 'text'], 'required'],
 			[['title'], 'string', 'max' => 255],
             [['text', 'meta_title', 'meta_description', 'meta_keywords'], 'string'],
-            [['region', 'is_lead'], 'integer'],
+            [['is_lead'], 'integer'],
+			[['eventDate'], 'date', 'format' => 'php:d.m.Y'],
         ];
+    }
+
+	// В базе поле eventAt - типа int(11), то есть timestamp
+	// Виджет Картика DatePicker не умеет (?) работать с таким.
+	// Поэтому делаем геттер и сеттер для "поля" eventDate формата d.m.Y
+	// И в форме уже работаем именно с этим полем (и в rules() тоже, соответственно, оно)
+	// Идея взята здесь: https://toster.ru/q/209224
+	public function getEventDate() {
+        return $this->eventAt ? date('d.m.Y', $this->eventAt) : '';
+    }
+
+    public function setEventDate($date) {
+        $this->eventAt = $date ? strtotime($date) : null;
     }
 
     /**
@@ -93,19 +111,26 @@ class News extends \yii\db\ActiveRecord
             'meta_title' => 'Meta Title',
             'meta_description' => 'Meta Description',
             'meta_keywords' => 'Meta Keywords',
-            'region' => 'Регион',
 			'is_lead' => 'Тема дня',
+			'eventDate' => 'Дата мероприятия',
         ];
     }
 
 	public function beforeSave($insert)
 	{
 	    if (parent::beforeSave($insert)) {
-			// Метатеги генерируются по вводимым полям автоматом:
+
+			// Генерируем метатайтл:
 			$this->meta_title = $this->title . ' :: Новости рынка :: Коворкинг-ревю';
-			$this->meta_description = $this->title . ' :: Новости рынка :: Коворкинг-ревю';
+
+			// Генерируем Метадескрипшн:
+	        $this->meta_description = $this->generateAnons($this->text, 200);
+
+
+			// Генерируем Метакейвордс:
 			$this->meta_keywords = 'коворкинг, новости';
-	        return true;
+
+			return true;
 	    } else {
 			return false;
 		}
@@ -122,36 +147,28 @@ class News extends \yii\db\ActiveRecord
         Yii::$app->formatter->locale = 'ru-RU';
         $this->date = Yii::$app->formatter->asDate($this->createdAt, 'long');
 
-        $len = 500;
-        $string = strip_tags($this->text);
-        if (mb_strlen($string) > $len)
-        {
-            $string = mb_substr($string, 0, $len);
-            $limit = mb_strrpos($string, ' ');
-            if ($limit)
-            {
-                $string = mb_substr($string, 0, $limit);
-            }
-            $string .= '...';
-        }
-        $this->anons_text = $string;
+        $this->anons_text = $this->generateAnons($this->text, 500);;
 
-        $len = 70;
-        $string = strip_tags($this->text);
-        if (mb_strlen($string) > $len)
-        {
-            $string = mb_substr($string, 0, $len);
-            $limit = mb_strrpos($string, ' ');
-            if ($limit)
-            {
-                $string = mb_substr($string, 0, $limit);
-            }
-            $string .= '...';
-        }
-        $this->anons_text_short = $string;
+		$this->anons_text_short = $this->generateAnons($this->text, 70);
 
         parent::afterFind();
     }
+
+	public function generateAnons($string, $len)
+	{
+        $string = strip_tags($string);
+        if (mb_strlen($string) > $len)
+        {
+            $string = mb_substr($string, 0, $len);
+            $limit = mb_strrpos($string, ' ');
+            if ($limit)
+            {
+                $string = mb_substr($string, 0, $limit);
+            }
+            $string .= '...';
+        }
+        return $string;
+	}
 
 	public function getCenters()
     {
