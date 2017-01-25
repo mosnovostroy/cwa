@@ -120,15 +120,17 @@ class News extends \yii\db\ActiveRecord
 	{
 	    if (parent::beforeSave($insert)) {
 
-			// Генерируем метатайтл:
+			// meta: title
 			$this->meta_title = $this->title . ' | Коворкинг-ревю';
 
-			// Генерируем Метадескрипшн:
+			// meta: description
 	        $this->meta_description = $this->generateAnons($this->text, 300);
 
-
-			// Генерируем Метакейвордс:
+			// meta: keywords
 			$this->meta_keywords = 'коворкинг, новости';
+
+			// og-title
+	        $this->meta_og_title = $this->title;
 
 			return true;
 	    } else {

@@ -9,7 +9,7 @@ $this->title = $model->meta_title;
 $this->registerMetaTag(['name' => 'description', 'content' => $model->meta_description]);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keywords]);
 
-$this->registerMetaTag(['property' => 'og:title', 'content' => $model->meta_title]);
+$this->registerMetaTag(['property' => 'og:title', 'content' => $model->meta_og_title]);
 $this->registerMetaTag(['property' => 'og:description', 'content' => $model->meta_description]);
 $this->registerMetaTag(['property' => 'og:url', 'content' => Url::to('', true)]);
 $this->registerMetaTag(['property' => 'og:image', 'content' => ($model->images && count($model->images) > 0) ? Url::to($model->images[0]['file'], true) : '']);
