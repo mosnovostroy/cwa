@@ -29,8 +29,8 @@ $this->params['showCounters'] = true;
             <?php
                 if (User::isAdmin())
                 {
-                    echo Html::a('Редактирование', ['update', 'id' => $model->id], ['class' => 'btn btn-default']);
-                    echo Html::a('Удалить новость', ['delete', 'id' => $model->id], [
+                    echo Html::a('Редактирование', ['news/update', 'id' => $model->id], ['class' => 'btn btn-default']);
+                    echo Html::a('Удалить новость', ['news/delete', 'id' => $model->id], [
                         'class' => 'btn btn-default',
                           'data' => [
                               'confirm' => 'Действительно хотите удалить новость?',
@@ -45,7 +45,7 @@ $this->params['showCounters'] = true;
 </div>
 
 <div class="row">
-    <div class="col-sm-7">
+    <div class="col-sm-8">
         <div class="clearfix">
             <p style="" class="special-interval"><?= $model->text?></p>
 
@@ -55,7 +55,36 @@ $this->params['showCounters'] = true;
 
         </div>
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-4">
+        <!-- <h3><p>Мероприятие состоится:</p></h3> -->
+        <p><?=$model->eventAtFormatted?></p>
+        <?php $center = $model->center; ?>
+        <?php if ($center) : ?>
+            <?php $url = Url::to(['center/view', 'id' => $center->id]); ?>
+
+            <?php
+                $centerLogo = $model->centerLogo;
+                if ($centerLogo) {
+                    echo '<div class="cr-events-logo-right">
+                        <a href="'.$url.'">
+                            <img width=100% src="'.$centerLogo.'">
+                        </a>
+                    </div>';
+                }
+            ?>
+
+            <h2><p><a href="<?=$url?>"><?= $center->name ?></a></p></h2>
+
+
+            <p><?= implode(", ", [$center->regionName, $center->address]) ?></p>
+            <?php
+                if ($center->metro)
+                    echo '<p><span class="metro-icon"> '.$center->metro.'</span></p>';
+            ?>
+            <br>
+            <?= Html::a('Все мероприятия коворкинга', ['event/index', 'centerid' => $center->id ]) ?>
+        <?php endif; ?>
+
         <?php
 			$fotorama = \metalguardian\fotorama\Fotorama::begin(
 			  [

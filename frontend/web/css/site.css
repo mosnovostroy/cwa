@@ -581,3 +581,23 @@ div.required label.control-label:after {
     .top-item:hover {
         /*background-color: #f00;*/
     }
+
+
+/***********************************************************************************************/
+/* Мероприятия: */
+    .cr-events {
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .cr-events-logo {
+        width: 25%;
+        float: left;
+        margin: 0 10px 10px 0;
+    }
+
+    .cr-events-logo-right {
+        width: 25%;
+        float: right;
+        margin: 0 x 10px 10px;
+    }

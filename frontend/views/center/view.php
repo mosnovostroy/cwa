@@ -317,7 +317,7 @@ $this->params['showCounters'] = true;
 
 <div class="row">
     <div class="col-sm-8">
-        <h3 style="margin-top: 30px;"><p>Новости</p></h3>
+        <?php if($news->getCount() > 0) :?><h3 style="margin-top: 30px;"><p>Новости</p></h3><?php endif; ?>
         <?php $count = 0; ?>
         <?php foreach ($news->getModels() as $news): ?>
         <?php if ($count > 3) break; ?>
@@ -342,6 +342,32 @@ $this->params['showCounters'] = true;
         ?>
     </div>
 </div>
+
+<?php if($events && $events->getCount()) :?>
+    <h3 style="margin-top: 30px;"><p>Мероприятия</p></h3>
+
+    <div class="row">
+        <?php $count = 1; ?>
+        <?php foreach ($events->getModels() as $event): ?>
+            <?php if ($count > 3) break; $url = Url::to(['event/view', 'id' => $event->id]); ?>
+            <div class="col-md-4">
+
+                <h4><p><a href="<?=$url?>"><?=Html::encode("{$event->title}")?></a></p></h4>
+
+                <p><?=Html::encode("{$event->anons_text}")?></p>
+
+                <p><?= $event->eventDate ?></p>
+
+            </div>
+        <?php $count++; endforeach; ?>
+        <?php if ($count == 3)  echo '<div class="col-md-4"></div>';?>
+        <?php if ($count == 2)  echo '<div class="col-md-4"></div><div class="col-md-4"></div>';?>
+    </div>
+    <?php if ($count > 4) {
+        echo Html::a('Все мероприятия коворкинга', ['event/index', 'centerid' => $model->id ]);
+        }
+    ?>
+<?php endif; ?>
 
 <div class="row">
     <div class="col-md-6">

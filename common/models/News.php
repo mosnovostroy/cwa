@@ -20,6 +20,7 @@ use yii\behaviors\TimestampBehavior;
 class News extends \yii\db\ActiveRecord
 {
 	public $date;
+	public $eventAtFormatted;
 	public $anons_text;
     public $anons_text_short;
 
@@ -148,6 +149,7 @@ class News extends \yii\db\ActiveRecord
     {
         Yii::$app->formatter->locale = 'ru-RU';
         $this->date = Yii::$app->formatter->asDate($this->createdAt, 'long');
+		$this->eventAtFormatted = Yii::$app->formatter->asDate($this->eventAt, 'd MMMM, EEEE');
 
         $this->anons_text = $this->generateAnons($this->text, 500);;
 
@@ -198,4 +200,31 @@ class News extends \yii\db\ActiveRecord
 
 		return true;
 	}
+
+	public function getCenterLogo ()
+	{
+		$centers = $this->centers;
+		if ($centers) {
+			foreach ($centers as $center) {
+				$logo = $center->logoImage;
+				if ($logo) {
+					return $logo;
+				}
+			}
+		}
+		return '';
+	}
+
+	public function getCenter ()
+	{
+		$centers = $this->centers;
+		if ($centers) {
+			foreach ($centers as $center) {
+				return $center;
+				break;
+			}
+		}
+		return null;
+	}
+
 }

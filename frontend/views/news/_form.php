@@ -14,22 +14,30 @@ use kartik\date\DatePicker;
 
 <div class="news-form">
 
-    <?php
-        Pjax::begin(['enablePushState' => false]);
-            echo $this->render('_centers', ['model' => $model]);
-        Pjax::end();
-
-        Pjax::begin(['enablePushState' => false]);
-            echo $this->render('_regions', ['model' => $model]);
-        Pjax::end();
-    ?>
-
-    <?php $form = ActiveForm::begin(); ?>
-
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
+
+            <?php $form = ActiveForm::begin(); ?>
 
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+            <div class="row">
+                <div class="col-md-7">
+                    <?= $form->field($model, 'eventDate')
+                        ->widget(DatePicker::classname(), [
+                            'options' => ['placeholder' => 'Для новости оставить поле пустым'],
+                            'pluginOptions' => [
+                                'format' => 'dd.mm.yyyy',
+                                'autoclose'=>true,
+                            ]
+                        ]);
+                    ?>
+                </div>
+                <div class="col-md-5">
+                    <?= $form->field($model, 'is_lead')->checkbox(); ?>
+                </div>
+            </div>
+
 
             <?= $form->field($model, 'text')->widget(Widget::className(), [
                 'settings' => [
@@ -41,26 +49,6 @@ use kartik\date\DatePicker;
                     ]
                 ]
             ]) ?>
-
-            <?= $form->field($model, 'is_lead')->checkbox(); ?>
-
-        </div>
-
-        <div class="col-md-5">
-            <?php if ($model->anonsImage) echo '<div style="margin-bottom: 30px;"><image src="'.$model->anonsImage.'" width=100%></div>'; ?>
-
-            <?= $form->field($model, 'eventDate')
-                ->widget(DatePicker::classname(), [
-                    'options' => ['placeholder' => 'Дата в формате дд.мм.гггг'],
-                    'pluginOptions' => [
-                        'format' => 'dd.mm.yyyy',
-                        'autoclose'=>true,
-                    ]
-                ])
-                ->hint('Для мероприятия указать дату, для новости оставить поле пустым');
-            ?>
-        </div>
-     </div>
 
       <?= $form->field($model->imageUploadModel, 'uploadFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
 
@@ -106,5 +94,26 @@ use kartik\date\DatePicker;
     <?= Html::submitButton($model->isNewRecord ? 'Сохранить изменения' : 'Сохранить изменения', ['class' => 'btn btn-primary center-block']) ?>
 
     <?php ActiveForm::end(); ?>
+
+        </div>
+        <div class="col-md-4">
+            <?php if ($model->anonsImage) echo '<div style="margin-bottom: 30px;"><image src="'.$model->anonsImage.'" width=100%></div>'; ?>
+
+            <div>
+                <?php
+                    Pjax::begin(['enablePushState' => false]);
+                        echo $this->render('_centers', ['model' => $model]);
+                    Pjax::end();
+
+                    Pjax::begin(['enablePushState' => false]);
+                        echo $this->render('_regions', ['model' => $model]);
+                    Pjax::end();
+                ?>
+            </div>
+
+        </div>
+     </div>
+
+
 
 </div>

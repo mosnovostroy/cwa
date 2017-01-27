@@ -57,7 +57,7 @@ class ImageBehavior extends Behavior
 		return '';
     }
 
-		public function getAnonsImage()
+	public function getAnonsImage()
     {
 		$entity = $this->entity;
 		$entityId = $this->entityId;

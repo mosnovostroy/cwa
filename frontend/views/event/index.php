@@ -49,7 +49,7 @@
     <div class="col-xs-12">
         <?php
             if (User::isAdmin())
-                echo Html::a('Создать мероприятие', ['create'], ['class' => 'btn btn-default']);
+                echo Html::a('Создать мероприятие', ['news/create'], ['class' => 'btn btn-default']);
         ?>
     </div>
 </div>

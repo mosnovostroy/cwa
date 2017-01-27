@@ -200,12 +200,16 @@ class CenterController extends \yii\web\Controller
       $closestCenters = $searchModel->searchClosest($model);
 
       $newsModel = new NewsSearch();
-      $news = $newsModel->searchForCenter($id, 3);
+      $news = $newsModel->searchForCenter($id, false, 3);
+
+      $eventsModel = new NewsSearch();
+      $events = $newsModel->searchForCenter($id, true, 3);
 
       return $this->render('view', [
           'model' => $model,
           'closestCenters' => $closestCenters,
           'news' => $news,
+          'events' => $events,
         ]);
     }
 

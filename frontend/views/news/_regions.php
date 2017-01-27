@@ -10,7 +10,7 @@ use yii\web\JsExpression;
 ?>
 
 <div class="row">
-    <div class="col-md-7" style="margin-bottom: 35px;">
+    <div class="col-md-12" style="margin-bottom: 15px;">
         <?php
             $url = \yii\helpers\Url::to(['regions-list']);
 
@@ -21,7 +21,7 @@ use yii\web\JsExpression;
                           'placeholder' => 'Присоединить регион',
                       ],
                       'pluginEvents' => [
-                          "select2:select" => 'function() { $.pjax({url: "/news/add-region-link/?news_id='.$model->id.'&region_id=" + $("#www222").val(), type: "GET", container: "#w1", push: false}); }',
+                          "select2:select" => 'function() { $.pjax({url: "/news/add-region-link/?news_id='.$model->id.'&region_id=" + $("#www222").val(), type: "GET", container: "#w2", push: false}); }',
                       ],
                       'pluginOptions' => [
                           'ajax' => [
@@ -32,7 +32,7 @@ use yii\web\JsExpression;
                       ],
                   ]);
 
-            echo '</div class="col-md-7"><div class="col-md-5" style="margin-bottom: 20px;">';
+            echo '</div><div class="col-md-12" style="margin-bottom: 15px;">';
 
             foreach($model->regions as $region) {
                 echo '<div><span style="margin-right: 5px; ">';

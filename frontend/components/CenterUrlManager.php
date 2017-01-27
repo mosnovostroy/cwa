@@ -146,6 +146,14 @@ class CenterUrlManager extends UrlManager
                 }
             }
 
+            // Если это список мероприятий коворкинга, регион этого коворкинга также в приоритете:
+            if ($route == 'event/index' && isset($params['centerid'])) {
+                $center = Center::findOne($params['centerid']);
+                if ($center) {
+                    $regionId = $center->region;
+                }
+            }
+
             if ($regionId)
             {
                 // Берем алиас региона:
@@ -184,7 +192,7 @@ class CenterUrlManager extends UrlManager
                         unset($params['metro']);
                     }
 
-                    // Этот параметр может придти только для списка новостей ("новости коворкинга"):
+                    // Этот параметр может придти только для списка новостей или мероприятий конкретного коворкинга:
                     $center_alias = '';
                     if (isset($params['centerid'])) {
                         $center = Center::findOne($params['centerid']);
@@ -218,6 +226,7 @@ class CenterUrlManager extends UrlManager
 
                     if ($center_alias) {
                         $url = str_replace('/news/', '/news/'.$center_alias.'/', $url);
+                        $url = str_replace('/events/', '/events/'.$center_alias.'/', $url);
                     }
                 }
             }
@@ -358,7 +367,7 @@ class CenterUrlManager extends UrlManager
                         // В $detailed_matches[1] может сидеть:
                         // - станция метро;
                         // - точная локация;
-                        // - алиас коворкинга (для списка новостей коворкинга);
+                        // - алиас коворкинга (для списка новостей или мероприятий коворкинга);
                         $st = Station::findOne(['slug' => $detailed_matches[1], 'region' => $region_id]);
                         if ($st) {
                             $params['metro'] = $st->id;
@@ -374,7 +383,7 @@ class CenterUrlManager extends UrlManager
                     // Итак, это не сущность. Значит, это страница index или map или coordinates:
 
                     // Вручную установим в форме поиска регион:
-                    if ($itemName == 'center' || $itemName == 'arenda' || $itemName == 'news') {
+                    if ($itemName == 'center' || $itemName == 'arenda' || $itemName == 'news' || $itemName == 'event') {
                         $params['region'] = $region_id;
                     }
                     // if ($itemName == 'center' || $itemName == 'arenda') {

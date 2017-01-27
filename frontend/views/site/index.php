@@ -74,28 +74,31 @@ $this->params['showCounters'] = true;
 
 
     <?php if ($events && $events->getCount()): ?>
-        <h2><p><?= Html::a('Мероприятия', ['event/index']) ?></p></h2>
+        <h2><p><?= Html::a('Мероприятия в коворкингах', ['event/index']) ?></p></h2>
 
-        <div class="row row-flex1234 row-flex1234-wrap" style="margin-bottom: 50px;">
+        <div class="row cr-events">
             <?php $count = 1; ?>
             <?php foreach ($events->getModels() as $event): ?>
                 <?php if ($count > 3) break; $url = Url::to(['event/view', 'id' => $event->id]); ?>
-                <div class="col-md-4 tgbcol" onclick="location.href='<?= $url ?>';">
-                    <div class="tgb">
-                        <?php if ($event->anonsImage)
-                            echo '<div class="tgbimg"><img src="'.$event->anons16x9.'"></div>';
-                            // echo '<div class="redlabel">'.$event->regionName.'</div>'
-                        ?>
-                        <h4><p><a href="<?=$url?>"><?=Html::encode("{$event->title}")?></a></p></h4>
+                <div class="col-md-4">
 
-                        <p style="margin-top: -6px;">
-                            <?=Html::encode("{$event->anons_text}")?>
-                        </p>
+                    <h4><p><a href="<?=$url?>"><?=Html::encode("{$event->title}")?></a></p></h4>
 
-                        <div class="lgray" style="margin-top: 7px;"><?= $event->regionName ?></div>
+                    <?php
+                        $centerLogo = $event->centerLogo;
+                        if ($centerLogo) {
+                            echo '<div class="cr-events-logo">
+                                <a href="'.$url.'">
+                                    <img width=100% src="'.$centerLogo.'">
+                                </a>
+                            </div>';
+                        }
+                    ?>
 
-                        <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
-                    </div>
+                    <p><?=Html::encode("{$event->anons_text}")?></p>
+
+                    <p><?= $event->eventDate ?></p>
+                    
                 </div>
             <?php $count++; endforeach; ?>
             <?php if ($count == 3)  echo '<div class="col-md-4"></div>';?>

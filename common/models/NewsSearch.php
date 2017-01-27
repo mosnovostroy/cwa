@@ -33,62 +33,74 @@ class NewsSearch extends News
     /**
     * Формирует нужное SQL-выражение. Вызывается тремя способами.
     * 1) getSql() - "стандартный" SQL для дата-провайдера (список новостей с поиском по строке и пр.)
-    * 2) getSql(false) - SQL для поиска id "главных" новостей (в текцщей версии всего одна главная новость)
-    * 3) getSql(false, [id главных новостей]) - SQL для поиска остальных новостей для анонсной страницы.
+    * 2) isSpecial => true - SQL для поиска id "главных" новостей (в текущей версии всего одна главная новость)
+    * 3) isSpecial=>true, excludedIds => [..]) - SQL для поиска остальных новостей для анонсной страницы.
     */
-    protected function getSql($ordinar = true, $excludedIds = [])
+    protected function getSql($options = [])
     {
-        if ($ordinar) {
+        $isSpecial = isset($options['isSpecial']) ? $options['isSpecial'] : false;
+
+        $excludedIds = isset($options['excludedIds']) ? $options['excludedIds'] : [];
+
+        $isEvent = isset($options['isEvent']) ? $options['isEvent'] : false;
+
+        if (!$isSpecial) {
             $specCond = '';
-        } else if (!$ordinar && count($excludedIds) > 0) {
+        } else if ( count($excludedIds) > 0 ) {
             $specCond = ' AND n.id NOT IN ('.(implode(",", $excludedIds)).') ';
         } else {
             $specCond = ' AND n.is_lead = 1 ';
         }
 
-        return
-            '(SELECT n.*
-            FROM 	news AS n,
-                    news_center AS nc,
-                    center AS c
-            WHERE 	n.id = nc.news_id
-                    AND nc.center_id = c.id
-                    AND c.region = :region_id
-                    '.$specCond.')
+        if ($isEvent) {
+            return
+                '(SELECT n.*
+                FROM 	news AS n,
+                        news_center AS nc,
+                        center AS c
+                WHERE 	n.id = nc.news_id
+                        AND nc.center_id = c.id
+                        AND c.region = :region_id
+                        AND FROM_UNIXTIME(n.eventAt) >= CURDATE()
+                        '.$specCond.')
 
-            UNION
+                UNION
 
-            (SELECT  n.*
-            FROM 	news AS n,
-                    news_region AS nr
-            WHERE 	n.id = nr.news_id
-                    AND nr.region_id = :region_id
-                    '.$specCond.')
+                (SELECT  n.*
+                FROM 	news AS n,
+                        news_region AS nr
+                WHERE 	n.id = nr.news_id
+                        AND nr.region_id = :region_id
+                        AND FROM_UNIXTIME(n.eventAt) >= CURDATE()
+                        '.$specCond.')
 
-            UNION
+                UNION
 
-            (SELECT  n.*
-            FROM 	news AS n
-            WHERE 	n.id NOT IN (SELECT DISTINCT news_id FROM news_region)
-                    AND n.id NOT IN (SELECT DISTINCT news_id FROM news_center)
-                    '.$specCond.')
+                (SELECT  n.*
+                FROM 	news AS n
+                WHERE 	n.id NOT IN (SELECT DISTINCT news_id FROM news_region)
+                        AND n.id NOT IN (SELECT DISTINCT news_id FROM news_center)
+                        AND FROM_UNIXTIME(n.eventAt) >= CURDATE()
+                        '.$specCond.')
 
-            ORDER BY createdAt DESC';
+                ORDER BY eventAt';
+        } else {
+            return
+                'SELECT  n.*
+                FROM 	news AS n
+                WHERE 	n.id NOT IN (SELECT DISTINCT news_id FROM news_center)
+                        AND n.eventAt IS NULL
+                        '.$specCond.'
+
+                ORDER BY createdAt DESC';
+        }
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params, $onlyIds = false, $onlyLead = false)
-    {
-        //Yii::info($params, 'myd');
 
+    public function search($params, $isEvent = false)
+    {
         if ( isset($params['centerid']) && $params['centerid'] > 0 ) {
-            return $this->searchForCenter ($params['centerid']);
+            return $this->searchForCenter ($params['centerid'], $isEvent);
         }
 
         $this->load($params);
@@ -96,10 +108,21 @@ class NewsSearch extends News
         if (!$this->validate())
             return new ActiveDataProvider(['query' => News::find()]);
 
-        $regionId = isset($params['region']) ? $params['region'] : 1; // Москва до умолчанию
+
+        if (isset($params['region'])) {
+            $regionId = $params['region'];
+        } else if (Yii::$app->regionManager->id) {
+            $regionId = Yii::$app->regionManager->id;
+        }
+        else {
+            $regionId = 1; // Москва до умолчанию
+        }
         $this->region = $regionId;
 
-        $sql = $this->getSql();
+        // if ($isEvent)
+        //     Yii::info(Yii::$app->regionManager->id, 'myd');
+
+        $sql = $this->getSql([ 'isEvent' => $isEvent ]);
         $query = News::findBySql($sql, [ ':region_id' => $regionId ] );
 
         $adpParams = ['query' => $query,
@@ -128,13 +151,16 @@ class NewsSearch extends News
         return $dataProvider;
     }
 
+
     public function searchLead()
     {
         $regionId = Yii::$app->regionManager->id;
         if (!$regionId) $regionId = 1;
         $this->region = $regionId;
 
-        $sql = $this->getSql(false);
+        $sql = $this->getSql([
+            'isSpecial' => true,
+        ]);
         $ids = Yii::$app->db->createCommand($sql, [ ':region_id' => $regionId ] )
             ->queryAll();
         //Yii::info($ids, 'myd');
@@ -154,14 +180,18 @@ class NewsSearch extends News
 
         if (!$this->lead_id) $this->lead_id = 0;
 
-        $sql = $this->getSql(false, [$this->lead_id]);
+        $sql = $this->getSql([
+            'isSpecial' => true,
+            'excludedIds' => [ $this->lead_id ],
+        ]);
+
         $query = News::findBySql($sql, [ ':region_id' => $regionId ] );
         $adpParams = ['query' => $query, 'pagination' => ['pageSize' => 10]];
         $dataProvider = new ActiveDataProvider($adpParams);
         return $dataProvider;
     }
 
-    public function searchForCenter($id, $limit = null)
+    public function searchForCenter($id, $isEvent = false, $limit = null )
     {
         $this->centerName = Center::findOne($id)->name;
 
@@ -170,6 +200,7 @@ class NewsSearch extends News
                 news_center AS nc
         WHERE 	n.id = nc.news_id
                 AND nc.center_id = :center_id
+                AND n.eventAt IS '.($isEvent ? 'NOT' : '').' NULL
         ORDER BY createdAt DESC';
 
         if ($limit) {

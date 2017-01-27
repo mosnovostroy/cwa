@@ -21,7 +21,7 @@ class NewsController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'pictures', 'delete-file', 'file-set-as-anons', 'file-set-as-logo', 'features', 'create-tariff', 'update-tariff', 'delete-tariff'],
+                'only' => ['create', 'update', 'delete', 'pictures', 'delete-file', 'file-set-as-anons', 'add-center-link', 'delete-center-link', 'add-region-link', 'delete-region-link'],
                 'rules' => [
                     [
                          'actions' => ['create'],
@@ -37,14 +37,6 @@ class NewsController extends \yii\web\Controller
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
 							//Yii::info($action->controller->actionParams->id, 'myd');
-							 return User::isAdmin();
-                         }
-                    ],
-                    [
-                         'actions' => ['features'],
-                         'allow' => true,
-                         'roles' => ['@'],
-                         'matchCallback' => function ($rule, $action) {
 							 return User::isAdmin();
                          }
                     ],
@@ -81,7 +73,7 @@ class NewsController extends \yii\web\Controller
                          }
                     ],
                     [
-                         'actions' => ['file-set-as-logo'],
+                         'actions' => ['add-center-link'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -89,7 +81,7 @@ class NewsController extends \yii\web\Controller
                          }
                     ],
                     [
-                         'actions' => ['features'],
+                         'actions' => ['delete-center-link'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -97,7 +89,7 @@ class NewsController extends \yii\web\Controller
                          }
                     ],
                     [
-                         'actions' => ['create-tariff'],
+                         'actions' => ['add-region-link'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -105,15 +97,7 @@ class NewsController extends \yii\web\Controller
                          }
                     ],
                     [
-                         'actions' => ['update-tariff'],
-                         'allow' => true,
-                         'roles' => ['@'],
-                         'matchCallback' => function ($rule, $action) {
-							                return User::isAdmin();
-                         }
-                    ],
-                    [
-                         'actions' => ['delete-tariff'],
+                         'actions' => ['delete-region-link'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -133,7 +117,7 @@ class NewsController extends \yii\web\Controller
 
    protected function findModel($id)
     {
-        if (($model = News::findOne($id)) !== null) {
+        if (($model = News::findOne($id)) !== null ) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -143,7 +127,7 @@ class NewsController extends \yii\web\Controller
     public function actionIndex()
     {
         $searchModel = new NewsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -151,49 +135,35 @@ class NewsController extends \yii\web\Controller
         ]);
     }
 
-    public function actionIndexSubmit()
-    {
-        $params = Yii::$app->request->queryParams;
-        $params[0] = 'news/index';
-        return $this->redirect($params);
-    }
-
     public function actionView($id)
     {
       $model = $this->findModel($id);
-
-      $searchModel = new NewsSearch();
-      //$closestCenters = $searchModel->searchClosest($model);
-
+      if ($model->eventAt ) {
+          throw new NotFoundHttpException('The requested page does not exist.');
+      }
       return $this->render('view', [
           'model' => $model,
-          //'closestCenters' => $closestCenters,
         ]);
     }
 
 
-    /**
-     * Creates a new Center model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
+        if (!User::isAdmin())
+            throw new ForbiddenHttpException;
+
         $model = new News();
+
         if ($model->load(Yii::$app->request->post()) && $model->save() && $model->upload() ) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect([ ($model->eventAt ? 'event' : 'news').'/view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
     }
-    /**
-     * Updates an existing Center model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -202,10 +172,23 @@ class NewsController extends \yii\web\Controller
             throw new ForbiddenHttpException;
 
         if ($model->load(Yii::$app->request->post()) && $model->save() && $model->upload() ) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect([ ($model->eventAt ? 'event' : 'news').'/view', 'id' => $model->id ]);
         }
         else
             return $this->render('update', [ 'model' => $model ]);
+    }
+
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+	    if (!User::isAdminOrOwner($model->createdBy))
+		     throw new ForbiddenHttpException;
+
+        $model->deleteAllImages();
+        $model->deleteAllComments();
+        $model->delete();
+        return $this->redirect(['index']);
     }
 
 
@@ -313,24 +296,6 @@ class NewsController extends \yii\web\Controller
     }
 
 
-    /**
-     * Deletes an existing Center model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
-	    if (!User::isAdminOrOwner($model->createdBy))
-		     throw new ForbiddenHttpException;
-
-        $model->deleteAllImages();
-        $model->deleteAllComments();
-        $model->delete();
-        return $this->redirect(['index']);
-    }
-
     public function actionPictures($id)
     {
 		    $model = $this->findModel($id);
@@ -339,20 +304,18 @@ class NewsController extends \yii\web\Controller
         return $this->render('pictures', ['model' => $model]);
     }
 
+
     public function actionDeleteFile($id, $filename)
     {
 		    $this->findModel($id)->deleteImage($filename);
         return $this->redirect(['pictures', 'id' => $id]);
     }
 
+
     public function actionFileSetAsAnons($id, $filename)
     {
 		    $this->findModel($id)->setAnonsImage($filename);
 		    return $this->redirect(['update', 'id' => $id]);
     }
-    public function actionFileSetAsLogo($id, $filename)
-    {
-		    $this->findModel($id)->setLogoImage($filename);
-		    return $this->redirect(['pictures', 'id' => $id]);
-    }
+
 }

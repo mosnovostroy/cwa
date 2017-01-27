@@ -125,8 +125,8 @@ class SiteController extends Controller
         $lead = $searchModel3->searchLead();
         $other = $searchModel3->searchOther();
 
-        $searchModel4 = new EventSearch();
-        $events = $searchModel4->searchForMainPage();
+        $searchModel4 = new NewsSearch();
+        $events = $searchModel4->search([], true);
 
         return $this->render('index', [
             'model' => $model,

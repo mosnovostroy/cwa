@@ -1,20 +1,80 @@
 <?php
+echo "PHP: " . PHP_VERSION . "<br>";
+echo "ICU: " . INTL_ICU_VERSION . "<br>";
+echo "ICU Data: " . INTL_ICU_DATA_VERSION . "<br>";
 
-  $url = 'https://graph.facebook.com/v2.5/881196305317844/picture?width=100&height=100';
-  $file = '/var/www/html/cwa/frontend/web/upload/1.jpg';
+$options = ['a1' => true, 'a2' => [], 'a3' => false];
 
-  $im = imagecreatefromstring(file_get_contents($url));
-  imagejpeg($im, $file, 80);
+echo "options['a0']: ";
+if (count($options['a0']))
+    echo "count > 0";
+else
+    echo "count not > 0";
+echo "<br>";
 
-  // if ($im !== false) {
-  //     header('Content-Type: image/png');
-  //     imagepng($im);
-  //     imagedestroy($im);
-  // }
-  // else {
-  //     echo 'Произошла ошибка.';
-  // }
 
-  //file_put_contents($file, 'hi');
+echo 'Starting... '.'<br>';
 
- ?>
+echo "options['a0']: ";
+if ($options['a0'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+echo "options['a1']: ";
+if ($options['a1'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+echo "options['a2']: ";
+if ($options['a2'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+echo "options['a3']: ";
+if ($options['a3'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+
+echo "options['a0']: ";
+if (!$options['a0'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+echo "options['a1']: ";
+if (!$options['a1'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+echo "options['a2']: ";
+if (!$options['a2'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+echo "options['a3']: ";
+if (!$options['a3'])
+    echo "yes";
+else
+    echo "no";
+echo "<br>";
+
+
+
+echo 'finish'.'<br>';
+
+
+?>
