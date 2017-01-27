@@ -46,10 +46,13 @@ class NewsSearch extends News
 
         if (!$isSpecial) {
             $specCond = '';
+            $limit = '';
         } else if ( count($excludedIds) > 0 ) {
             $specCond = ' AND n.id NOT IN ('.(implode(",", $excludedIds)).') ';
+            $limit = ' LIMIT 5 ';
         } else {
             $specCond = ' AND n.is_lead = 1 ';
+            $limit = ' LIMIT 1 ';
         }
 
         if ($isEvent) {
@@ -86,13 +89,25 @@ class NewsSearch extends News
                 ORDER BY eventAt';
         } else {
             return
-                'SELECT  n.*
+                '(SELECT n.*
+                FROM 	news AS n,
+                        news_center AS nc,
+                        center AS c
+                WHERE 	n.id = nc.news_id
+                        AND nc.center_id = c.id
+                        AND c.region = :region_id
+                        AND n.eventAt IS NULL
+                        '.$specCond.')
+
+                UNION
+
+                (SELECT  n.*
                 FROM 	news AS n
                 WHERE 	n.id NOT IN (SELECT DISTINCT news_id FROM news_center)
                         AND n.eventAt IS NULL
-                        '.$specCond.'
+                        '.$specCond.')
 
-                ORDER BY createdAt DESC';
+                ORDER BY createdAt DESC' . $limit;
         }
     }
 

@@ -457,6 +457,7 @@ div.required label.control-label:after {
         left: 0;
         cursor: pointer;
         cursor: hand;
+        margin-bottom: 15px;
     }
 
     /* Градиент на главной новости */
