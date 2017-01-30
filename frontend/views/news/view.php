@@ -40,19 +40,22 @@ $this->params['showCounters'] = true;
                 }
             ?>
         </p></h1>
-        <?php /*var_dump(unserialize($model->tariffs));*/ ?>
+        <div class="news-date-line">
+            <?=$model->date?>
+
+            <div style="float: right; margin-top: -7px;">
+                <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+                <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
+                <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-top: 15px;">
     <div class="col-sm-7">
         <div class="clearfix">
-            <p style="" class="special-interval"><?= $model->text?></p>
-
-            <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
-            <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
-            <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
-
+            <?= $model->text?>
         </div>
     </div>
     <div class="col-sm-5">
@@ -89,6 +92,42 @@ $this->params['showCounters'] = true;
     </div>
 </div>
 
+<?php $center = $model->center; ?>
+<?php if ($center) : ?>
+    <div class="comments row">
+        <div class="col-md-12 col-sm-12">
+            <div class="title-block clearfix">
+                <h3 class="h3-body-title">
+                    Ссылки
+                </h3>
+                <div class="title-separator">
+                </div>
+            </div>
+
+                <?php $url = Url::to(['center/view', 'id' => $center->id]); ?>
+
+                <?php
+                    $centerLogo = $model->centerLogo;
+                    if ($centerLogo) {
+                        echo '<div class="cr-events-logo-newspage">
+                            <a href="'.$url.'">
+                                <img width=100% src="'.$centerLogo.'">
+                            </a>
+                        </div>';
+                    }
+                ?>
+
+                <h2><p><a href="<?=$url?>"><?= $center->name ?></a></p></h2>
+
+
+                <p><?= implode(", ", [$center->regionName, $center->address]) ?></p>
+                <?php
+                    if ($center->metro)
+                        echo '<p><span class="metro-icon"> '.$center->metro.'</span></p>';
+                ?>
+        </div>
+    </div>
+<?php endif; ?>
 
 <?php
     echo \yii2mod\comments\widgets\Comment::widget([

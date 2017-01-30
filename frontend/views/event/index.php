@@ -7,17 +7,21 @@
     use yii\grid\GridView;
     use common\models\User;
 
-    if ($searchModel->regionNameTp)
-    {
-        $this->title = 'Мероприятия коворкингов в '.$searchModel->regionNameTp;
+    if ($searchModel->centerName) {
+        $this->title = 'Мероприятия коворкинга: '.$searchModel->centerName;
+        $h1 = 'Мероприятия коворкинга: ' . (Html::a( $searchModel->centerName, ['center/view', 'id' => $searchModel->centerId] ));
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Мероприятия коворкинга: '.$searchModel->centerName.'.']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'мероприятия, коворкинг, коворкинг-центр, '.$searchModel->centerName]);
+    } else if ($searchModel->regionNameTp) {
+        $this->title = 'Мероприятия';
+        $h1 = $this->title;
         $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': мастер-классы, лекции, конференции, семинары']);
-        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
-    }
-    else
-    {
-        $this->title = 'Мероприятия в коворкингах';
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центр, '.$searchModel->regionName]);
+    } else {
+        $this->title = 'Мероприятия';
+        $h1 = $this->title;
         $this->registerMetaTag(['name' => 'description', 'content' => 'Мероприятия в коворкингах: мастер-классы, лекции, конференции, семинары']);
-        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии, мероприятия']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'мероприятия, коворкинг, коворкинг-центры']);
     }
 
     $this->params['showCounters'] = true;
@@ -26,7 +30,7 @@
 <div class="row">
     <div class="col-xs-12">
         <h1><p>
-            Мероприятия
+            <?=$h1?>
         </p></h1>
     </div>
 </div>

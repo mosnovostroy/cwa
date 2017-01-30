@@ -326,7 +326,6 @@ div.required label.control-label:after {
         background: url('/img/moscow_metro.png') no-repeat 0px 0px; padding-left: 24px;
     }
 
-
     .comments .comment-author-avatar img {
         width: 50px;
     }
@@ -586,19 +585,47 @@ div.required label.control-label:after {
 
 /***********************************************************************************************/
 /* Мероприятия: */
+
     .cr-events {
         margin-top: 30px;
         margin-bottom: 50px;
     }
 
+    .cr-events-date {
+        color: #090;
+    }
+
     .cr-events-logo {
         width: 25%;
         float: left;
-        margin: 0 10px 10px 0;
+        margin: 0 15px 15px 0;
+        border: 1px solid #aaa;
     }
 
     .cr-events-logo-right {
         width: 25%;
         float: right;
         margin: 0 x 10px 10px;
+        border: 1px solid #aaa;
+    }
+
+    .cr-events-logo-newspage {
+        width: 25%;
+        float: left;
+        margin: 0 15px 15px 0;
+        border: 1px solid #aaa;
+    }
+    @media (min-width: 767px) {
+        .cr-events-logo-newspage {width: 150px;}
+    }
+
+
+/***********************************************************************************************/
+/* Новости: */
+
+    .news-date-line {
+        border-bottom: 1px solid #ccc;
+        color: #ccc;
+        padding: 6px 0;
+        margin-bottom: 15px;
     }

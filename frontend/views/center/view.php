@@ -336,7 +336,7 @@ $this->params['showCounters'] = true;
         </div>
         <?php $count++; ?>
         <?php endforeach; ?>
-        <?php if ($count > 0) {
+        <?php if ($count > 4) {
             echo Html::a('Все новости коворкинга >> ', ['news/index', 'centerid' => $model->id ]);
             }
         ?>
@@ -356,7 +356,10 @@ $this->params['showCounters'] = true;
 
                 <p><?=Html::encode("{$event->anons_text}")?></p>
 
-                <p><?= $event->eventDate ?></p>
+                <div>
+                    <span class="cr-events-date glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    <?=$event->eventAtFormatted?>
+                </div>
 
             </div>
         <?php $count++; endforeach; ?>

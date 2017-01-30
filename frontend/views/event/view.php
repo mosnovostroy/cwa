@@ -40,24 +40,33 @@ $this->params['showCounters'] = true;
                 }
             ?>
         </p></h1>
-        <?php /*var_dump(unserialize($model->tariffs));*/ ?>
+
+        <div class="news-date-line">
+            <?=$model->eventDate?>
+
+            <div style="float: right; margin-top: -7px;">
+                <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
+                <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
+                <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-top: 15px;">
     <div class="col-sm-8">
         <div class="clearfix">
-            <p style="" class="special-interval"><?= $model->text?></p>
-
-            <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
-            <script type="text/javascript" src="http://yastatic.net/share2/share.js" charset="utf-8"></script>
-            <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
-
+            <?= $model->text?>
         </div>
     </div>
     <div class="col-sm-4">
         <!-- <h3><p>Мероприятие состоится:</p></h3> -->
-        <p><?=$model->eventAtFormatted?></p>
+
+        <div>
+            <span class="cr-events-date glyphicon glyphicon-calendar" aria-hidden="true"></span>
+            <?=$model->eventAtFormatted?>
+        </div>
+
         <?php $center = $model->center; ?>
         <?php if ($center) : ?>
             <?php $url = Url::to(['center/view', 'id' => $center->id]); ?>
@@ -81,8 +90,8 @@ $this->params['showCounters'] = true;
                 if ($center->metro)
                     echo '<p><span class="metro-icon"> '.$center->metro.'</span></p>';
             ?>
-            <br>
-            <?= Html::a('Все мероприятия коворкинга', ['event/index', 'centerid' => $center->id ]) ?>
+            <!-- <br>
+            <?= Html::a('Все мероприятия коворкинга', ['event/index', 'centerid' => $center->id ]) ?> -->
         <?php endif; ?>
 
         <?php

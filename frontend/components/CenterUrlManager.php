@@ -403,7 +403,8 @@ class CenterUrlManager extends UrlManager
                     }
 
                     // Список
-                    //Yii::info($params, 'myd');
+                    // Yii::info("Сегодня параметры таковы: ",'myd');
+                    // Yii::info($params, 'myd');
                     return [$itemName.'/index', $params];
                 }
             }

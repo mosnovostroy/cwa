@@ -14,7 +14,8 @@ use ReflectionClass;
  */
 class NewsSearch extends News
 {
-    // Когда отображается список новостей конкретного коворкинга, в этой переменной сохраняется его имя
+    // Когда отображается список новостей конкретного коворкинга, сохраняется его имя и id:
+    public $centerId;
     public $centerName;
 
     // Переменная для "промежуточного" хранения id главной новости между двумя вызовами разных search
@@ -208,7 +209,10 @@ class NewsSearch extends News
 
     public function searchForCenter($id, $isEvent = false, $limit = null )
     {
-        $this->centerName = Center::findOne($id)->name;
+        //Yii::info($id, 'myd');
+        $center = Center::findOne($id);
+        $this->centerId = $center->id;
+        $this->centerName = $center->name;
 
         $sql = 'SELECT n.*
         FROM 	news AS n,

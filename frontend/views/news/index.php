@@ -9,7 +9,7 @@
 
     if ($searchModel->centerName) {
         $this->title = 'Новости коворкинга: '.$searchModel->centerName;
-        $h1 = $searchModel->centerName.': новости коворкинга';
+        $h1 = 'Новости коворкинга: ' . (Html::a( $searchModel->centerName, ['center/view', 'id' => $searchModel->centerId] ));
         $this->registerMetaTag(['name' => 'description', 'content' => 'Новости коворкинга: '.$searchModel->centerName.'.']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'новости, коворкинг, коворкинг-центр, '.$searchModel->centerName]);
     } else if ($searchModel->regionNameTp) {

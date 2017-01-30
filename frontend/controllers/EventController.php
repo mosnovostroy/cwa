@@ -33,7 +33,7 @@ class EventController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $searchModel = new NewsSearch();
+        $searchModel = new NewsSearch();        
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
 
         return $this->render('index', [
