@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\RegionSearch;
 use yii\widgets\Pjax;
-
+use common\models\LocationSearch;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Center */
@@ -36,7 +36,10 @@ use yii\widgets\Pjax;
 
             <?= $form->field($model, 'meta_keywords')->textarea(['rows' => 1])->hint('Через запятую все запросы, по которым поисковику было бы разумно выдавать этот конкретный центр: коворкинг ромашка, коворкинг метро сходненская, коворкинг в бизнес-парке ленинградский, коворкинг бизнес-парк ленинградский, коворкинг метро сходненская, коворкинги в СЗАО, коворкинг ленинский проспект') ?>
 
-            <?= $form->field($model, 'address')->textInput()->hint('Регион не указываем. Только город в области ("Химки"), если есть. Или сразу начинаем с улицы, если в областном центре (Москва, Новосибирск и пр.)') ?>
+            <?= $form->field($model, 'location')->dropDownList(LocationSearch::getLocationsArray())->hint('Город выбираем только для Москвы и МО')
+            ?>
+
+            <?= $form->field($model, 'address')->textInput()->hint('!! Регион не указываем !! Cразу начинаем с улицы') ?>
 
             <?= $form->field($model, 'phone')->textInput()->hint('Можно указать несколько через запятую. Но лучше все же один (смотрится лучше)') ?>
 

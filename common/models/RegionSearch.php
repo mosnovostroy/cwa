@@ -44,7 +44,7 @@ class RegionSearch extends Region
         $regions = array();
         if ($all)
           $regions[0] = $none ? 'Не установлен' : 'Все регионы';
-        $result = Region::find()->where(['parent' => 0])->all();
+        $result = Region::find()->where(['parent' => 0])->orderBy('name')->all();
         $subregions = ArrayHelper::map($result,'id','name');
         $regions = $regions + $subregions;
         return $regions;

@@ -79,7 +79,7 @@ $this->params['showCounters'] = true;
     <div class="col-md-6">
         <div class="clearfix">
             <?php if ($model->logoImage) echo '<div class="center-view-logo"><image src="'.$model->logoImage.'"></div>'; ?>
-            <p><?= $model->address?></p>
+            <p><?= $model->fullAddress?></p>
             <p style="" class="special-interval"><?= $model->description?></p>
 
             <script type="text/javascript" src="http://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
@@ -394,7 +394,7 @@ $this->params['showCounters'] = true;
             <table class="table table-hover">
                 <tr>
                     <td>Адрес</td>
-                    <td><?= $model->address?></td>
+                    <td><?= $model->fullAddress?></td>
                 </tr>
                     <td>Телефон</td>
                     <td><?= $model->phone?></td>
@@ -451,11 +451,10 @@ $this->params['showCounters'] = true;
 
                 <p style="margin-top: -6px;">
                     <?php
+                        echo '<p>'.$center->fullAddress.'</p>';
 
                         if ($center->metro)
-                            echo '<span class="metro-icon"> '.$center->metro.'</span>';
-                        else
-                            echo $center->address;
+                            echo '<p><span class="metro-icon"> '.$center->metro.'</span></p>';
                     ?>
                 </p>
 

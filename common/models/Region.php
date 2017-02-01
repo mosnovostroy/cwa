@@ -79,4 +79,18 @@ class Region extends \yii\db\ActiveRecord
         // return json_encode($data);
     }
 
+    public function beforeSave($insert)
+	{
+	    if (parent::beforeSave($insert)) {
+
+            if (!$this->default_address_atom) {
+                $this->default_address_atom = $this->name;
+            }
+	        return true;
+	    } else {
+	        return false;
+		}
+	}
+
+
 }

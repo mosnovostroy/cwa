@@ -29,31 +29,23 @@ use common\models\User;
     </div>
 </div>
 
-<style>
-    .regions-table, .regions-table tr, .regions-table td {border: none;}
-    .regions-table tr { height: 30px; border-bottom: 1px solid #ccc;}
-    .regions-table tr:last-child { border-bottom: none;}
-    .regions-table td{ padding: 0 5px; border-right: 1px solid #ccc; }
-    .regions-table td:last-child{ border-right: none; }
-    .regions-table td:first-child{ width: 200px; }
-</style>
-
 <table class="regions-table">
 <?php foreach ($dataProvider->getModels() as $region): ?>
     <tr>
         <td>
             <?= Html::a($region->name, ['site/index', 'region' => $region->id], ['class' => '']) ?>
-            <?php if (User::isAdmin() && $region->hh_api_region) { ?>
+            <!-- <?php if (User::isAdmin() && $region->hh_api_region) { ?>
                 <span style="float:right"><?= $region->hh_api_region ?></span>
-            <?php } ?>
+            <?php } ?> -->
         </td>
         <?php if (User::isAdmin()) { ?>
-            <td>в <?= $region->name_tp ?></td>
+            <!-- <td>в <?= $region->name_tp ?></td>
             <td><?= $region->alias ?></td>
             <td><?= $region->map_lat ?></td>
             <td><?= $region->map_lng ?></td>
-            <td><?= $region->map_zoom ?></td>
-            <td><?= Html::a('Редактировать', ['update', 'id' => $region->id], ['class' => '']) ?></td>
+            <td><?= $region->map_zoom ?></td> -->
+            <td><?= Html::a('Редактировать регион', ['update', 'id' => $region->id], ['class' => '']) ?></td>
+            <td><?= Html::a('Населенные пункты', ['location/index', 'region' => $region->id], ['class' => '']) ?></td>
         <?php } ?>
     </tr>
 <?php endforeach; ?>

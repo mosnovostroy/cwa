@@ -499,6 +499,7 @@ class CenterUrlManager extends UrlManager
             return $res1;
         }
 
+        //Yii::info($params, 'myd');
 
         //Если "наш" код не сработал (и мы сюда таки дошли) - ладно, просто вызовем родительский метод:
         return parent::parseRequest($request);

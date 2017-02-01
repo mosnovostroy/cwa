@@ -10,6 +10,7 @@ use common\behaviors\ImageBehavior;
 use common\behaviors\RegionInfoBehavior;
 use common\behaviors\SearchableBehavior;
 use common\models\Region;
+use common\models\Location;
 
 /**
  * This is the model class for table "center".
@@ -44,7 +45,7 @@ class Center extends \yii\db\ActiveRecord
 						[['alias'], 'match', 'pattern' => '/^[a-zA-Z0-9-]+/i'],
             [['description', 'meta_title', 'meta_description', 'meta_keywords', 'features', 'tariffs'], 'string'],
             [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
-            [['region', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
+            [['region', 'location', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
             [['name', 'alias'], 'string', 'max' => 255],
 						[['address', 'phone', 'metro'], 'string'],
 						['email', 'email'],
@@ -93,6 +94,7 @@ class Center extends \yii\db\ActiveRecord
             'gmap_lat' => 'Широта',
             'gmap_lng' => 'Долгота',
             'region' => 'Расположение объекта',
+			'location' => 'Город',
             'price_month' => 'цена',
 						'address' => 'Адрес',
 						'phone' => 'Телефон',
@@ -397,5 +399,26 @@ class Center extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Region::className(), ['id' => 'region']);
     }
+
+	public function getFullAddress()
+	{
+		// Если указана точная локация (город в области):
+		if ($this->location) {
+			$location = Location::FindOne($this->location);
+			if ($location) {
+				$str = ($location->address_atom ? $location->address_atom . ', ' : '') . $location->name . ', ';
+				return $str . $this->address;
+			}
+		}
+
+		// Иначе просто указан регион:
+		$region = Region::FindOne($this->region);
+		if ($region) {
+			return $region->default_address_atom . ', ' . $this->address;
+		}
+
+		// Ошибка в указании региона:
+		return $this->address;
+	}
 
 }

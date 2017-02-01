@@ -28,7 +28,7 @@ class CenterSearch extends Center
         return [
             [['id', 'is24x7'], 'integer'],
             [['name', 'description', 'meta_title', 'meta_description', 'meta_keywords','text'], 'safe'],
-            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max', 'metro'], 'number'],
+            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max', 'metro', 'location'], 'number'],
         ];
     }
 
@@ -119,6 +119,7 @@ class CenterSearch extends Center
         $query->andFilterWhere([
             'id' => $this->id,
             'region' => $this->region,
+            'location' => $this->location,
             'is24x7' => $this->is24x7,
         ]);
 
