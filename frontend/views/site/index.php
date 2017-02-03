@@ -54,7 +54,7 @@ $this->params['showCounters'] = true;
         <!-- <div class="col-sm-1">
         </div> -->
         <?php $url = Url::to(['center/index']); ?>
-        <div class="col-sm-6" onclick="location.href='<?= $url ?>';">
+        <div class="col-sm-4" onclick="location.href='<?= $url ?>';">
             <div class="button-main clearfix">
                 <a href="<?=$url?>"><h4><p>Поиск коворкингов</p></h4></a>
             </div>
@@ -62,13 +62,19 @@ $this->params['showCounters'] = true;
         <!-- <div class="col-sm-1">
         </div> -->
         <?php $url = Url::to(['center/map']); ?>
-        <div class="col-sm-6" onclick="location.href='<?= $url ?>';">
+        <div class="col-sm-4" onclick="location.href='<?= $url ?>';">
             <div class="button-main clearfix">
                 <a href="<?=$url?>"><h4><p>Коворкинги на карте</p></h4></a>
             </div>
         </div>
         <!-- <div class="col-sm-1">
         </div> -->
+        <?php $url = Url::to(['site/locations']); ?>
+        <div class="col-sm-4" onclick="location.href='<?= $url ?>';">
+            <div class="button-main clearfix">
+                <a href="<?=$url?>"><h4><p>Метро и районы</p></h4></a>
+            </div>
+        </div>
     </div>
 
 

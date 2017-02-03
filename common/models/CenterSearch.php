@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Center;
 use common\models\Station;
+use common\models\Location;
 use yii\helpers\Html;
 use ReflectionClass;
 
@@ -18,7 +19,9 @@ class CenterSearch extends Center
     public $price_month_min;
     public $price_month_max;
     public $text;
+
     public $metro;
+    public $placeParameter;
 
     /**
      * @inheritdoc
@@ -28,7 +31,7 @@ class CenterSearch extends Center
         return [
             [['id', 'is24x7'], 'integer'],
             [['name', 'description', 'meta_title', 'meta_description', 'meta_keywords','text'], 'safe'],
-            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max', 'metro', 'location'], 'number'],
+            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max', 'metro', 'placeParameter', 'location'], 'number'],
         ];
     }
 
@@ -51,6 +54,7 @@ class CenterSearch extends Center
         //if ($this->text)
             $fields['text'] = 'text';
             $fields['metro'] = 'metro';
+            $fields['placeParameter'] = 'placeParameter';
 
         return $fields;
     }
@@ -133,7 +137,7 @@ class CenterSearch extends Center
         $query->andFilterWhere(['>=', 'price_month', $this->price_month_min])
               ->andFilterWhere(['<=', 'price_month', $this->price_month_max]);
 
-
+        //Yii::info($this->location, 'myd');
         return $dataProvider;
     }
 
@@ -225,4 +229,18 @@ class CenterSearch extends Center
         return $dataProvider;
     }
 
+    public function getPlaceString()
+    {
+        if ( empty($this->metro) ) {
+            if (empty($this->location)) {
+                $str = 'Метро или район';
+            } else {
+                $str = Location::findOne($this->location)->name;
+            }
+        } else {
+            $str = Station::findOne($this->metro)->name;
+        }
+
+        return $str;
+    }
 }

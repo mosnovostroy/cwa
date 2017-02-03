@@ -102,6 +102,7 @@ $config = [
                         'centers' => 'center/index',
                         'centers/map' => 'center/map',
                         'centers/coordinates' => 'center/coordinates',
+                        'locations' => 'site/locations',
                         'arenda' => 'arenda/index',
                         'arenda/map' => 'arenda/map',
                         'arenda/coordinates' => 'arenda/coordinates',

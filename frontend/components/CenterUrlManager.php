@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use common\models\Station;
 use common\models\Center;
 use common\models\Arenda;
+use common\models\Location;
 
 class CenterUrlManager extends UrlManager
 {
@@ -54,6 +55,12 @@ class CenterUrlManager extends UrlManager
         {
 			return '/regions/';
         }
+
+        // // Страница "Города и метро":
+		// if ($route === 'site/locations')
+        // {
+		// 	return '/locations/';
+        // }
 
         // Страница "Администирование":
 		if ($route === 'site/admin')
@@ -128,7 +135,8 @@ class CenterUrlManager extends UrlManager
             $route == 'event/index' ||
             $route == 'arenda/index' ||
             $route == 'center/map' ||
-            $route == 'arenda/map'
+            $route == 'arenda/map' ||
+            $route == 'site/locations'
             )
         {
             $regionId = Yii::$app->regionManager->id;
@@ -183,6 +191,7 @@ class CenterUrlManager extends UrlManager
                         }
                     }
 
+                    // Метро
                     $station_slug = '';
                     if (isset($params['metro'])) {
                         $station = Station::findOne($params['metro']);
@@ -190,6 +199,18 @@ class CenterUrlManager extends UrlManager
                             $station_slug = $station->slug;
                         }
                         unset($params['metro']);
+                        unset($params['placeParameter']);
+                    }
+
+                    // Локация (то есть город)
+                    $location_alias = '';
+                    if (isset($params['location'])) {
+                        $location = Location::findOne($params['location']);
+                        if ($location && $location->alias) {
+                            $location_alias = $location->alias;
+                        }
+                        unset($params['location']);
+                        unset($params['placeParameter']);
                     }
 
                     // Этот параметр может придти только для списка новостей или мероприятий конкретного коворкинга:
@@ -209,6 +230,7 @@ class CenterUrlManager extends UrlManager
                         $url = str_replace('news', $region_alias.'/news', $url);
                         $url = str_replace('events', $region_alias.'/events', $url);
                         $url = str_replace('arenda', $region_alias.'/arenda', $url);
+                        $url = str_replace('locations', $region_alias.'/locations', $url);
                     }
 
                     if ($station_slug) {
@@ -221,6 +243,17 @@ class CenterUrlManager extends UrlManager
                             $url = str_replace('/news/', '/news/'.$station_slug.'/', $url);
                             $url = str_replace('/events/', '/events/'.$station_slug.'/', $url);
                             $url = str_replace('/arenda/', '/arenda/'.$station_slug.'/', $url);
+                        }
+                    } else if ($location_alias) {
+                        if ($route == 'center/map') {
+                            $url = str_replace('/centers/map/', '/centers/map/'.$location_alias.'/', $url);
+                        } else if ($route == 'arenda/map') {
+                            $url = str_replace('/arenda/map/', '/arenda/map/'.$location_alias.'/', $url);
+                        } else {
+                            $url = str_replace('/centers/', '/centers/'.$location_alias.'/', $url);
+                            $url = str_replace('/news/', '/news/'.$location_alias.'/', $url);
+                            $url = str_replace('/events/', '/events/'.$location_alias.'/', $url);
+                            $url = str_replace('/arenda/', '/arenda/'.$location_alias.'/', $url);
                         }
                     }
 
@@ -283,6 +316,12 @@ class CenterUrlManager extends UrlManager
     		return ['region/index', $params];
     	}
 
+        // // Страница "Города и метро":
+    	// if (preg_match('%^locations/$%', $pathInfo, $matches))
+    	// {
+    	// 	return ['site/locations', $params];
+    	// }
+
         // Страница "Администрирование":
     	if (preg_match('%^admin/$%', $pathInfo, $matches))
     	{
@@ -306,6 +345,23 @@ class CenterUrlManager extends UrlManager
             }
         }
 
+        // Список городов и районов
+        if (preg_match('%^([a-z0-9-_]+)/locations/$%', $pathInfo, $matches))
+        {
+            // Один карман: matches[1] - предполагаемый алиас региона
+
+            // Сначала ищем совпадение $matches[1] с алиасом региона:
+            $region_id = Yii::$app->db
+                ->createCommand('SELECT id FROM region
+                                  WHERE alias=:region' , [':region' => $matches[1]])
+                ->queryScalar();
+
+            //Если нашли - распознавание завершено:
+            if ($region_id) {
+                return ['site/locations', ['region' => $region_id]];
+            }
+        }
+
         // Единообразная обработка тройки (сущность, список, карта) для: коворкингов, объявлений, новостей, мероприятий
         function doParse($pathInfo, $params, $matches, $itemName, $itemNameURL)
         {
@@ -324,7 +380,7 @@ class CenterUrlManager extends UrlManager
                 // Если нашли - можно о чем-то говорить дальше:
                 if ($region_id)
                 {
-                    // Сначала варианты, когда это страница сущности:
+                    // Теперь варианты, когда это страница сущности:
                     if (preg_match('%([a-z0-9-_]+)/?$%', $matches[2], $detailed_matches))
                     {
                         // Это так, когда в кармане $detailed_matches[1]:
@@ -371,6 +427,11 @@ class CenterUrlManager extends UrlManager
                         $st = Station::findOne(['slug' => $detailed_matches[1], 'region' => $region_id]);
                         if ($st) {
                             $params['metro'] = $st->id;
+                        }
+
+                        $loc = Location::findOne(['alias' => $detailed_matches[1], 'region' => $region_id]);
+                        if ($loc) {
+                            $params['location'] = $loc->id;
                         }
 
                         $center = Center::findOne([ 'alias' => $detailed_matches[1] ]);

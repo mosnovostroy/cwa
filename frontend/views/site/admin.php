@@ -32,4 +32,16 @@ $this->params['showCounters'] = false;
         ?>
     </p>
 
+    <p>
+        <?php
+        echo Html::a('Обновить все станции метро', ['site/update-metro'], [
+            'class' => 'btn btn-default',
+              'data' => [
+                  'confirm' => 'Действительно хотите обновить все станции метро во всех городах?',
+                    'method' => 'post',
+                    ],
+                  ]);
+        ?>
+    </p>
+
 </div>

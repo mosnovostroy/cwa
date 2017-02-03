@@ -7,6 +7,7 @@
     use yii\grid\GridView;
     use common\models\User;
     use common\models\Station;
+    use common\models\Location;
     use yii\web\JsExpression;
     use kartik\typeahead\Typeahead;
     use kartik\select2\Select2;
@@ -83,19 +84,29 @@
                 <?php $form = ActiveForm::begin(['method' => 'get', 'action' => ['center/index-submit'],
                                                 'options' => ['class' => 'form-inline']]); ?>
                         <?php
-                        $url = \yii\helpers\Url::to(['site/stations-list']);
-                        $initMetro = empty($searchModel->metro) ? 'Метро или район' : Station::findOne($searchModel->metro)->name;
+                        $url = \yii\helpers\Url::to(['site/places-list']);
+
+                        $format = <<< SCRIPT
+                        function format(placeParameter) {
+                            if (placeParameter.id > 1000000) return placeParameter.text;
+                            return '<span class="metro-icon">' + placeParameter.text + '</span>';
+                        }
+SCRIPT;
+                        $escape = new JsExpression("function(m) { return m; }");
+                        $this->registerJs($format, yii\web\View::POS_HEAD);
+
+                        $initString = $searchModel->placeString;
 
                         //echo Select2::widget([
-                        echo $form->field($searchModel, 'metro')->label(false)->widget(Select2::classname(), [
+                        echo $form->field($searchModel, 'placeParameter')->label(false)->widget(Select2::classname(), [
                                   'id' => 'www111',
                                   //'name' => 'state_10',
-                                  'initValueText' => $initMetro,
+                                  'initValueText' => $initString,
                                   'options' => [
                                       'placeholder' => 'Метро или район',
                                   ],
                                   'pluginEvents' => [
-                                      "select2:select" => 'function() { $.pjax({url: "/news/add-center-link/?news_id='.$searchModel->id.'&center_id=" + $("#www111").val(), type: "GET", container: "#w0", push: false}); }',
+                                      // "select2:select" => 'function() { $.pjax({url: "/news/add-center-link/?news_id='.$searchModel->id.'&center_id=" + $("#www111").val(), type: "GET", container: "#w0", push: false}); }',
                                   ],
                                   'pluginOptions' => [
                                       'ajax' => [
@@ -105,6 +116,9 @@
                                       ],
                                       'width' => '200px',
                                       'allowClear' => true,
+                                      'templateResult' => new JsExpression('format'),
+                                      'templateSelection' => new JsExpression('format'),
+                                      'escapeMarkup' => $escape,
                                   ],
                               ]);
                         ?>

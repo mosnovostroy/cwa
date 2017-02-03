@@ -149,8 +149,15 @@ class CenterController extends \yii\web\Controller
 
         $searchModel = new CenterSearch();
 
-        $dataProvider = $searchModel->search($params);
         //Yii::info(Yii::$app->request->queryParams, 'myd');
+
+        if (isset($params['metro']) && $params['metro'] > 0) {
+            $params['placeParameter'] = $params['metro'];
+        } else if (isset($params['location']) && $params['location'] > 0) {
+            $params['placeParameter'] = $params['location'] + 1000000;
+        }
+
+        $dataProvider = $searchModel->search($params);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -181,7 +188,20 @@ class CenterController extends \yii\web\Controller
     public function actionIndexSubmit()
     {
         $params = Yii::$app->request->queryParams;
+
+        //Yii::info($params, 'myd');
         $params[0] = 'center/index';
+
+        $placeParameter = intval($params['placeParameter']);
+        if ($placeParameter && $placeParameter < 1000000) {
+            $params['metro'] = $placeParameter;
+        } else if ($placeParameter > 1000000) {
+            $params['location'] = $placeParameter - 1000000;
+        }
+        unset($params['placeParameter']);
+
+        //Yii::info($params, 'myd');
+
         return $this->redirect($params);
     }
 

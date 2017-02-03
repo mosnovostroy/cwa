@@ -23,8 +23,11 @@ use common\models\Region;
 use common\models\Center;
 use common\models\News;
 use common\models\Station;
+use common\models\Location;
+use common\models\Locations;
 use common\models\Admin;
 use frontend\models\UpdateFastsearch;
+use frontend\models\UpdateMetro;
 use frontend\components\RegionManager;
 use yii\web\ForbiddenHttpException;
 use yii\bootstrap\Alert;
@@ -278,11 +281,6 @@ class SiteController extends Controller
         return $this->render('adv');
     }
 
-    public function actionUpdatemetro()
-    {
-        return $this->render('updatemetro');
-    }
-
     /**
      * Signs user up.
      *
@@ -404,7 +402,7 @@ class SiteController extends Controller
         }
      }
 
-     public function actionStationsList($q = null, $id = null)
+     public function actionPlacesList($q = null, $id = null)
      {
          // Настройки формата:
          \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -413,16 +411,19 @@ class SiteController extends Controller
          // Результаты будут разные для разных регионов, поэтому смотрим на регион:
          $regionId = Yii::$app->regionManager->id ? Yii::$app->regionManager->id : 0;
 
+         // Страницу со ссылками на метро и районы
+         // Распихать такие же ссылки по сайту
+
+
+         // Сейчас по слову "город" ищется нормально, но: выбор метро - поиск нормальный, выбор города - поиск не срабатывает, урл не меняется.
+         // Скоректировать генератор метро (добавить к слагам префикс метро-)
+
          // Если есть подстрока для поиска:
          if (!is_null($q)) {
-             $query = new \yii\db\Query;
-             $query->select("id, name AS text")
-                 ->from('station')
-                 ->where(['like', 'name', $q])
-                 ->andWhere(['region' => $regionId])
-                 ->limit(10);
-             $command = $query->createCommand();
-             $data = $command->queryAll();
+             $data = Yii::$app->db->createCommand("SELECT id AS id, name AS text FROM station WHERE name LIKE :q AND region = :region LIMIT 10 UNION SELECT id+1000000 AS id, name AS text FROM location WHERE name LIKE :q AND region = :region LIMIT 10")
+                ->bindValue(':q', "%".$q."%")
+                ->bindValue(':region', $regionId)
+                ->queryAll();
              $out['results'] = array_values($data);
          }
          elseif ($id > 0) {
@@ -432,6 +433,33 @@ class SiteController extends Controller
          return $out;
      }
 
+    //  public function actionStationsList($q = null, $id = null)
+    //  {
+    //      // Настройки формата:
+    //      \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    //      $out = ['results' => ['id' => '', 'text' => '']];
+     //
+    //      // Результаты будут разные для разных регионов, поэтому смотрим на регион:
+    //      $regionId = Yii::$app->regionManager->id ? Yii::$app->regionManager->id : 0;
+     //
+    //      // Если есть подстрока для поиска:
+    //      if (!is_null($q)) {
+    //          $query = new \yii\db\Query;
+    //          $query->select("id, name AS text")
+    //              ->from('station')
+    //              ->where(['like', 'name', $q])
+    //              ->andWhere(['region' => $regionId])
+    //              ->limit(10);
+    //          $command = $query->createCommand();
+    //          $data = $command->queryAll();
+    //          $out['results'] = array_values($data);
+    //      }
+    //      elseif ($id > 0) {
+    //          $out['results'] = ['id' => $id, 'text' => Station::find($id)->name];
+    //      }
+    //      //return json_encode($out);
+    //      return $out;
+    //  }
 
      public function actionAdmin()
      {
@@ -460,5 +488,34 @@ class SiteController extends Controller
 
          $this->redirect(['admin']);
      }
+
+     public function actionUpdateMetro ()
+     {
+        if (!User::isAdmin()) {
+            throw new ForbiddenHttpException;
+        }
+
+        $updateMetroModel = new UpdateMetro();
+        if ( $updateMetroModel ) {
+            $strResult = $updateMetroModel->doUpdate();
+            if ($strResult) {
+                Yii::$app->session->setFlash('success', 'Станции метро успешно обновлены: '.$strResult);
+            } else {
+                Yii::$app->session->setFlash('danger', 'При обновлении станций метро произошла ошибка!');
+            }
+        }
+        $this->redirect(['admin']);
+     }
+
+    public function actionLocations()
+    {
+        $model = new Locations();
+        $model->region = Yii::$app->regionManager->id ? Yii::$app->regionManager->id : 0;
+
+        return $this->render('locations', [
+            'model' => $model,
+        ]);
+    }
+
 
 }
