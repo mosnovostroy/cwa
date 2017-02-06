@@ -13,6 +13,7 @@
 
         $template_centers = "<div><a href=\"{{url}}\">{{value}}</a></div>";
         $template_stations = "<div><a href=\"{{url}}\">{{value}}</a></div>";
+        $template_locations = "<div><a href=\"{{url}}\">{{value}}</a></div>";
 
         echo Typeahead::widget([
             'id' => 'msf-input',
@@ -38,6 +39,7 @@
                         'suggestion' => new JsExpression("Handlebars.compile('{$template_centers}')")
                     ]
                 ],
+
                 [
                     //'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
                     'display' => 'value',
@@ -49,6 +51,20 @@
                         'header' => '<span style="margin: 10px;">Станции метро</span>',
                         //'notFound' => '<div class="text-danger" style="padding:0 8px">Ничего не найдено</div>',
                         'suggestion' => new JsExpression("Handlebars.compile('{$template_stations}')")
+                    ]
+                ],
+
+                [
+                    //'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['search/locations-list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'templates' => [
+                        'header' => '<span style="margin: 10px;">Города и районы</span>',
+                        //'notFound' => '<div class="text-danger" style="padding:0 8px">Ничего не найдено</div>',
+                        'suggestion' => new JsExpression("Handlebars.compile('{$template_locations}')")
                     ]
                 ],
 

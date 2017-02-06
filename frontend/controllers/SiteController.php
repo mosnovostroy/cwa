@@ -411,13 +411,6 @@ class SiteController extends Controller
          // Результаты будут разные для разных регионов, поэтому смотрим на регион:
          $regionId = Yii::$app->regionManager->id ? Yii::$app->regionManager->id : 0;
 
-         // Страницу со ссылками на метро и районы
-         // Распихать такие же ссылки по сайту
-
-
-         // Сейчас по слову "город" ищется нормально, но: выбор метро - поиск нормальный, выбор города - поиск не срабатывает, урл не меняется.
-         // Скоректировать генератор метро (добавить к слагам префикс метро-)
-
          // Если есть подстрока для поиска:
          if (!is_null($q)) {
              $data = Yii::$app->db->createCommand("SELECT id AS id, name AS text FROM station WHERE name LIKE :q AND region = :region LIMIT 10 UNION SELECT id+1000000 AS id, name AS text FROM location WHERE name LIKE :q AND region = :region LIMIT 10")

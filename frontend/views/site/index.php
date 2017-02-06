@@ -31,16 +31,11 @@ $this->params['showCounters'] = true;
                     <h4><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h4>
 
                     <p style="margin-top: -6px;">
-                        <?php
-
-                            if ($center->metro)
-                                echo '<span class="metro-icon"> '.$center->metro.'</span>';
-                            else
-                                echo $center->address;
-                        ?>
+                        <?= $center->fullAddress ?>
                     </p>
-
-                    <div class="lgray" style="margin-top: 7px;"><?= $center->regionName ?></div>
+                    <p style="margin-top: -6px;">
+                        <?= $center->metro ? '<span class="metro-icon"> '.$center->metro.'</span>' : '' ?>
+                    </p>
 
                     <div class="pb"><a href=""><span class="glyphicon glyphicon-menu-right"></span></a></div>
                 </div>

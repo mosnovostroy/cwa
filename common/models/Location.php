@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use common\behaviors\RegionInfoBehavior;
+use common\behaviors\SearchableBehavior;
 
 /**
  * This is the model class for table "region".
@@ -29,6 +30,14 @@ class Location extends \yii\db\ActiveRecord
             'regionInfo' => [
                 'class' => RegionInfoBehavior::className(),
             ],
+            'searchable' => [
+                'class' => SearchableBehavior::className(),
+                'dataForFastSearch' => [
+					'name',
+				],
+				'fastsearchAttribute' => 'fastsearch',
+            ],
+
         ];
     }
 

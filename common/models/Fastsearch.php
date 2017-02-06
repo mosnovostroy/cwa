@@ -5,7 +5,7 @@ use yii\base\Model;
 use yii\base\InvalidParamException;
 use common\models\User;
 use common\models\Center;
-use common\models\Metro;
+use common\models\Location;
 use Yii;
 use yii\helpers\Json;
 use yii\db\Query;
@@ -18,9 +18,15 @@ class Fastsearch extends Model
 {
     public function searchCenters($q)
     {
+        if (Yii::$app->regionManager->id) {
+            $regionId = Yii::$app->regionManager->id;
+        } else {
+            $regionId = 1; // Москва до умолчанию
+        }
+
         $arr = $this->getWords($q);
 
-        $items = Center::find();
+        $items = Center::find()->where(['region' => $regionId]);
 
         if (is_array($arr)){
             foreach ($arr as $key => $val){
@@ -40,10 +46,16 @@ class Fastsearch extends Model
 
         $out = [];
         foreach($items->all() as $item) {
+            // $output = $item->name;
+            // $location = implode(', ', [$item->regionName, $item->address]);
+            // if ($location) {
+            //     $output .= ' ('.$location.')';
+            // }
             $output = $item->name;
-            $location = implode(', ', [$item->regionName, $item->address]);
-            if ($location) {
-                $output .= ' ('.$location.')';
+            $fullAddress = $item->fullAddress;
+            if ($fullAddress) {
+                //$output .= ' | '.$fullAddress;
+                $output .= ' ('.$fullAddress.')';
             }
             $out[] = [
                 'value' => $output,
@@ -57,9 +69,15 @@ class Fastsearch extends Model
 
     public function searchStations($q)
     {
+        if (Yii::$app->regionManager->id) {
+            $regionId = Yii::$app->regionManager->id;
+        } else {
+            $regionId = 1; // Москва до умолчанию
+        }
+
         $arr = $this->getWords($q);
 
-        $items = Station::find();
+        $items = Station::find()->where(['region' => $regionId]);
 
         if (is_array($arr)){
             foreach ($arr as $key => $val){
@@ -80,7 +98,50 @@ class Fastsearch extends Model
         $out = [];
         foreach($items->all() as $item) {
             //$output = 'Метро '.$item->name.' ('.$item->regionName.')';
-            $output = $item->name.' ('.$item->regionName.')';
+            //$output = $item->name.' ('.$item->regionName.')';
+            $output = $item->name;
+            $out[] = [
+                'value' => $output,
+                'url' => Url::to(['center/index', 'region' => $item->regionId, 'metro' => $item->id]),
+            ];
+        }
+
+        return Json::encode($out);
+    }
+
+    public function searchLocations($q)
+    {
+        if (Yii::$app->regionManager->id) {
+            $regionId = Yii::$app->regionManager->id;
+        } else {
+            $regionId = 1; // Москва до умолчанию
+        }
+
+        $arr = $this->getWords($q);
+
+        $items = Location::find()->where(['region' => $regionId]);
+
+        if (is_array($arr)){
+            foreach ($arr as $key => $val){
+                if (strlen($val) < 2){
+                    continue;
+                }
+                if (preg_match("/^-(.*)/ui", $val, $reg)){
+                    $items->andFilterWhere(['not like', 'fastsearch', $tmp]);
+                } else {
+                    if ( $tmp = preg_replace("/[^_\-а-яёА-ЯЁ\w\d\.,]/ui", "", $val) ){
+                        $items->andFilterWhere(['like', 'fastsearch', $tmp]);
+                    }
+                }
+                unset($reg, $tmp);
+            }
+        }
+
+        $out = [];
+        foreach($items->all() as $item) {
+            //$output = 'Метро '.$item->name.' ('.$item->regionName.')';
+            //$output = $item->name.' ('.$item->regionName.')';
+            $output = $item->name;
             $out[] = [
                 'value' => $output,
                 'url' => Url::to(['center/index', 'region' => $item->regionId, 'metro' => $item->id]),

@@ -5,6 +5,7 @@ use yii\base\Model;
 use yii\base\InvalidParamException;
 use common\models\User;
 use common\models\Center;
+use common\models\Location;
 use Yii;
 
 /**
@@ -20,9 +21,20 @@ class UpdateFastsearch extends Model
             // Искусственно сбросим поле fastsearch.
             // Без этого не вызывается событие EVENT_BEFORE_UPDATE и не запускается обработчик поведения
             $item->fastsearch = '1';
-            
+
             $item->save();
         }
+
+        $items = Location::find()->all();
+        foreach ($items as $item) {
+
+            // Искусственно сбросим поле fastsearch.
+            // Без этого не вызывается событие EVENT_BEFORE_UPDATE и не запускается обработчик поведения
+            $item->fastsearch = '1';
+
+            $item->save();
+        }
+
         return true;
     }
 }

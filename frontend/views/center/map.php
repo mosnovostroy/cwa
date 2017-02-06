@@ -9,17 +9,26 @@ use common\models\User;
 use common\models\RegionSearch;
 
 /* @var $this yii\web\View */
-if ($searchModel->regionNameTp)
-{
-    $this->title = 'Коворкинг-центры в '.$searchModel->regionNameTp;
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинг-центры в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры, '.$searchModel->regionName]);
-}
-else
-{
-    $this->title = 'Коворкинг-центры: поиск';
-    $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкинг-центров в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
-    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг-центры в россии']);
+if ($locationName && $locationNameTp && $searchModel->regionName) {
+    $this->title = 'Коворкинги в '.$locationNameTp.' на карте';
+    $h1 = $this->title;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$locationNameTp.' ('.$locationAddressAtom.') на карте']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, карта,  '.$locationName.', '.$locationName]);
+} else if ($metroName) {
+    $this->title = 'Коворкинги: метро '.$metroName.' на карте';
+    $h1 = $this->title;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.' - поиск по карте в районе станции метро '.$metroName]);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, карта, '.$metroName]);
+} else if ($searchModel->regionNameTp) {
+    $this->title = 'Коворкинги в '.$searchModel->regionNameTp.' на карте';
+    $h1 = $this->title;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': поиск по расположению на карте']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, карта '.$searchModel->regionName]);
+} else {
+    $this->title = 'Коворкинги: поиск по расположению на карте';
+    $h1 = $this->title;
+    $this->registerMetaTag(['name' => 'description', 'content' => 'Карта коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
+    $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, карта, регионы']);
 }
 
 $this->params['hasYandexMap'] = true;

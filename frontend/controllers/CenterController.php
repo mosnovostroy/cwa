@@ -15,6 +15,8 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use common\models\Region;
+use common\models\Station;
+use common\models\Location;
 use yii\web\ForbiddenHttpException;
 
 class CenterController extends \yii\web\Controller
@@ -152,29 +154,79 @@ class CenterController extends \yii\web\Controller
         //Yii::info(Yii::$app->request->queryParams, 'myd');
 
         if (isset($params['metro']) && $params['metro'] > 0) {
+
             $params['placeParameter'] = $params['metro'];
+
+            $station = Station::findOne($params['metro']);
+            if ($station) {
+                $metroName = $station->name;
+            }
         } else if (isset($params['location']) && $params['location'] > 0) {
+
             $params['placeParameter'] = $params['location'] + 1000000;
+
+            $location = Location::findOne($params['location']);
+            if ($location) {
+                $locationName = $location->name;
+                $locationNameTp = $location->name_tp;
+                $locationAddressAtom = $location->address_atom;
+            }
+
         }
 
         $dataProvider = $searchModel->search($params);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'metro' => isset($params['metro']) ? $params['metro'] : null,
+            //'metro' => isset($params['metro']) ? $params['metro'] : null,
+            'metroName' => isset($metroName) ? $metroName : null,
+            'locationName' => isset($locationName) ? $locationName : null,
+            'locationNameTp' => isset($locationNameTp) ? $locationNameTp : null,
+            'locationAddressAtom' => isset($locationAddressAtom) ? $locationAddressAtom: null,
         ]);
     }
 
     public function actionMap()
     {
+        $params = Yii::$app->request->queryParams;
+
         $searchModel = new CenterSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        //Yii::info(Yii::$app->request->queryParams, 'myd');
+
+        if (isset($params['metro']) && $params['metro'] > 0) {
+
+            $params['placeParameter'] = $params['metro'];
+
+            $station = Station::findOne($params['metro']);
+            if ($station) {
+                $metroName = $station->name;
+            }
+        } else if (isset($params['location']) && $params['location'] > 0) {
+
+            $params['placeParameter'] = $params['location'] + 1000000;
+
+            $location = Location::findOne($params['location']);
+            if ($location) {
+                $locationName = $location->name;
+                $locationNameTp = $location->name_tp;
+                $locationAddressAtom = $location->address_atom;
+            }
+
+        }
+
+        $dataProvider = $searchModel->search($params);
 
 		$this->layout = 'map';
 
         return $this->render('map', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            //'metro' => isset($params['metro']) ? $params['metro'] : null,
+            'metroName' => isset($metroName) ? $metroName : null,
+            'locationName' => isset($locationName) ? $locationName : null,
+            'locationNameTp' => isset($locationNameTp) ? $locationNameTp : null,
+            'locationAddressAtom' => isset($locationAddressAtom) ? $locationAddressAtom: null,
         ]);
     }
 

@@ -12,15 +12,24 @@
     use kartik\typeahead\Typeahead;
     use kartik\select2\Select2;
 
-    if ($searchModel->regionNameTp)
-    {
+    if ($locationName && $locationNameTp && $searchModel->regionName) {
+        $this->title = 'Коворкинги в '.$locationNameTp;
+        $h1 = $this->title;
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$locationNameTp.' ('.$locationAddressAtom.')']);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$locationName.', '.$locationName]);
+    } else if ($metroName) {
+        $this->title = 'Коворкинги: метро '.$metroName;
+        $h1 = $this->title;
+        $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.' с сортировкой по расстоянию от станции метро '.$metroName]);
+        $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$metroName]);
+    } else if ($searchModel->regionNameTp) {
         $this->title = 'Коворкинги в '.$searchModel->regionNameTp;
+        $h1 = $this->title;
         $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.': полный список. Цены, условия, фото, отзывы посетителей']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, '.$searchModel->regionName]);
-    }
-    else
-    {
+    } else {
         $this->title = 'Коворкинги: поиск';
+        $h1 = $this->title;
         $this->registerMetaTag(['name' => 'description', 'content' => 'Каталог коворкингов в Москве и регионах РФ. Цены, условия, фото, отзывы посетителей']);
         $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центры в россии']);
     }
@@ -28,7 +37,7 @@
     $this->params['showCounters'] = true;
 ?>
 <h1><p>
-    Коворкинги в <?=$searchModel->regionNameTp?>
+    <?= $h1 ?>
 
     <?php
         //echo Html::a('Метро или район <span class="caret"></span>', ['site/location'], ['class' => 'btn btn-link']);
@@ -176,16 +185,14 @@ SCRIPT;
                     echo '</div>';
                 }
             ?>
-            <?php
-                $arr = array();
-                if ($center->regionName) $arr[] = $center->regionName;
-                if ($center->address) $arr[] = $center->address;
-                echo '<p>'.implode(' | ', $arr).'</p>';
-            ?>
-
-    					<p><?= $center->description ?></p>
-    				</div>
-      </div>
+            <p>
+                <?= $center->fullAddress ?>
+            </p>
+			<p>
+                <?= $center->description ?>
+            </p>
+            </div>
+        </div>
     </div>
 <?php endforeach; ?>
 

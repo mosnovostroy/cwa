@@ -55,4 +55,10 @@ class SearchController extends \yii\web\Controller
         echo $model->searchStations($q);
     }
 
+    public function actionLocationsList($q = null)
+    {
+        $model = new Fastsearch();
+        echo $model->searchLocations($q);
+    }
+
 }

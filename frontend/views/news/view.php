@@ -120,7 +120,7 @@ $this->params['showCounters'] = true;
                 <h2><p><a href="<?=$url?>"><?= $center->name ?></a></p></h2>
 
 
-                <p><?= implode(", ", [$center->regionName, $center->address]) ?></p>
+                <p><?= $center->fullAddress ?></p>
                 <?php
                     if ($center->metro)
                         echo '<p><span class="metro-icon"> '.$center->metro.'</span></p>';
