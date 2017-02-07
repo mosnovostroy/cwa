@@ -27,6 +27,10 @@ use common\models\Location;
  */
 class Center extends \yii\db\ActiveRecord
 {
+
+	// Расстояние до ближайшего метро:
+	public $dist = null;
+
 	 /**
      * @inheritdoc
      */
@@ -44,7 +48,7 @@ class Center extends \yii\db\ActiveRecord
             [['name', 'alias'], 'required'],
 						[['alias'], 'match', 'pattern' => '/^[a-zA-Z0-9-]+/i'],
             [['description', 'meta_title', 'meta_description', 'meta_keywords', 'features', 'tariffs'], 'string'],
-            [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating'], 'number'],
+            [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating', 'dist'], 'number'],
             [['region', 'location', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
             [['name', 'alias'], 'string', 'max' => 255],
 						[['address', 'phone', 'metro'], 'string'],

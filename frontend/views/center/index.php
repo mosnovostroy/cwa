@@ -11,6 +11,7 @@
     use yii\web\JsExpression;
     use kartik\typeahead\Typeahead;
     use kartik\select2\Select2;
+    use common\models\Helper;
 
     if ($locationName && $locationNameTp && $searchModel->regionName) {
         $this->title = 'Коворкинги в '.$locationNameTp;
@@ -164,7 +165,10 @@ SCRIPT;
     				<div class="clearfix" >
             <?php if ($center->logoImage) echo '<div class="card-logo"><image src="'.$center->logoImage.'"></div>'; ?>
     					<?php if ($center->anons3x2) echo '<image class="card-image" src="'.$center->anons3x2.'">'; ?>
-    					<h3><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h3>
+    		<h3><p><a href="<?=$url?>"><?=Html::encode("{$center->name}")?></a></p></h3>
+            <?= $center->dist ? '<p><span class="metro-icon"> '.$searchModel->metroString.': '.(Helper::formatDist($center->dist)).'</span></p>' : '' ?>
+
+
             <?php
                 if ($center->paramsList || $center->is24x7())
                 {

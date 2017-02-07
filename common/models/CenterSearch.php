@@ -55,6 +55,7 @@ class CenterSearch extends Center
             $fields['text'] = 'text';
             $fields['metro'] = 'metro';
             $fields['placeParameter'] = 'placeParameter';
+            $fields['dist'] = 'dist';
 
         return $fields;
     }
@@ -82,7 +83,10 @@ class CenterSearch extends Center
         if ($this->metro) {
             $mc = Station::findOne($this->metro);
             if ($mc && isset($mc['lat']) && isset($mc['lng'])) {
-                $dist = '(gmap_lat-'.$mc["lat"].')*(gmap_lat-'.$mc["lat"].')+(gmap_lng-'.$mc["lng"].')*(gmap_lng-'.$mc["lng"].')';
+                //$dist = '(gmap_lat-'.$mc["lat"].')*(gmap_lat-'.$mc["lat"].')+(gmap_lng-'.$mc["lng"].')*(gmap_lng-'.$mc["lng"].')';
+
+                $dist = 'round(6372795 * acos( cos(radians(gmap_lat)) * cos(radians('.$mc["lat"].')) * ( cos (radians(gmap_lng - '.$mc["lng"].')) - 1 ) + cos(radians(gmap_lat - '.$mc["lat"].')) ), -1)';
+
                 $query = Center::find()
                     ->select(['*', 'dist' => $dist])
                     ->from('center')
@@ -234,6 +238,7 @@ class CenterSearch extends Center
         if ( empty($this->metro) ) {
             if (empty($this->location)) {
                 $str = 'Метро или район';
+                //$str = '';
             } else {
                 $str = Location::findOne($this->location)->name;
             }
@@ -242,5 +247,10 @@ class CenterSearch extends Center
         }
 
         return $str;
+    }
+
+    public function getMetroString()
+    {
+        return empty($this->metro) ? '' : Station::findOne($this->metro)->name;
     }
 }

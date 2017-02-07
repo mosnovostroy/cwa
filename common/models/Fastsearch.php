@@ -144,7 +144,7 @@ class Fastsearch extends Model
             $output = $item->name;
             $out[] = [
                 'value' => $output,
-                'url' => Url::to(['center/index', 'region' => $item->regionId, 'metro' => $item->id]),
+                'url' => Url::to(['center/index', 'region' => $item->regionId, 'location' => $item->id]),
             ];
         }
 

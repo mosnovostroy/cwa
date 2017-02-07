@@ -15,7 +15,7 @@ if ($locationName && $locationNameTp && $searchModel->regionName) {
     $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$locationNameTp.' ('.$locationAddressAtom.') на карте']);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, карта,  '.$locationName.', '.$locationName]);
 } else if ($metroName) {
-    $this->title = 'Коворкинги: метро '.$metroName.' на карте';
+    $this->title = 'Коворкинги на карте: метро '.$metroName.'';
     $h1 = $this->title;
     $this->registerMetaTag(['name' => 'description', 'content' => 'Коворкинги в '.$searchModel->regionNameTp.' - поиск по карте в районе станции метро '.$metroName]);
     $this->registerMetaTag(['name' => 'keywords', 'content' => 'коворкинг, коворкинг-центр, карта, '.$metroName]);
