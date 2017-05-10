@@ -31,7 +31,7 @@ class CenterSearch extends Center
         return [
             [['id', 'is24x7'], 'integer'],
             [['name', 'description', 'meta_title', 'meta_description', 'meta_keywords','text'], 'safe'],
-            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max', 'metro', 'placeParameter', 'location'], 'number'],
+            [['gmap_lat', 'gmap_lng', 'region', 'rating', 'price_month', 'price_month_min', 'price_month_max', 'metro', 'placeParameter', 'location', 'status'], 'number'],
         ];
     }
 
@@ -104,8 +104,8 @@ class CenterSearch extends Center
         if ($all) {
             $adpParams = [
               'query' => $query,
-              'totalCount' => 1000,
-              'pagination' => ['pageSize' => 1000],
+              'totalCount' => 10000,
+              'pagination' => ['pageSize' => 10000],
             ];
         } else if (isset($params['metro'])) {
             $adpParams = ['query' => $query,
@@ -129,6 +129,7 @@ class CenterSearch extends Center
             'region' => $this->region,
             'location' => $this->location,
             'is24x7' => $this->is24x7,
+            'status' => Center::STATUS_ACTUAL,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
@@ -183,6 +184,7 @@ class CenterSearch extends Center
                 'SELECT *
                 FROM center
                 WHERE region = :region
+                AND status = 1
                 ORDER BY RAND()',
                 [
                     ':region' => $regionId,
@@ -193,6 +195,7 @@ class CenterSearch extends Center
             $query = Center::findBySql(
                 'SELECT *
                 FROM center
+                WHERE status = 1
                 ORDER BY RAND()'
             );
         }
@@ -215,6 +218,7 @@ class CenterSearch extends Center
             WHERE gmap_lat IS NOT NULL
                 AND gmap_lng IS NOT NULL
                 AND id <> :id
+            AND status = 1                
             ORDER BY dist ASC
             LIMIT 3',
             [

@@ -26,7 +26,7 @@ class Fastsearch extends Model
 
         $arr = $this->getWords($q);
 
-        $items = Center::find()->where(['region' => $regionId]);
+        $items = Center::find()->where(['region' => $regionId, 'status' => Center::STATUS_ACTUAL]);
 
         if (is_array($arr)){
             foreach ($arr as $key => $val){

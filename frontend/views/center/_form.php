@@ -47,6 +47,8 @@ use common\models\LocationSearch;
 
             <?= $form->field($model, 'site')->textInput()->hint('Отображается не только в контактах, но и как источник фотографий') ?>
 
+            <?= $form->field($model, 'status')->dropDownList($model->statusMap); ?>            
+
         </div>
 
         <div class="col-md-5">

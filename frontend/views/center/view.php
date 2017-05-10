@@ -77,6 +77,11 @@ $this->params['showCounters'] = true;
 
 <div class="row">
     <div class="col-md-6">
+        <?php if ($model->status == 2) : ?>
+            <div style="padding: 10px 15px; margin-bottom: 15px; background-color: #f77; color: #fff;">
+                Этого коворкинга больше не существует - архив
+            </div>
+        <?php endif; ?>
         <div class="clearfix">
             <?php if ($model->logoImage) echo '<div class="center-view-logo"><image src="'.$model->logoImage.'"></div>'; ?>
             <p><?= $model->fullAddress?></p>
@@ -87,6 +92,7 @@ $this->params['showCounters'] = true;
             <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
 
         </div>
+        <?php if ($model->status == 1) : ?>
         <!-- <h3><p>Общие условия</p></h3> -->
         <div class="row special-interval">
             <div class="col-sm-6">
@@ -132,6 +138,7 @@ $this->params['showCounters'] = true;
                 ?>
             </div>
         </div>
+        <?php endif; ?>
     </div>
     <div class="col-md-6">
         <?= $model->site ? '<div class="dgray" style="position: absolute; right: 0; top: -1.7em; margin-right: 15px; font-size: 0.7em; float: right;">Фото: '.$model->site.'</div>' : '' ?>
@@ -168,6 +175,7 @@ $this->params['showCounters'] = true;
     </div>
 </div>
 
+<?php if ($model->status == 1) : ?>
 <?php if ($model->tariffsCount > 0) {?>
 <!-- <div class="title-block clearfix"> -->
     <h3 class="h3-body-title">
@@ -314,6 +322,7 @@ $this->params['showCounters'] = true;
         <?php } ?>
     </div>
 </div> -->
+<?php endif; ?>
 
 <div class="row">
     <div class="col-sm-8">
@@ -372,6 +381,7 @@ $this->params['showCounters'] = true;
     ?>
 <?php endif; ?>
 
+<?php if ($model->status == 1) : ?>
 <div class="row">
     <div class="col-md-6">
 
@@ -414,6 +424,7 @@ $this->params['showCounters'] = true;
 
     </div>
 </div>
+<?php endif; ?>
 
 <?php
     echo \yii2mod\comments\widgets\Comment::widget([

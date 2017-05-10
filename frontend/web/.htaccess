@@ -1,4 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine on
-RewriteCond %{HTTP_HOST} ^www\.coworking-review\.ru$ [NC]
-RewriteRule ^(.*)$ http://coworking-review.ru/$1 [R=301,L]

@@ -27,6 +27,9 @@ use common\models\Location;
  */
 class Center extends \yii\db\ActiveRecord
 {
+    //const STATUS_UNKNOWN = 0;
+    const STATUS_ACTUAL = 1;
+    const STATUS_ARCHIVE = 2;
 
 	// Расстояние до ближайшего метро:
 	public $dist = null;
@@ -49,7 +52,8 @@ class Center extends \yii\db\ActiveRecord
 						[['alias'], 'match', 'pattern' => '/^[a-zA-Z0-9-]+/i'],
             [['description', 'meta_title', 'meta_description', 'meta_keywords', 'features', 'tariffs'], 'string'],
             [['gmap_lat', 'gmap_lng', 'region', 'price_day', 'rating', 'dist'], 'number'],
-            [['region', 'location', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating'], 'integer'],
+            [['region', 'location', 'price_hour', 'price_day', 'price_week', 'price_month', 'is24x7', 'has_fixed', 'has_storage', 'has_meeting_room', 'has_printer', 'has_internet', 'rating', 'status'], 'integer'],
+            [['status'], 'default', 'value' => Center::STATUS_ACTUAL],
             [['name', 'alias'], 'string', 'max' => 255],
 						[['address', 'phone', 'metro'], 'string'],
 						['email', 'email'],
@@ -105,6 +109,7 @@ class Center extends \yii\db\ActiveRecord
 						'email' => 'Email',
 						'site' => 'Сайт',
 						'is24x7' => 'Круглосуточно',
+            'status' => 'Статус объекта',
         ];
     }
 
@@ -425,4 +430,12 @@ class Center extends \yii\db\ActiveRecord
 		return $this->address;
 	}
 
+    public function getStatusMap()
+  	{
+  		return [
+                    //Center::STATUS_UNKNOWN => 'Не указано',
+                    Center::STATUS_ACTUAL => 'Актуальный объект',
+                    Center::STATUS_ARCHIVE => 'В архиве',
+                ];
+  	}
 }
