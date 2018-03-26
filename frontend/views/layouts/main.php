@@ -57,6 +57,18 @@ BootstrapSelectAsset::register($this);
 <!-- Контент страницы -->
     <div class="wrap">
         <div class="container">
+
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-8483812460071635"
+                data-ad-slot="1785873902"
+                data-ad-format="auto">
+            </ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
             <?= Breadcrumbs::widget([
                 'homeLink' => false,
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

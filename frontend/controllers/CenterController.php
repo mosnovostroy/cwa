@@ -241,8 +241,9 @@ class CenterController extends \yii\web\Controller
     {
         $params = Yii::$app->request->queryParams;
 
-        //Yii::info($params, 'myd');
         $params[0] = 'center/index';
+
+        Yii::info($params, 'myd');
 
         $placeParameter = intval($params['placeParameter']);
         if ($placeParameter && $placeParameter < 1000000) {

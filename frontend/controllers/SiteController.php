@@ -417,7 +417,8 @@ class SiteController extends Controller
                 ->bindValue(':q', "%".$q."%")
                 ->bindValue(':region', $regionId)
                 ->queryAll();
-             $out['results'] = array_values($data);
+             //$out['results'] = array_values($data);
+             $out['results'] = $data;
          }
          elseif ($id > 0) {
              $out['results'] = ['id' => $id, 'text' => Station::find($id)->name];

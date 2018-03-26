@@ -1,0 +1,16 @@
+@media (max-width: 599px) {
+    .t2-img {width: calc(100% - 20px); margin: 10px;}
+    .t2-text {width: calc(100% - 20px); float: left; margin: 10px 10px;}
+    .t2-cont {margin-top: 15px;}
+}
+@media (min-width: 600px) {
+    .t2-img {width: 43%; float: left; margin: 10px;}
+    .t2-text {width: calc(57% - 40px); float: left; margin: 10px 10px;}
+}
+.t2-cont {border: 1px solid #ccc; cursor: pointer; margin-bottom: 15px;}
+.t2-cont:hover {
+    border: solid 1px #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 12px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 12px rgba(102, 175, 233, 0.6);
+}

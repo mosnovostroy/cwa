@@ -96,6 +96,8 @@
                         <?php
                         $url = \yii\helpers\Url::to(['site/places-list']);
 
+                        //echo $url;
+
                         $format = <<< SCRIPT
                         function format(placeParameter) {
                             if (placeParameter.id > 1000000) return placeParameter.text;
