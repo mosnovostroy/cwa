@@ -60,7 +60,7 @@ BootstrapSelectAsset::register($this);
 <!-- Контент страницы -->
 <div class="wrap">
 
-    <div style="width: 100%; height: 150px;">
+    <div style="width: 100%;">
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <!-- Коворкинг - новый адаптивный -->
         <ins class="adsbygoogle"
@@ -72,7 +72,7 @@ BootstrapSelectAsset::register($this);
         (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
     </div>
-        
+
     <?= Breadcrumbs::widget([
         'homeLink' => false,
         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
