@@ -60,7 +60,7 @@ BootstrapSelectAsset::register($this);
 <!-- Контент страницы -->
 <div class="wrap">
 
-    <div style="width: 100%;">
+    <div class="container">
         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <!-- Коворкинг - новый адаптивный -->
         <ins class="adsbygoogle"
