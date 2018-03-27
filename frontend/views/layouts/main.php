@@ -58,16 +58,18 @@ BootstrapSelectAsset::register($this);
     <div class="wrap">
         <div class="container">
 
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-8483812460071635"
-                data-ad-slot="1785873902"
-                data-ad-format="auto">
-            </ins>
-            <script>
+            <div style="width: 100%; height: 150px;">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Коворкинг - новый адаптивный -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-8483812460071635"
+                     data-ad-slot="5626077765"
+                     data-ad-format="auto"></ins>
+                <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+                </script>
+            </div>
 
             <?= Breadcrumbs::widget([
                 'homeLink' => false,
