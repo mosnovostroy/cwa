@@ -76,6 +76,7 @@ BootstrapSelectAsset::register($this);
             <!-- <div class="alert-widget"><?= Alert::widget() ?></div> -->
             <?=  $content ?>
         </div>
+        <?= $this->render('_advBottom') ?>
     </div>
 
 <!-- Футер -->
