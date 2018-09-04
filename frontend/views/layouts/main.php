@@ -57,18 +57,6 @@ BootstrapSelectAsset::register($this);
 <!-- Контент страницы -->
     <div class="wrap">
         <div class="container">
-
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Коворкинг - новый адаптивный -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-8483812460071635"
-                 data-ad-slot="5626077765"
-                 data-ad-format="auto"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-
             <?= Breadcrumbs::widget([
                 'homeLink' => false,
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -76,8 +64,9 @@ BootstrapSelectAsset::register($this);
             <!-- <div class="alert-widget"><?= Alert::widget() ?></div> -->
             <?=  $content ?>
         </div>
-        <?= $this->render('_advBottom') ?>
+        <?= YII_ENV_PROD ? $this->render('_advBottom') : "" ?>
     </div>
+
 
 <!-- Футер -->
     <?php $this->beginContent('@app/views/layouts/_footer2.php'); ?>
