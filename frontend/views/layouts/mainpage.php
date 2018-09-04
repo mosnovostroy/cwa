@@ -70,8 +70,8 @@ BootstrapSelectAsset::register($this);
     <div class="alert-widget"><?= Alert::widget() ?></div>
     <?=  $content ?>
 
-    <?= YII_ENV_PROD ? $this->render('_advBottom') : "" ?>
-    
+    <?= $this->render('_advBottom') ?>
+
 </div>
 
 <!-- Футер -->
